@@ -1,0 +1,131 @@
+"""Demo patients and printable test sheets. Test targets only: no real people or wounds.
+
+    venv/bin/python -m scripts.demo_data seed     # create the two demo patients
+    venv/bin/python -m scripts.demo_data sheets   # print/*.png, 300 dpi, Letter
+
+Each demo patient is one wound outline (fixed shape seed) at shrinking sizes.
+Earlier visits are created by photographing the synthetic target in software
+and measuring it with the real pipeline, so every stored number is a real
+measurement of a known target. Today's visit is the printed sheet, photographed
+live on a phone.
+"""
+
+from __future__ import annotations
+
+import sys
+from datetime import date, timedelta
+from pathlib import Path
+
+import cv2
+import numpy as np
+
+from app import patients, store, synth, vision
+
+ROOT = Path(__file__).resolve().parent.parent
+DEMO = [
+    {"id": "demo-a", "name": "Demo patient A", "wound": "Diabetic foot ulcer, left heel (test target)",
+     "skin": 1, "shape_seed": 11, "areas": [8.0, 7.7, 7.4, 7.2], "today": 7.0},
+    {"id": "demo-b", "name": "Demo patient B", "wound": "Pressure injury, sacrum (test target)",
+     "skin": 4, "shape_seed": 23, "areas": [6.0, 4.9, 3.9, 3.2], "today": 2.6},
+]
+
+
+def seed() -> None:
+    start = date.today() - timedelta(days=28)
+    for d in DEMO:
+        p = {"id": d["id"], "name": d["name"], "wound": d["wound"], "start_date": start.isoformat(),
+             "demo": "Test target, not a person. Earlier visits are software photos of the same "
+                     "printed target design, measured by the real pipeline.",
+             "history": []}
+        patients.save(p)
+        rng = np.random.default_rng(d["shape_seed"])
+        for week, area in enumerate(d["areas"]):
+            plane, true_mm2 = synth.render_plane(rng, area, d["skin"], shape_seed=d["shape_seed"])
+            shot = synth.Shot(tilt_deg=float(rng.uniform(5, 20)), px_per_mm=float(rng.uniform(5, 7)),
+                              blur_sigma=0.0, glare=False, skin=d["skin"], true_cm2=true_mm2 / 100)
+            img = synth.photograph(rng, plane, 8.0, shot)
+            assert vision.check_photo(img)["ok"], "seed photo failed its own quality check"
+            m = vision.measure(img, "grabcut")
+            pid = f"seed-{d['id']}-w{week}"
+            ok, buf = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 90])
+            store.put(f"photos/{pid}.jpg", buf.tobytes(), "image/jpeg")
+            ok, buf = cv2.imencode(".jpg", vision.annotate(img, m), [cv2.IMWRITE_JPEG_QUALITY, 85])
+            store.put(f"annotated/{pid}-grabcut.jpg", buf.tobytes(), "image/jpeg")
+            clean = {k: v for k, v in m.items() if not k.startswith("_")}
+            e = patients.add_measurement(d["id"], pid, clean, on=start + timedelta(days=7 * week))
+            print(f"{d['id']} day {e['day']:2d}: true {true_mm2 / 100:.2f} cm², measured {e['area_cm2']:.2f}")
+
+
+def sheets() -> None:
+    out = ROOT / "print"
+    out.mkdir(exist_ok=True)
+    dpi = 300
+    ppm = dpi / 25.4
+    W, H = round(215.9 * ppm), round(279.4 * ppm)
+    for d in DEMO:
+        page = np.full((H, W, 3), 255, np.uint8)
+        rng = np.random.default_rng(d["shape_seed"] + 1000)
+        plane, true_mm2 = synth.render_plane(rng, d["today"], d["skin"], px_per_mm=ppm,
+                                             shape_seed=d["shape_seed"])
+        ox, oy = round(8 * ppm), round(20 * ppm)
+        page[oy:oy + plane.shape[0], ox:ox + plane.shape[1]] = plane
+        y = oy + plane.shape[0] + round(14 * ppm)
+        lines = [f"WoundTrace test target - {d['name']}, today's visit",
+                 f"True wound area: {true_mm2 / 100:.2f} cm2  (test target, not a real wound)",
+                 "Print at 100% / Actual size. Check: the bar below must measure 100 mm."]
+        for i, t in enumerate(lines):
+            cv2.putText(page, t, (ox, y + i * round(8 * ppm)), cv2.FONT_HERSHEY_SIMPLEX, 1.6,
+                        (40, 40, 40), 3, cv2.LINE_AA)
+        by = y + len(lines) * round(8 * ppm)
+        cv2.rectangle(page, (ox, by), (ox + round(100 * ppm), by + round(3 * ppm)), (0, 0, 0), -1)
+        path = out / f"{d['id']}-today.png"
+        cv2.imwrite(str(path), page)
+        # Embed the DPI so "Actual size" prints 1:1.
+        _set_png_dpi(path, dpi)
+        print(path, f"true {true_mm2 / 100:.2f} cm²")
+    # A spare card on its own, for photographing anything else.
+    card_page = np.full((H, W, 3), 255, np.uint8)
+    from app import card
+    card.draw(card_page, ppm)
+    path = out / "card-only.png"
+    cv2.imwrite(str(path), card_page)
+    _set_png_dpi(path, dpi)
+    print(path)
+
+
+def samples() -> None:
+    """Software photos of today's targets for judges without a printer (web/samples)."""
+    out = ROOT / "web" / "samples"
+    out.mkdir(parents=True, exist_ok=True)
+    cases = [("a-good", 0, dict(tilt_deg=12, px_per_mm=6.0, blur_sigma=0.0, glare=False)),
+             ("a-tilted", 0, dict(tilt_deg=56, px_per_mm=5.0, blur_sigma=0.0, glare=False)),
+             ("a-glare", 0, dict(tilt_deg=8, px_per_mm=6.0, blur_sigma=0.0, glare=True)),
+             ("b-good", 1, dict(tilt_deg=15, px_per_mm=6.5, blur_sigma=0.0, glare=False))]
+    for name, i, kw in cases:
+        d = DEMO[i]
+        for attempt in range(40):  # pick a glare spot that actually lands on the wound
+            rng = np.random.default_rng(d["shape_seed"] + 1000 + attempt)
+            plane, mm2 = synth.render_plane(np.random.default_rng(d["shape_seed"] + 1000), d["today"],
+                                            d["skin"], shape_seed=d["shape_seed"])
+            img = synth.photograph(rng, plane, 8.0, synth.Shot(skin=d["skin"], true_cm2=mm2 / 100, **kw))
+            m = vision.measure(img)
+            if not kw["glare"] or (m.get("found") and m["glare_fraction"] > 0.1):
+                break
+        cv2.imwrite(str(out / f"{name}.jpg"), img, [cv2.IMWRITE_JPEG_QUALITY, 88])
+        print(name, f"true {mm2 / 100:.2f}", vision.check_photo(img)["ok"], m.get("area_cm2"),
+              m.get("glare_fraction"))
+
+
+def _set_png_dpi(path: Path, dpi: int) -> None:
+    import struct
+    import zlib
+    data = path.read_bytes()
+    ppm = round(dpi / 0.0254)
+    body = b"pHYs" + struct.pack(">IIB", ppm, ppm, 1)
+    chunk = struct.pack(">I", 9) + body + struct.pack(">I", zlib.crc32(body) & 0xFFFFFFFF)
+    i = data.index(b"IDAT") - 4
+    path.write_bytes(data[:i] + chunk + data[i:])
+
+
+if __name__ == "__main__":
+    {"seed": seed, "sheets": sheets, "samples": samples}[sys.argv[1]]()

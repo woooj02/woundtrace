@@ -3,129 +3,435 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>woundtrace</title>
+<title>WoundTrace</title>
+<meta name="description" content="Measure a wound from a phone photo with OpenCV 5, coach a better photo when needed, and ask a nurse to review when healing stalls.">
 <style>
   :root {
-    --bg: #fafaf9; --panel: #ffffff; --ink: #1c1917; --muted: #78716c;
-    --line: #e7e5e4; --accent: #4f46e5; --accent-ink: #ffffff;
-    --ok: #15803d; --warn: #b45309; --err: #b91c1c; --code: #f5f5f4;
+    --bg: #f6f5f2; --panel: #ffffff; --ink: #1d1b18; --muted: #6f6a62; --line: #e4e1db;
+    --accent: #0f766e; --accent-ink: #ffffff; --accent-soft: #e6f3f1;
+    --ok: #15803d; --ok-soft: #e8f5ec; --warn: #b45309; --warn-soft: #fdf2e3;
+    --err: #b91c1c; --err-soft: #fdecec; --code: #f1efeb; --chart: #0f766e; --bench: #b45309;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #0c0a09; --panel: #1c1917; --ink: #f5f5f4; --muted: #a8a29e;
-      --line: #292524; --accent: #818cf8; --accent-ink: #0c0a09;
-      --ok: #4ade80; --warn: #fbbf24; --err: #f87171; --code: #292524;
+      --bg: #121110; --panel: #1c1b19; --ink: #f2f0ec; --muted: #a39e95; --line: #2e2c29;
+      --accent: #2dd4bf; --accent-ink: #0b1514; --accent-soft: #12302c;
+      --ok: #4ade80; --ok-soft: #13291b; --warn: #fbbf24; --warn-soft: #2e2410;
+      --err: #f87171; --err-soft: #321616; --code: #262422; --chart: #2dd4bf; --bench: #fbbf24;
     }
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink);
-         font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
-  main { max-width: 760px; margin: 0 auto; padding: 48px 16px 80px; }
-  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
-  .tagline { color: var(--muted); margin: 0 0 28px; }
-  form { display: flex; gap: 8px; }
-  textarea { flex: 1; resize: vertical; min-height: 52px; padding: 12px 14px;
-             font: inherit; color: inherit; background: var(--panel);
-             border: 1px solid var(--line); border-radius: 10px; }
-  textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
-  button { padding: 0 20px; font: inherit; font-weight: 600; border: 0;
-           border-radius: 10px; background: var(--accent); color: var(--accent-ink);
-           cursor: pointer; }
-  button:disabled { opacity: .5; cursor: progress; }
-  .examples { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 28px; }
-  .examples button { background: transparent; color: var(--muted); font-weight: 400;
-                     border: 1px solid var(--line); padding: 4px 10px; font-size: 14px; }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
-          padding: 20px; margin-bottom: 16px; }
-  .answer { white-space: pre-wrap; font-size: 17px; }
-  .meta { color: var(--muted); font-size: 13px; margin-top: 12px; }
-  .step { border-top: 1px solid var(--line); padding: 10px 0; font-size: 14px; }
-  .step:first-of-type { border-top: 0; }
-  .step b { font-family: ui-monospace, monospace; }
-  pre { background: var(--code); padding: 8px 10px; border-radius: 6px; margin: 6px 0 0;
-        overflow-x: auto; font-size: 13px; }
-  .err { color: var(--err); }
-  .badge { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 99px;
-           border: 1px solid var(--line); color: var(--muted); }
-  .badge.mock { color: var(--warn); border-color: var(--warn); }
-  footer { margin-top: 40px; color: var(--muted); font-size: 13px; }
-  @media (max-width: 520px) { form { flex-direction: column; } button { padding: 12px; } }
+         font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { border-bottom: 1px solid var(--line); background: var(--panel); }
+  .bar { max-width: 1120px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center;
+         gap: 16px; flex-wrap: wrap; }
+  .brand { font-weight: 700; font-size: 20px; letter-spacing: -0.01em; }
+  .brand span { color: var(--accent); }
+  .tag { color: var(--muted); font-size: 14px; flex: 1; min-width: 200px; }
+  nav { display: flex; gap: 4px; background: var(--code); padding: 4px; border-radius: 10px; }
+  nav button { border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 600;
+               padding: 6px 14px; border-radius: 7px; cursor: pointer; }
+  nav button[aria-selected="true"] { background: var(--panel); color: var(--ink); box-shadow: 0 1px 2px #0002; }
+  nav .count { background: var(--warn); color: #fff; border-radius: 99px; font-size: 12px; padding: 0 6px; margin-left: 4px; }
+  main { max-width: 1120px; margin: 0 auto; padding: 24px 16px 80px; }
+  .grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .card + .card { margin-top: 16px; }
+  h2 { font-size: 15px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 12px; }
+  h3 { margin: 0 0 4px; font-size: 18px; }
+  .muted { color: var(--muted); }
+  .small { font-size: 13px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 10px;
+          padding: 8px 12px; font: inherit; cursor: pointer; text-align: left; }
+  .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .chip b { display: block; font-size: 15px; }
+  .chip span { font-size: 12px; color: var(--muted); }
+  .capture { display: block; width: 100%; margin: 16px 0 10px; padding: 18px; border: 0; border-radius: 12px;
+             background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 700; font-size: 18px;
+             cursor: pointer; }
+  .capture:disabled { opacity: .6; cursor: progress; }
+  .samples { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .sample { border: 1px solid var(--line); border-radius: 10px; padding: 0; overflow: hidden; background: var(--panel);
+            cursor: pointer; font: inherit; color: var(--ink); text-align: left; }
+  .sample img { display: block; width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+  .sample div { padding: 6px 8px; font-size: 13px; }
+  .howto { margin: 12px 0 0; padding-left: 20px; color: var(--muted); font-size: 14px; }
+  .outcome { border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+  .outcome.recorded { background: var(--ok-soft); }
+  .outcome.retake { background: var(--warn-soft); }
+  .outcome.nurse_review { background: var(--accent-soft); }
+  .outcome .head { font-weight: 700; font-size: 20px; }
+  .outcome.recorded .head { color: var(--ok); }
+  .outcome.retake .head { color: var(--warn); }
+  .outcome.nurse_review .head { color: var(--accent); }
+  .say { white-space: pre-wrap; margin-top: 6px; }
+  .photo { width: 100%; border-radius: 10px; border: 1px solid var(--line); display: block; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 12px 0; }
+  @media (max-width: 560px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .stat { background: var(--code); border-radius: 10px; padding: 8px 10px; }
+  .stat b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 12px; color: var(--muted); }
+  .trace { list-style: none; padding: 0; margin: 0; counter-reset: s; }
+  .trace li { position: relative; padding: 8px 0 8px 34px; border-top: 1px solid var(--line); font-size: 14px; }
+  .trace li:first-child { border-top: 0; }
+  .trace li::before { counter-increment: s; content: counter(s); position: absolute; left: 0; top: 9px;
+                      width: 22px; height: 22px; border-radius: 99px; background: var(--code); color: var(--muted);
+                      font-size: 12px; display: grid; place-items: center; font-weight: 700; }
+  .trace .t { font-family: ui-monospace, monospace; font-weight: 700; }
+  .trace .why { color: var(--muted); }
+  .trace .bad { color: var(--err); }
+  .trace .note { font-style: italic; color: var(--muted); }
+  .trace .note::before { content: "agent: "; font-style: normal; font-weight: 600; }
+  details { margin-top: 4px; }
+  summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+  pre { background: var(--code); padding: 8px 10px; border-radius: 8px; overflow-x: auto; font-size: 12px; margin: 6px 0 0; max-height: 260px; }
+  .badge { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+  .badge.warn { color: var(--warn); border-color: var(--warn); }
+  .badge.ok { color: var(--ok); border-color: var(--ok); }
+  .badge.err { color: var(--err); border-color: var(--err); }
+  .empty { color: var(--muted); text-align: center; padding: 40px 10px; }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid currentColor; border-right-color: transparent;
+             border-radius: 99px; animation: spin .8s linear infinite; vertical-align: -3px; margin-right: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .err-box { background: var(--err-soft); color: var(--err); border-radius: 10px; padding: 10px 12px; }
+  .patients { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+  .alert { border: 1px solid var(--line); border-left: 4px solid var(--warn); border-radius: 10px; padding: 12px 14px; margin-top: 10px; }
+  .alert.approved { border-left-color: var(--ok); }
+  .alert.rejected { border-left-color: var(--muted); opacity: .75; }
+  .alert .row { display: flex; gap: 12px; align-items: flex-start; }
+  .alert img { width: 120px; border-radius: 8px; border: 1px solid var(--line); }
+  .actions { display: flex; gap: 8px; margin-top: 10px; }
+  .btn { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 6px 14px;
+         font: inherit; font-weight: 600; cursor: pointer; }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 6px 4px; border-top: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  svg text { fill: var(--muted); font-size: 11px; }
+  .legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .legend i { display: inline-block; width: 14px; height: 2px; vertical-align: middle; margin-right: 4px; }
+  .arch { width: 100%; height: auto; }
+  .foot { color: var(--muted); font-size: 13px; margin-top: 24px; }
+  [hidden] { display: none !important; }
 </style>
 </head>
 <body>
+<header>
+  <div class="bar">
+    <div class="brand">Wound<span>Trace</span></div>
+    <div class="tag">Measure a wound from a phone photo. A nurse approves every alert.</div>
+    <nav role="tablist">
+      <button role="tab" aria-selected="true" data-tab="patient">Patient</button>
+      <button role="tab" aria-selected="false" data-tab="nurse">Nurse <span class="count" id="pendingCount" hidden></span></button>
+      <button role="tab" aria-selected="false" data-tab="how">How it works</button>
+    </nav>
+  </div>
+</header>
+
 <main>
-  <h1 id="name">woundtrace</h1>
-  <p class="tagline">One sentence: who this is for and what it does for them.</p>
+  <section id="tab-patient">
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h2>1 · Who is this for</h2>
+          <div class="chips" id="patientChips"><span class="muted small">Loading…</span></div>
+          <h2 style="margin-top:18px">2 · Photo</h2>
+          <input type="file" id="file" accept="image/*" capture="environment" hidden>
+          <button class="capture" id="captureBtn">Take a photo</button>
+          <div class="muted small">Place the printed card flat next to the wound. Hold the phone straight above.</div>
+          <h2 style="margin-top:18px">Or try a sample photo</h2>
+          <div class="samples" id="samples"></div>
+          <p class="muted small" style="margin-bottom:0">Samples and demo patients are printed test targets, not real wounds or people.</p>
+        </div>
+      </div>
+      <div>
+        <div class="card" id="resultCard">
+          <div class="empty" id="resultEmpty">
+            The agent checks the photo, measures the wound in cm², compares it with earlier visits,
+            and decides what happens next. Its steps appear here.
+          </div>
+          <div id="result" hidden></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <form id="f">
-    <textarea id="prompt" placeholder="Ask something…" required></textarea>
-    <button id="go">Run</button>
-  </form>
-  <div class="examples" id="examples"></div>
+  <section id="tab-nurse" hidden>
+    <div class="card" id="queueCard">
+      <h2>Waiting for your approval</h2>
+      <div id="queue"></div>
+    </div>
+    <div class="patients" id="patientCards" style="margin-top:16px"></div>
+  </section>
 
-  <div id="out"></div>
-
-  <footer><span class="badge" id="engine">…</span></footer>
+  <section id="tab-how" hidden>
+    <div class="card">
+      <h2>Perception → decision → action</h2>
+      <svg class="arch" viewBox="0 0 1000 300" role="img" aria-label="Agent workflow diagram">
+        <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
+        <g font-size="13">
+          <rect x="10" y="110" width="140" height="70" rx="10" fill="var(--code)" stroke="var(--line)"/>
+          <text x="80" y="140" text-anchor="middle" style="fill:var(--ink);font-weight:700">Phone photo</text>
+          <text x="80" y="160" text-anchor="middle">+ printed card</text>
+          <rect x="190" y="20" width="260" height="120" rx="10" fill="var(--accent-soft)" stroke="var(--accent)"/>
+          <text x="320" y="44" text-anchor="middle" style="fill:var(--ink);font-weight:700">check_photo (OpenCV 5)</text>
+          <text x="320" y="66" text-anchor="middle">ArUco detect · IPPE pose → tilt</text>
+          <text x="320" y="86" text-anchor="middle">marker edge width → blur in mm</text>
+          <text x="320" y="106" text-anchor="middle">homography residual → card flat</text>
+          <text x="320" y="126" text-anchor="middle">px/mm · brightness</text>
+          <rect x="190" y="160" width="260" height="120" rx="10" fill="var(--accent-soft)" stroke="var(--accent)"/>
+          <text x="320" y="184" text-anchor="middle" style="fill:var(--ink);font-weight:700">measure_wound (OpenCV 5)</text>
+          <text x="320" y="206" text-anchor="middle">warpPerspective to true mm</text>
+          <text x="320" y="226" text-anchor="middle">Lab colour + edge-seeking threshold</text>
+          <text x="320" y="246" text-anchor="middle">GrabCut refine · glare · contrast</text>
+          <text x="320" y="266" text-anchor="middle">area · length · width · perimeter</text>
+          <rect x="500" y="90" width="200" height="110" rx="10" fill="var(--warn-soft)" stroke="var(--bench)"/>
+          <text x="600" y="116" text-anchor="middle" style="fill:var(--ink);font-weight:700">Agent (Bedrock)</text>
+          <text x="600" y="138" text-anchor="middle">picks the next tool</text>
+          <text x="600" y="158" text-anchor="middle">plain-code gates it</text>
+          <text x="600" y="178" text-anchor="middle">can't override</text>
+          <rect x="750" y="10" width="230" height="60" rx="10" fill="var(--code)" stroke="var(--line)"/>
+          <text x="865" y="36" text-anchor="middle" style="fill:var(--ink);font-weight:700">request_retake</text>
+          <text x="865" y="56" text-anchor="middle">specific fix for the patient</text>
+          <rect x="750" y="85" width="230" height="60" rx="10" fill="var(--code)" stroke="var(--line)"/>
+          <text x="865" y="111" text-anchor="middle" style="fill:var(--ink);font-weight:700">measure again (colour)</text>
+          <text x="865" y="131" text-anchor="middle">when the edge is weak</text>
+          <rect x="750" y="160" width="230" height="60" rx="10" fill="var(--code)" stroke="var(--line)"/>
+          <text x="865" y="186" text-anchor="middle" style="fill:var(--ink);font-weight:700">record + assess_healing</text>
+          <text x="865" y="206" text-anchor="middle">4-week, 50% benchmark</text>
+          <rect x="750" y="235" width="230" height="60" rx="10" fill="var(--ok-soft)" stroke="var(--ok)"/>
+          <text x="865" y="261" text-anchor="middle" style="fill:var(--ink);font-weight:700">nurse review (draft)</text>
+          <text x="865" y="281" text-anchor="middle">sent only after approval</text>
+          <path d="M150 140 L188 90" stroke="var(--muted)" fill="none" marker-end="url(#ar)"/>
+          <path d="M450 80 L498 125" stroke="var(--muted)" fill="none" marker-end="url(#ar)"/>
+          <path d="M450 220 L498 170" stroke="var(--muted)" fill="none" marker-end="url(#ar)"/>
+          <path d="M700 120 L748 45" stroke="var(--muted)" fill="none" marker-end="url(#ar)"/>
+          <path d="M700 135 L748 115" stroke="var(--muted)" fill="none" marker-end="url(#ar)"/>
+          <path d="M700 155 L748 190" stroke="var(--muted)" fill="none" marker-end="url(#ar)"/>
+          <path d="M700 175 L748 260" stroke="var(--muted)" fill="none" marker-end="url(#ar)"/>
+          <path d="M750 115 C 600 250, 480 250, 452 230" stroke="var(--muted)" stroke-dasharray="4 4" fill="none" marker-end="url(#ar)"/>
+        </g>
+      </svg>
+      <p class="muted small">Runs on AWS: Lambda (OpenCV 5 + FastAPI) behind a Function URL, photos and records in S3, the agent on Amazon Bedrock, logs in CloudWatch.</p>
+    </div>
+    <div class="card" id="evalCard">
+      <h2>Evaluation (synthetic test targets with known area)</h2>
+      <div id="evalBody" class="muted small">See the README and eval/summary.md in the repository.</div>
+    </div>
+  </section>
+  <p class="foot">WoundTrace measures; it does not diagnose. Demo patients are printed test targets. <span id="engineNote"></span></p>
 </main>
+
 <script>
-// The scripted demo prompts. Rehearse these with REPLAY=record.
-const EXAMPLES = [
-  "What's 2500 growing at 7% a year for 10 years?",
-  "What's today's date, and how many days until Dec 31?",
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = (n, d = 2) => n == null ? "–" : Number(n).toFixed(d);
+let state = { patient: null, patients: [], busy: false };
+
+const SAMPLES = [
+  { file: "a-good.jpg", patient: "demo-a", label: "Patient A · good photo" },
+  { file: "a-tilted.jpg", patient: "demo-a", label: "Patient A · tilted" },
+  { file: "a-glare.jpg", patient: "demo-a", label: "Patient A · flash glare" },
+  { file: "b-good.jpg", patient: "demo-b", label: "Patient B · good photo" },
 ];
 
-const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-
-for (const ex of EXAMPLES) {
-  const b = document.createElement("button");
-  b.type = "button"; b.textContent = ex;
-  b.onclick = () => { $("prompt").value = ex; $("f").requestSubmit(); };
-  $("examples").append(b);
-}
-
-fetch("/api/health").then((r) => r.json()).then((h) => {
-  $("engine").textContent = `${h.engine === "mock" ? "mock engine" : h.model}${h.replay !== "off" ? " · replay " + h.replay : ""}`;
-  if (h.engine === "mock") $("engine").classList.add("mock");
-}).catch(() => { $("engine").textContent = "server unreachable"; });
-
-$("prompt").addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("f").requestSubmit(); }
-});
-
-$("f").onsubmit = async (e) => {
-  e.preventDefault();
-  const prompt = $("prompt").value.trim();
-  if (!prompt) return;
-  $("go").disabled = true; $("go").textContent = "Thinking…";
-  $("out").innerHTML = "";
-  try {
-    const r = await fetch("/api/run", {
-      method: "POST", headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({prompt}),
-    });
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.detail || r.statusText);
-    render(d);
-  } catch (err) {
-    $("out").innerHTML = `<div class="card err">${esc(err.message)}</div>`;
-  } finally {
-    $("go").disabled = false; $("go").textContent = "Run";
-  }
+const TOOL_LABEL = {
+  check_photo: "Checked the photo", measure_wound: "Measured the wound", get_history: "Read earlier visits",
+  assess_healing: "Compared with baseline", record_measurement: "Saved to the record",
+  request_retake: "Asked for a new photo", request_nurse_review: "Drafted a note for the nurse",
 };
 
-function render(d) {
-  const steps = (d.steps || []).map((s) => `
-    <div class="step"><b>${esc(s.tool)}</b>
-      <pre>${esc(JSON.stringify(s.input))}</pre>
-      ${s.error ? `<pre class="err">${esc(s.error)}</pre>` : `<pre>${esc(JSON.stringify(s.output, null, 2))}</pre>`}
-    </div>`).join("");
-  $("out").innerHTML = `
-    <div class="card"><div class="answer">${esc(d.answer)}</div>
-      <div class="meta">${(d.ms / 1000).toFixed(1)}s · ${d.steps.length} tool call${d.steps.length === 1 ? "" : "s"}${d.replayed ? " · replayed" : ""}</div>
-    </div>
-    ${steps ? `<div class="card"><div class="meta" style="margin:0 0 6px">How it got there</div>${steps}</div>` : ""}`;
+async function api(path, opts = {}) {
+  const r = await fetch(path, opts);
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.detail || `HTTP ${r.status}`);
+  return body;
 }
+
+// Tabs
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => showTab(b.dataset.tab));
+function showTab(name) {
+  document.querySelectorAll("nav button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === name));
+  ["patient", "nurse", "how"].forEach(t => $(`#tab-${t}`).hidden = t !== name);
+  if (name === "nurse") loadNurse();
+  try { localStorage.setItem("tab", name); } catch {}
+}
+
+async function loadPatients() {
+  state.patients = await api("/api/patients");
+  if (!state.patient && state.patients.length) state.patient = state.patients[0].id;
+  $("#patientChips").innerHTML = state.patients.map(p => `
+    <button class="chip" aria-pressed="${p.id === state.patient}" data-id="${esc(p.id)}">
+      <b>${esc(p.name)}</b><span>${esc(p.wound)} · day ${p.day}</span></button>`).join("") ||
+    `<span class="muted small">No patients yet.</span>`;
+  document.querySelectorAll(".chip").forEach(c => c.onclick = () => { state.patient = c.dataset.id; loadPatients(); });
+  const pending = state.patients.reduce((n, p) => n + p.pending, 0);
+  $("#pendingCount").hidden = !pending; $("#pendingCount").textContent = pending;
+}
+
+$("#samples").innerHTML = SAMPLES.map((s, i) => `
+  <button class="sample" data-i="${i}"><img src="/static/samples/${s.file}" alt="${esc(s.label)}" loading="lazy"><div>${esc(s.label)}</div></button>`).join("");
+document.querySelectorAll(".sample").forEach(b => b.onclick = async () => {
+  const s = SAMPLES[b.dataset.i];
+  state.patient = s.patient; loadPatients();
+  const blob = await (await fetch(`/static/samples/${s.file}`)).blob();
+  runVisit(blob, s.file);
+});
+
+$("#captureBtn").onclick = () => $("#file").click();
+$("#file").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = "";
+  if (!f) return;
+  runVisit(await shrink(f), f.name);
+};
+
+// Phones take 12 MP photos; 2000 px is plenty for the card and keeps uploads small.
+async function shrink(file) {
+  try {
+    const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+    const k = Math.min(1, 2000 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+    return await new Promise(r => c.toBlob(r, "image/jpeg", 0.92));
+  } catch { return file; }
+}
+
+async function runVisit(blob, name) {
+  if (state.busy || !state.patient) return;
+  state.busy = true; $("#captureBtn").disabled = true;
+  $("#resultEmpty").hidden = true; const out = $("#result"); out.hidden = false;
+  out.innerHTML = `<div class="muted"><span class="spinner"></span>Uploading…</div>`;
+  try {
+    const fd = new FormData(); fd.append("file", blob, name || "photo.jpg"); fd.append("patient_id", state.patient);
+    const up = await api("/api/photos", { method: "POST", body: fd });
+    out.innerHTML = `<div class="muted"><span class="spinner"></span>The agent is checking and measuring the photo…</div>
+      <img class="photo" style="margin-top:12px;opacity:.6" src="/api/img/photos/${up.photo_id}.jpg" alt="">`;
+    const run = await api("/api/visits", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ patient_id: state.patient, photo_id: up.photo_id }) });
+    renderRun(run);
+    loadPatients();
+  } catch (err) {
+    out.innerHTML = `<div class="err-box">Something went wrong: ${esc(err.message)}. Please try again.</div>`;
+  } finally { state.busy = false; $("#captureBtn").disabled = false; }
+}
+
+function renderRun(run) {
+  const o = run.outcome || { kind: "none" };
+  const meas = [...run.steps].reverse().find(s => s.tool === "measure_wound" && s.output && s.output.found)?.output;
+  const heal = run.steps.find(s => s.tool === "assess_healing" && s.output)?.output;
+  const head = { recorded: `Measured ${fmt(meas?.area_cm2)} cm²`, retake: "Please take a new photo",
+                 nurse_review: o.recorded ? `Measured ${fmt(meas?.area_cm2)} cm² · nurse asked to review` : "Sent to your nurse to check" }[o.kind] || "Done";
+  const img = meas?.annotated ? `/api/img/${meas.annotated}` : `/api/img/photos/${run.photo_id}.jpg`;
+  $("#result").innerHTML = `
+    <div class="outcome ${esc(o.kind)}">
+      <div class="head">${esc(head)}</div>
+      <div class="say">${esc(run.answer)}</div>
+      ${o.kind === "retake" && o.fixes?.length ? `<ul class="small" style="margin:8px 0 0">${o.fixes.map(f => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}
+    </div>
+    <img class="photo" src="${img}" alt="Photo with the measured outline">
+    ${meas ? `<div class="stats">
+      <div class="stat"><b>${fmt(meas.area_cm2)}</b><span>area, cm²</span></div>
+      <div class="stat"><b>${fmt(meas.length_cm, 1)} × ${fmt(meas.width_cm, 1)}</b><span>length × width, cm</span></div>
+      <div class="stat"><b>${fmt(meas.ruler_area_cm2)}</b><span>ruler L×W would say, cm²</span></div>
+      <div class="stat"><b>${heal?.reduction_from_baseline != null ? Math.round(heal.reduction_from_baseline * 100) + "%" : "–"}</b><span>smaller than baseline</span></div>
+    </div>` : ""}
+    <h2 style="margin-top:16px">What the agent did <span class="badge ${run.engine === "bedrock" ? "ok" : "warn"}">${run.engine === "bedrock" ? "Bedrock · " + esc(run.model) : "rules engine (no LLM)"}</span> <span class="badge">${run.ms} ms</span></h2>
+    ${run.note ? `<div class="small muted" style="margin-bottom:6px">${esc(run.note)}</div>` : ""}
+    <ol class="trace">${run.steps.map(stepHtml).join("")}</ol>`;
+}
+
+function stepHtml(s) {
+  if (s.tool === "agent_note") return `<li><div class="note">${esc(s.output)}</div></li>`;
+  const o = s.output || {};
+  let why = "";
+  if (s.error) why = `<span class="bad">refused: ${esc(s.error)}</span>`;
+  else if (s.tool === "check_photo") {
+    const m = o.metrics || {};
+    why = o.ok ? `passed · tilt ${fmt(m.tilt_deg, 0)}° · ${fmt(m.px_per_mm, 1)} px/mm · edge ${fmt(m.edge_mm)} mm`
+               : `<span class="bad">failed: ${o.problems.map(p => esc(p.code)).join(", ")}</span>` +
+                 (m.tilt_deg != null ? ` · tilt ${fmt(m.tilt_deg, 0)}°` : "");
+  } else if (s.tool === "measure_wound") {
+    why = o.found ? `${esc(s.input.method)}: ${fmt(o.area_cm2)} cm² · glare ${fmt(o.glare_fraction * 100, 1)}% · edge contrast ${fmt(o.edge_contrast, 1)} → <b>${esc(o.decision?.action)}</b>${o.decision?.reasons?.length ? " (" + o.decision.reasons.map(esc).join(", ") + ")" : ""}`
+                  : `<span class="bad">no wound found</span>`;
+  } else if (s.tool === "assess_healing") why = `${esc(o.status)}: ${esc(o.detail)}`;
+  else if (s.tool === "get_history") why = `${o.history?.length ?? 0} earlier measurements`;
+  else if (s.tool === "record_measurement") why = `saved ${fmt(o.saved?.area_cm2)} cm² on day ${o.saved?.day}`;
+  else if (s.tool === "request_retake") why = `“${esc(s.input.message)}”`;
+  else if (s.tool === "request_nurse_review") why = `${esc(s.input.kind)} · waiting for approval`;
+  return `<li><span class="t">${esc(TOOL_LABEL[s.tool] || s.tool)}</span> <span class="why">${why}</span>
+    <details><summary>${esc(s.tool)} · ${s.ms ?? 0} ms</summary><pre>${esc(JSON.stringify({ input: s.input, output: s.output, error: s.error }, null, 1))}</pre></details></li>`;
+}
+
+async function loadNurse() {
+  const ps = await api("/api/patients");
+  const full = await Promise.all(ps.map(p => api(`/api/patients/${p.id}`)));
+  const alerts = full.flatMap(p => p.alerts.map(a => ({ ...a, patient: p })));
+  const pending = alerts.filter(a => a.status === "awaiting_approval");
+  $("#queue").innerHTML = pending.length ? pending.map(alertHtml).join("") : `<div class="muted small">Nothing waiting.</div>`;
+  $("#patientCards").innerHTML = full.map(p => `
+    <div class="card">
+      <h3>${esc(p.name)}</h3>
+      <div class="muted small">${esc(p.wound)} · day ${p.day} · <span title="${esc(p.demo)}">test target</span></div>
+      ${chart(p)}
+      <table><tr><th>Day</th><th>Date</th><th>Area cm²</th><th>Ruler L×W</th><th>Photo</th></tr>
+        ${p.history.map(h => `<tr><td>${h.day}</td><td>${esc(h.date)}</td><td><b>${fmt(h.area_cm2)}</b></td><td>${fmt(h.ruler_area_cm2)}</td>
+          <td>${h.photo_id ? `<a href="/api/img/annotated/${esc(h.photo_id)}-${esc(h.method || "grabcut")}.jpg" target="_blank">view</a>` : ""}</td></tr>`).join("")}
+      </table>
+      ${p.alerts.filter(a => a.status !== "awaiting_approval").slice(0, 3).map(alertHtml).join("")}
+    </div>`).join("");
+  document.querySelectorAll("[data-decide]").forEach(b => b.onclick = async () => {
+    b.disabled = true;
+    try { await api(`/api/alerts/${b.dataset.id}/decide`, { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ decision: b.dataset.decide }) }); }
+    catch (e) { alert(e.message); }
+    loadNurse(); loadPatients();
+  });
+}
+
+function alertHtml(a) {
+  const m = a.evidence?.measure, h = a.evidence?.healing;
+  const p = a.patient || state.patients.find(x => x.id === a.patient_id) || {};
+  return `<div class="alert ${esc(a.status)}"><div class="row">
+    ${m?.annotated ? `<img src="/api/img/${esc(m.annotated)}" alt="">` : ""}
+    <div><b>${esc(p.name || a.patient_id)}</b> · ${a.kind === "care_plan_review" ? "care plan review" : "confirm the outline"}
+      <span class="badge ${a.status === "approved" ? "ok" : a.status === "rejected" ? "" : "warn"}">${esc(a.status.replaceAll("_", " "))}</span>
+      <div class="say small">${esc(a.note)}</div>
+      ${h?.baseline_cm2 ? `<div class="small muted">Evidence: ${fmt(h.baseline_cm2)} → ${fmt(m?.area_cm2)} cm² over ${h.days_since_baseline} days (${Math.round(h.reduction_from_baseline * 100)}% smaller; benchmark 50% at 4 weeks)</div>` : ""}
+      ${a.status === "awaiting_approval" ? `<div class="actions">
+        <button class="btn primary" data-decide="approve" data-id="${esc(a.id)}">Approve and send</button>
+        <button class="btn" data-decide="reject" data-id="${esc(a.id)}">Dismiss</button></div>` : ""}
+    </div></div></div>`;
+}
+
+// Area over time, with the 4-week benchmark (half the baseline by day 28).
+function chart(p) {
+  const H = p.history; if (!H.length) return `<p class="muted small">No measurements yet.</p>`;
+  const W = 460, Ht = 170, L = 36, R = 10, T = 10, B = 26;
+  const base = H[0].area_cm2, maxDay = Math.max(35, ...H.map(h => h.day));
+  const maxA = Math.max(...H.map(h => h.area_cm2)) * 1.1;
+  const x = d => L + (W - L - R) * d / maxDay, y = a => T + (Ht - T - B) * (1 - a / maxA);
+  const line = H.map((h, i) => `${i ? "L" : "M"}${x(h.day).toFixed(1)},${y(h.area_cm2).toFixed(1)}`).join(" ");
+  const ticks = [0, 7, 14, 21, 28, 35].filter(d => d <= maxDay);
+  return `<svg viewBox="0 0 ${W} ${Ht}" style="width:100%;margin:10px 0" role="img" aria-label="Wound area over time">
+    ${[0, .5, 1].map(f => `<line x1="${L}" x2="${W - R}" y1="${y(maxA * f / 1.1)}" y2="${y(maxA * f / 1.1)}" stroke="var(--line)"/>
+      <text x="${L - 6}" y="${y(maxA * f / 1.1) + 4}" text-anchor="end">${(maxA * f / 1.1).toFixed(1)}</text>`).join("")}
+    ${ticks.map(d => `<text x="${x(d)}" y="${Ht - 8}" text-anchor="middle">day ${d}</text>`).join("")}
+    <line x1="${x(0)}" y1="${y(base)}" x2="${x(28)}" y2="${y(base / 2)}" stroke="var(--bench)" stroke-dasharray="5 4" stroke-width="1.5"/>
+    <path d="${line}" fill="none" stroke="var(--chart)" stroke-width="2.5"/>
+    ${H.map(h => `<circle cx="${x(h.day)}" cy="${y(h.area_cm2)}" r="4" fill="var(--chart)"><title>day ${h.day}: ${fmt(h.area_cm2)} cm²</title></circle>`).join("")}
+  </svg>
+  <div class="legend"><span><i style="background:var(--chart)"></i>measured area</span><span><i style="background:var(--bench)"></i>on track: half the baseline by day 28</span></div>`;
+}
+
+api("/api/health").then(h => {
+  $("#engineNote").textContent = `OpenCV ${h.opencv} · agent: ${h.engine === "bedrock" ? "Amazon Bedrock" : "rules engine"} · storage: ${h.storage}`;
+}).catch(() => {});
+loadPatients().catch(e => $("#patientChips").innerHTML = `<div class="err-box">${esc(e.message)}</div>`);
+try { const t = localStorage.getItem("tab"); if (t) showTab(t); } catch {}
 </script>
 </body>
 </html>

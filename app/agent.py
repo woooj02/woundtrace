@@ -1,12 +1,12 @@
-"""The agent loop: Claude plus the tools in tools.py, with a recorded trace.
+"""The visit agent: perceive (OpenCV tools) → decide → act, with a recorded trace.
 
-Two engines:
-  claude: the real thing, used whenever ANTHROPIC_API_KEY is set.
-  mock:   no key, no network. It returns a canned answer so the UI and the
-          tests work offline. It is never what you demo.
-
-The trace (every tool call, its input and its output) goes back to the UI.
-Judges trust what they can watch happen, so show it.
+Two engines, same tools, same guards:
+  bedrock: an LLM on Amazon Bedrock (Converse API) chooses the next tool and
+           writes the messages. Used when Bedrock is reachable and today's
+           LLM budget is not spent.
+  rules:   no LLM. A fixed sequence driven by policy.decide, with template
+           messages. Used offline, in tests, and as the fallback. The UI
+           always shows which engine ran.
 """
 
 from __future__ import annotations
@@ -14,100 +14,177 @@ from __future__ import annotations
 import json
 import os
 import time
+from datetime import date
 
-from . import tools
+from . import patients, policy, store, tools, vision
 
-MODEL = os.environ.get("CLAUDE_MODEL", "claude-opus-5-5")
-# Opus 5.5 defaults to medium. Raise it for hard reasoning, drop it to low
-# when the demo has to feel instant.
-EFFORT = os.environ.get("CLAUDE_EFFORT", "medium")
-MAX_STEPS = int(os.environ.get("AGENT_MAX_STEPS", "8"))
+MODEL = os.environ.get("BEDROCK_MODEL", "us.amazon.nova-2-lite-v1:0")
+REGION = os.environ.get("AWS_REGION", "us-east-1")
+MAX_STEPS = int(os.environ.get("AGENT_MAX_STEPS", "10"))
+DAILY_LLM_RUNS = int(os.environ.get("DAILY_LLM_RUNS", "150"))
 
-SYSTEM = os.environ.get("AGENT_SYSTEM") or (
-    "You are the assistant inside a hackathon demo. Use the tools whenever they "
-    "can give a more exact answer than you could. Keep the final answer short "
-    "and concrete. Lead with the answer, then one or two lines on how you got it."
-)
+SYSTEM = """You are WoundTrace, the photo assistant for a home wound-care service.
+A patient has sent a photo of their wound next to a printed reference card. Your job
+is one visit: get a trustworthy measurement or a better photo, and tell the nurse
+when the numbers say they should look.
+
+How to work:
+1. Call check_photo first. If it fails, call request_retake with a short, kind
+   message built from the fixes it returned. Do not measure a failed photo.
+2. Otherwise call measure_wound with method "grabcut". Follow its decision:
+   - retake: request_retake, explaining the problem (for example glare).
+   - cross_check: call measure_wound again with method "colour"; follow the new decision.
+   - nurse_outline: request_nurse_review with kind "confirm_outline".
+   - record: call get_history and assess_healing, then record_measurement.
+     If assess_healing says needs_nurse, also call request_nurse_review with kind
+     "care_plan_review" and a note giving baseline, current area, days and change.
+3. Your final reply is shown to the patient: speak to them as "you", in two or three
+   plain sentences with no markdown. Say what happened and what happens next, and
+   mention the area if one was recorded.
+
+Rules: you measure, you never diagnose; don't comment on infection or treatment.
+Nurse messages are drafts that a human approves. Use only numbers the tools returned."""
 
 
 def engine() -> str:
-    return "claude" if os.environ.get("ANTHROPIC_API_KEY") else "mock"
+    if os.environ.get("AGENT_ENGINE") in ("rules", "bedrock"):
+        return os.environ["AGENT_ENGINE"]
+    return "bedrock" if os.environ.get("AWS_LAMBDA_FUNCTION_NAME") or os.environ.get("USE_BEDROCK") else "rules"
 
 
-def run(prompt: str) -> dict:
+def _llm_budget_left() -> bool:
+    key = f"usage/{date.today().isoformat()}.json"
+    u = store.get_json(key, {"runs": 0})
+    return u["runs"] < DAILY_LLM_RUNS
+
+
+def _count_llm_run(usage: dict) -> None:
+    key = f"usage/{date.today().isoformat()}.json"
+    u = store.get_json(key, {"runs": 0, "input_tokens": 0, "output_tokens": 0})
+    u["runs"] += 1
+    u["input_tokens"] += usage.get("inputTokens", 0)
+    u["output_tokens"] += usage.get("outputTokens", 0)
+    store.put_json(key, u)
+
+
+def run(patient_id: str, photo_id: str) -> dict:
     started = time.monotonic()
-    if engine() == "mock":
-        result = _run_mock(prompt)
-    else:
-        result = _run_claude(prompt)
-    result["engine"] = engine()
-    result["ms"] = int((time.monotonic() - started) * 1000)
+    visit = tools.Visit(patient_id, photo_id)
+    eng = engine()
+    note = None
+    if eng == "bedrock" and not _llm_budget_left():
+        eng, note = "rules", "Daily LLM budget reached; the rules engine ran instead."
+    if eng == "bedrock":
+        try:
+            result = _run_bedrock(visit)
+        except Exception as exc:  # Bedrock down or denied: say so and fall back
+            note = f"Bedrock unavailable ({type(exc).__name__}: {str(exc)[:160]}); rules engine ran instead."
+            visit = tools.Visit(patient_id, photo_id)
+            eng, result = "rules", None
+    if eng == "rules":
+        result = _run_rules(visit)
+    result.update(engine=eng, model=MODEL if eng == "bedrock" else None, note=note,
+                  ms=int((time.monotonic() - started) * 1000),
+                  patient_id=patient_id, photo_id=photo_id, outcome=visit.outcome,
+                  decision=visit.decision, created=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
+    result["id"] = f"{photo_id}"
+    store.put_json(f"runs/{photo_id}.json", result)
+    # One structured line per visit: CloudWatch Logs Insights can query these.
+    print(json.dumps({"event": "visit", "engine": eng, "patient": patient_id, "photo": photo_id,
+                      "outcome": (visit.outcome or {}).get("kind"),
+                      "decision": (visit.decision or {}).get("action"),
+                      "steps": [s["tool"] for s in result["steps"]], "ms": result["ms"],
+                      "usage": result.get("usage")}))
     return result
 
 
-def _run_mock(prompt: str) -> dict:
-    return {
-        "answer": f"(mock engine: set ANTHROPIC_API_KEY for real answers) You asked: {prompt}",
-        "steps": [],
-        "stop": "mock",
-    }
+def _step(visit, name, args, steps):
+    t = time.perf_counter()
+    step = {"tool": name, "input": args}
+    try:
+        step["output"] = tools.call(visit, name, args)
+    except Exception as exc:
+        step["error"] = f"{type(exc).__name__}: {exc}"
+    step["ms"] = round((time.perf_counter() - t) * 1000)
+    steps.append(step)
+    return step
 
 
-def _run_claude(prompt: str) -> dict:
-    import anthropic
-
-    client = anthropic.Anthropic()
-    messages: list = [{"role": "user", "content": prompt}]
+def _run_rules(visit: tools.Visit) -> dict:
+    """The deterministic path. Same tools, same guards, template wording."""
     steps: list[dict] = []
+    pid, ph = visit.patient_id, visit.photo_id
+    chk = _step(visit, "check_photo", {"photo_id": ph}, steps)["output"]
+    if not chk["ok"]:
+        fixes = " ".join(p["fix"] for p in chk["problems"])
+        _step(visit, "request_retake", {"photo_id": ph, "message": fixes}, steps)
+        return {"answer": f"I couldn't measure this photo. {fixes}", "steps": steps}
+    m = _step(visit, "measure_wound", {"photo_id": ph, "method": "grabcut"}, steps)["output"]
+    if m["decision"]["action"] == "cross_check":
+        m = _step(visit, "measure_wound", {"photo_id": ph, "method": "colour"}, steps)["output"]
+    action = m["decision"]["action"]
+    if action == "retake":
+        fixes = " ".join(vision.FIX.get(r, r) for r in m["decision"]["reasons"])
+        _step(visit, "request_retake", {"photo_id": ph, "message": fixes}, steps)
+        return {"answer": f"I couldn't measure this photo reliably. {fixes}", "steps": steps}
+    if action == "nurse_outline":
+        _step(visit, "request_nurse_review", {
+            "patient_id": pid, "photo_id": ph, "kind": "confirm_outline",
+            "note": f"The wound edge is unclear in today's photo (edge contrast "
+                    f"{m.get('edge_contrast')}). Please confirm or trace the outline."}, steps)
+        return {"answer": "Your photo is saved. The edge of the wound is hard to see, so your "
+                          "nurse will check the outline before it is recorded.", "steps": steps}
+    _step(visit, "get_history", {"patient_id": pid}, steps)
+    h = _step(visit, "assess_healing", {"patient_id": pid, "photo_id": ph}, steps)["output"]
+    _step(visit, "record_measurement", {"patient_id": pid, "photo_id": ph}, steps)
+    answer = f"Measured {m['area_cm2']:.2f} cm² and saved it to your record."
+    if h.get("needs_nurse"):
+        _step(visit, "request_nurse_review", {
+            "patient_id": pid, "photo_id": ph, "kind": "care_plan_review",
+            "note": f"Area {m['area_cm2']:.2f} cm² on day {h['days_since_baseline']}, baseline "
+                    f"{h['baseline_cm2']:.2f} cm² ({h['reduction_from_baseline']:.0%} smaller). "
+                    f"{h['detail']}"}, steps)
+        answer += " I've asked your nurse to review how it's healing."
+    return {"answer": answer, "steps": steps}
 
+
+def _run_bedrock(visit: tools.Visit) -> dict:
+    import boto3
+
+    client = boto3.client("bedrock-runtime", region_name=REGION)
+    tool_config = {"tools": [{"toolSpec": {"name": s["name"], "description": s["description"],
+                                           "inputSchema": {"json": s["input_schema"]}}}
+                             for s in tools.specs()]}
+    task = (f"New photo from patient_id={visit.patient_id}, photo_id={visit.photo_id}. "
+            f"Today is {date.today().isoformat()}.")
+    messages = [{"role": "user", "content": [{"text": task}]}]
+    steps: list[dict] = []
+    usage = {"inputTokens": 0, "outputTokens": 0}
     for _ in range(MAX_STEPS):
-        # The beta endpoint is used only for the server-side refusal fallback.
-        # If a safety classifier declines a benign request mid-demo, the API
-        # retries it on another model inside the same call, so no error ever
-        # reaches the stage.
-        response = client.beta.messages.create(
-            model=MODEL,
-            max_tokens=16000,
-            system=SYSTEM,
-            tools=tools.specs(),
-            messages=messages,
-            output_config={"effort": EFFORT},
-            betas=["server-side-fallback-2026-07-01"],
-            fallbacks="default",
-        )
-        # Append the content unchanged. Thinking blocks have to come back
-        # exactly as they were sent, or the next request is rejected.
-        messages.append({"role": "assistant", "content": response.content})
-
-        if response.stop_reason == "pause_turn":
-            continue
-        if response.stop_reason != "tool_use":
-            return {"answer": _text(response), "steps": steps, "stop": response.stop_reason}
-
+        r = client.converse(modelId=MODEL, system=[{"text": SYSTEM}], messages=messages,
+                            toolConfig=tool_config, inferenceConfig={"maxTokens": 800})
+        for k in usage:
+            usage[k] += r.get("usage", {}).get(k, 0)
+        msg = r["output"]["message"]
+        messages.append(msg)
+        texts = [b["text"] for b in msg["content"] if "text" in b]
+        if r["stopReason"] != "tool_use":
+            _count_llm_run(usage)
+            return {"answer": "\n".join(texts).strip(), "steps": steps, "usage": usage}
+        if texts:
+            steps.append({"tool": "agent_note", "output": " ".join(texts).strip()})
         results = []
-        for block in response.content:
-            if block.type != "tool_use":
+        for b in msg["content"]:
+            if "toolUse" not in b:
                 continue
-            step = {"tool": block.name, "input": block.input}
-            try:
-                output = tools.call(block.name, block.input)
-                step["output"] = output
-                results.append({"type": "tool_result", "tool_use_id": block.id,
-                                "content": json.dumps(output, default=str)})
-            except Exception as exc:  # the model sees the error and can recover
-                step["error"] = str(exc)
-                results.append({"type": "tool_result", "tool_use_id": block.id,
-                                "content": f"error: {exc}", "is_error": True})
-            steps.append(step)
-        # All results go back in one message. Splitting them teaches the model
-        # to stop calling tools in parallel.
+            tu = b["toolUse"]
+            step = _step(visit, tu["name"], tu.get("input") or {}, steps)
+            if "error" in step:
+                results.append({"toolResult": {"toolUseId": tu["toolUseId"], "status": "error",
+                                               "content": [{"text": step["error"]}]}})
+            else:
+                results.append({"toolResult": {"toolUseId": tu["toolUseId"],
+                                               "content": [{"json": json.loads(json.dumps(step["output"], default=str))}]}})
         messages.append({"role": "user", "content": results})
-
-    return {"answer": "Stopped after the step limit without a final answer.",
-            "steps": steps, "stop": "max_steps"}
-
-
-def _text(response) -> str:
-    if response.stop_reason == "refusal":
-        return "The model declined this request."
-    return "".join(b.text for b in response.content if b.type == "text").strip()
+    _count_llm_run(usage)
+    return {"answer": "Stopped after the step limit.", "steps": steps, "usage": usage}
