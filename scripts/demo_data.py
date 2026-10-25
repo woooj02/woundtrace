@@ -31,6 +31,9 @@ DEMO = [
 
 
 def seed() -> None:
+    """Reset the demo: two patients with four weekly visits each, and an empty nurse queue."""
+    for key in store.keys("alerts/"):
+        store.delete(key)
     start = date.today() - timedelta(days=28)
     for d in DEMO:
         p = {"id": d["id"], "name": d["name"], "wound": d["wound"], "start_date": start.isoformat(),

@@ -115,6 +115,7 @@
   .legend i { display: inline-block; width: 14px; height: 2px; vertical-align: middle; margin-right: 4px; }
   .arch { width: 100%; height: auto; }
   .foot { color: var(--muted); font-size: 13px; margin-top: 24px; }
+  a { color: var(--accent); }
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -325,7 +326,9 @@ function renderRun(run) {
   const heal = run.steps.find(s => s.tool === "assess_healing" && s.output)?.output;
   const head = { recorded: `Measured ${fmt(meas?.area_cm2)} cm²`, retake: "Please take a new photo",
                  nurse_review: o.recorded ? `Measured ${fmt(meas?.area_cm2)} cm² · nurse asked to review` : "Sent to your nurse to check" }[o.kind] || "Done";
-  const img = meas?.annotated ? `/api/img/${meas.annotated}` : `/api/img/photos/${run.photo_id}.jpg`;
+  // A retake is not a result: show the photo, not numbers that look like one.
+  const shown = o.kind === "retake" ? null : meas;
+  const img = shown?.annotated ? `/api/img/${shown.annotated}` : `/api/img/photos/${run.photo_id}.jpg`;
   $("#result").innerHTML = `
     <div class="outcome ${esc(o.kind)}">
       <div class="head">${esc(head)}</div>
@@ -333,7 +336,7 @@ function renderRun(run) {
       ${o.kind === "retake" && o.fixes?.length ? `<ul class="small" style="margin:8px 0 0">${o.fixes.map(f => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}
     </div>
     <img class="photo" src="${img}" alt="Photo with the measured outline">
-    ${meas ? `<div class="stats">
+    ${shown ? `<div class="stats">
       <div class="stat"><b>${fmt(meas.area_cm2)}</b><span>area, cm²</span></div>
       <div class="stat"><b>${fmt(meas.length_cm, 1)} × ${fmt(meas.width_cm, 1)}</b><span>length × width, cm</span></div>
       <div class="stat"><b>${fmt(meas.ruler_area_cm2)}</b><span>ruler L×W would say, cm²</span></div>

@@ -43,6 +43,13 @@ def get(key: str) -> bytes | None:
     return p.read_bytes() if p.exists() else None
 
 
+def delete(key: str) -> None:
+    if _bucket():
+        _client().delete_object(Bucket=_bucket(), Key=key)
+    else:
+        (LOCAL / key).unlink(missing_ok=True)
+
+
 def put_json(key: str, obj) -> None:
     put(key, json.dumps(obj, indent=1, default=str).encode(), "application/json")
 
