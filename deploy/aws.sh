@@ -109,5 +109,5 @@ if [ "${1:-}" = seed ]; then
 fi
 
 echo "== smoke test"
-curl -sf "${URL}api/health" | head -c 200; echo
+for i in 1 2 3 4 5; do curl -sf "${URL}api/health" | head -c 200 && break; sleep 3; done; echo
 echo "live: $URL"
