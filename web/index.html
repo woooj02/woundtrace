@@ -337,7 +337,7 @@ function renderRun(run) {
     </div>
     <img class="photo" src="${img}" alt="Photo with the measured outline">
     ${shown ? `<div class="stats">
-      <div class="stat"><b>${fmt(meas.area_cm2)}</b><span>area, cm²</span></div>
+      <div class="stat"><b>${fmt(meas.area_cm2)}${meas.area_sd_cm2 != null ? ` <small>± ${fmt(2 * meas.area_sd_cm2)}</small>` : ""}</b><span>area, cm² (± 2 sd, from this photo's sharpness and resolution)</span></div>
       <div class="stat"><b>${fmt(meas.length_cm, 1)} × ${fmt(meas.width_cm, 1)}</b><span>length × width, cm</span></div>
       <div class="stat"><b>${fmt(meas.ruler_area_cm2)}</b><span>ruler L×W would say, cm²</span></div>
       <div class="stat"><b>${heal?.reduction_from_baseline != null ? Math.round(heal.reduction_from_baseline * 100) + "%" : "–"}</b><span>smaller than baseline</span></div>
@@ -381,7 +381,7 @@ async function loadNurse() {
       <div class="muted small">${esc(p.wound)} · day ${p.day} · <span title="${esc(p.demo)}">test target</span></div>
       ${chart(p)}
       <table><tr><th>Day</th><th>Date</th><th>Area cm²</th><th>Ruler L×W</th><th>Photo</th></tr>
-        ${p.history.map(h => `<tr><td>${h.day}</td><td>${esc(h.date)}</td><td><b>${fmt(h.area_cm2)}</b></td><td>${fmt(h.ruler_area_cm2)}</td>
+        ${p.history.map(h => `<tr><td>${h.day}</td><td>${esc(h.date)}</td><td><b>${fmt(h.area_cm2)}</b>${h.area_sd_cm2 != null ? ` <span class="muted">± ${fmt(2 * h.area_sd_cm2)}</span>` : ""}</td><td>${fmt(h.ruler_area_cm2)}</td>
           <td>${h.photo_id ? `<a href="/api/img/annotated/${esc(h.photo_id)}-${esc(h.method || "grabcut")}.jpg" target="_blank">view</a>` : ""}</td></tr>`).join("")}
       </table>
       ${p.alerts.filter(a => a.status !== "awaiting_approval").slice(0, 3).map(alertHtml).join("")}
@@ -425,7 +425,8 @@ function chart(p) {
     ${ticks.map(d => `<text x="${x(d)}" y="${Ht - 8}" text-anchor="middle">day ${d}</text>`).join("")}
     <line x1="${x(0)}" y1="${y(base)}" x2="${x(28)}" y2="${y(base / 2)}" stroke="var(--bench)" stroke-dasharray="5 4" stroke-width="1.5"/>
     <path d="${line}" fill="none" stroke="var(--chart)" stroke-width="2.5"/>
-    ${H.map(h => `<circle cx="${x(h.day)}" cy="${y(h.area_cm2)}" r="4" fill="var(--chart)"><title>day ${h.day}: ${fmt(h.area_cm2)} cm²</title></circle>`).join("")}
+    ${H.filter(h => h.area_sd_cm2).map(h => `<line x1="${x(h.day)}" x2="${x(h.day)}" y1="${y(h.area_cm2 - 2 * h.area_sd_cm2)}" y2="${y(h.area_cm2 + 2 * h.area_sd_cm2)}" stroke="var(--chart)" stroke-width="1.5"/>`).join("")}
+    ${H.map(h => `<circle cx="${x(h.day)}" cy="${y(h.area_cm2)}" r="4" fill="var(--chart)"><title>day ${h.day}: ${fmt(h.area_cm2)} cm²${h.area_sd_cm2 ? " ± " + fmt(2 * h.area_sd_cm2) : ""}</title></circle>`).join("")}
   </svg>
   <div class="legend"><span><i style="background:var(--chart)"></i>measured area</span><span><i style="background:var(--bench)"></i>on track: half the baseline by day 28</span></div>`;
 }

@@ -47,8 +47,10 @@ def seed() -> None:
             shot = synth.Shot(tilt_deg=float(rng.uniform(5, 20)), px_per_mm=float(rng.uniform(5, 7)),
                               blur_sigma=0.0, glare=False, skin=d["skin"], true_cm2=true_mm2 / 100)
             img = synth.photograph(rng, plane, 8.0, shot)
-            assert vision.check_photo(img)["ok"], "seed photo failed its own quality check"
+            chk = vision.check_photo(img)
+            assert chk["ok"], "seed photo failed its own quality check"
             m = vision.measure(img, "grabcut")
+            m["area_sd_cm2"] = vision.area_sd_cm2(m, chk["metrics"])
             pid = f"seed-{d['id']}-w{week}"
             ok, buf = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 90])
             store.put(f"photos/{pid}.jpg", buf.tobytes(), "image/jpeg")
@@ -96,6 +98,61 @@ def sheets() -> None:
     print(path)
 
 
+BW = [("bw-small", 1.5, 41), ("bw-medium", 4.0, 42), ("bw-large", 9.0, 43)]
+
+
+def bw_page(area_cm2: float, shape_seed: int, ppm: float, size_mm=(215.9, 279.4), card_at=(15.0, 15.0)):
+    """A grayscale geometry target: textured light 'skin' over the whole page, a dark granular
+    wound with mid-grey slough, and the card. Prints with black ink only. Returns (gray image,
+    true area in mm²). Tests scale and outline geometry; colour is tested elsewhere."""
+    rng = np.random.default_rng(shape_seed)
+    W, H = round(size_mm[0] * ppm), round(size_mm[1] * ppm)
+    page = 205 + synth._noise_field(rng, (H, W), round(6 * ppm), 7) + rng.normal(0, 3, (H, W))
+    cx, cy = card_at[0] + synth.WOUND_CENTER[0], card_at[1] + synth.WOUND_CENTER[1]
+    poly = synth.wound_polygon(rng, area_cm2, center=(cx, cy))
+    mask = np.zeros((H, W), np.uint8)
+    cv2.fillPoly(mask, [np.round(poly * ppm * 16).astype(np.int32)], 255, lineType=cv2.LINE_8, shift=4)
+    true_mm2 = float(np.count_nonzero(mask)) / ppm ** 2
+    ring = cv2.dilate(mask, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (int(ppm * 5),) * 2))
+    page -= 14 * cv2.GaussianBlur((ring > 0).astype(np.float32), (0, 0), ppm * 1.5)
+    tex = synth._noise_field(rng, (H, W), max(2, round(ppm * 1.2)), 22)
+    wound = 80 + tex
+    slough = synth._noise_field(rng, (H, W), round(ppm * 4), 1) > 0.8
+    wound = np.where(slough, 145 + tex * 0.4, wound)
+    soft = cv2.GaussianBlur(mask.astype(np.float32) / 255, (0, 0), ppm * 0.15)
+    page = np.clip(page * (1 - soft) + wound * soft, 0, 255).astype(np.uint8)
+    page = cv2.cvtColor(page, cv2.COLOR_GRAY2BGR)
+    ox, oy = round(card_at[0] * ppm), round(card_at[1] * ppm)
+    sub = page[oy:, ox:].copy()
+    from app import card
+    card.draw(sub, ppm)
+    page[oy:, ox:] = sub
+    return cv2.cvtColor(page, cv2.COLOR_BGR2GRAY), true_mm2
+
+
+def bw_sheets() -> None:
+    """Black-ink-only geometry targets: print/bw-*.png (print in grayscale at 100%)."""
+    out = ROOT / "print"
+    out.mkdir(exist_ok=True)
+    dpi = 300
+    ppm = dpi / 25.4
+    for name, area, seed_ in BW:
+        page, true_mm2 = bw_page(area, seed_, ppm)
+        # Caption and check bar at the bottom, outside the measurement window around the card.
+        x, y = round(15 * ppm), round(238 * ppm)
+        cv2.rectangle(page, (x - 20, y - 70), (round(200 * ppm), round(272 * ppm)), 255, -1)
+        lines = [f"WoundTrace geometry target ({name}). True wound area: {true_mm2 / 100:.2f} cm2",
+                 "Print in grayscale, 100% / Actual size. The bar must measure 100 mm."]
+        for i, t in enumerate(lines):
+            cv2.putText(page, t, (x, y + i * round(7 * ppm)), cv2.FONT_HERSHEY_SIMPLEX, 1.5, 30, 3, cv2.LINE_AA)
+        by = y + len(lines) * round(7 * ppm)
+        cv2.rectangle(page, (x, by), (x + round(100 * ppm), by + round(3 * ppm)), 0, -1)
+        path = out / f"{name}.png"
+        cv2.imwrite(str(path), page)
+        _set_png_dpi(path, dpi)
+        print(path, f"true {true_mm2 / 100:.2f} cm²")
+
+
 def samples() -> None:
     """Software photos of today's targets for judges without a printer (web/samples)."""
     out = ROOT / "web" / "samples"
@@ -131,4 +188,4 @@ def _set_png_dpi(path: Path, dpi: int) -> None:
 
 
 if __name__ == "__main__":
-    {"seed": seed, "sheets": sheets, "samples": samples}[sys.argv[1]]()
+    {"seed": seed, "sheets": sheets, "bw": bw_sheets, "samples": samples}[sys.argv[1]]()

@@ -34,8 +34,12 @@ def methods_disagree(a: dict, b: dict) -> float:
     return abs(a["area_cm2"] - b["area_cm2"]) / max(a["area_cm2"], b["area_cm2"], 1e-6)
 
 
-def assess_healing(history: list[dict], area_cm2: float, day: int) -> dict:
-    """Compare a new area with the patient's baseline and last measurement."""
+def assess_healing(history: list[dict], area_cm2: float, day: int,
+                   area_sd_cm2: float | None = None) -> dict:
+    """Compare a new area with the patient's baseline and last measurement.
+
+    A rise counts as worsening only if it is over 10% and also larger than the
+    measurement noise of the two photos (2 sd of the difference)."""
     if not history:
         return {"status": "baseline", "detail": "First measurement: this becomes the baseline."}
     base, last = history[0], history[-1]
@@ -45,7 +49,9 @@ def assess_healing(history: list[dict], area_cm2: float, day: int) -> dict:
     out = {"baseline_cm2": base["area_cm2"], "days_since_baseline": days,
            "reduction_from_baseline": round(reduction, 3),
            "change_since_last": round(change_last, 3), "last_cm2": last["area_cm2"]}
-    if change_last > WORSE_INCREASE:
+    noise = 2 * ((area_sd_cm2 or 0) ** 2 + (last.get("area_sd_cm2") or 0) ** 2) ** 0.5
+    out["change_noise_cm2"] = round(noise, 2)
+    if change_last > WORSE_INCREASE and area_cm2 - last["area_cm2"] > noise:
         out.update(status="worsening",
                    detail=f"Area grew {change_last:.0%} since the last photo.")
     elif days >= STALL_DAYS and reduction < STALL_REDUCTION:

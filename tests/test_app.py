@@ -120,3 +120,20 @@ def test_tool_specs_are_closed():
         s = spec["input_schema"]
         assert spec["description"] and s["additionalProperties"] is False
         assert set(s["required"]) == set(s["properties"])
+
+
+def test_worsening_must_exceed_measurement_noise():
+    hist = [{"day": 0, "area_cm2": 5.0, "area_sd_cm2": 0.05}, {"day": 14, "area_cm2": 4.0, "area_sd_cm2": 0.3}]
+    # 12% larger, but within 2 sd of the difference: not called worsening
+    assert policy.assess_healing(hist, 4.48, 21, area_sd_cm2=0.3)["status"] != "worsening"
+    precise = [dict(h, area_sd_cm2=0.05) for h in hist]
+    assert policy.assess_healing(precise, 4.48, 21, area_sd_cm2=0.05)["status"] == "worsening"
+
+
+def test_measurement_reports_uncertainty():
+    img, true = photo()
+    pid = upload(img)
+    r = client.post("/api/visits", json={"patient_id": "t1", "photo_id": pid}).json()
+    m = [s for s in r["steps"] if s["tool"] == "measure_wound"][0]["output"]
+    assert 0 < m["area_sd_cm2"] < 0.1 * m["area_cm2"]
+    assert abs(m["area_cm2"] - true) < 4 * m["area_sd_cm2"] + 0.05

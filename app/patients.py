@@ -35,7 +35,7 @@ def day_of(p: dict, on: date | None = None) -> int:
 def add_measurement(pid: str, photo_id: str, m: dict, on: date | None = None) -> dict:
     p = get(pid)
     entry = {"date": (on or date.today()).isoformat(), "day": day_of(p, on),
-             "area_cm2": m["area_cm2"], "length_cm": m["length_cm"], "width_cm": m["width_cm"],
+             "area_cm2": m["area_cm2"], "area_sd_cm2": m.get("area_sd_cm2"), "length_cm": m["length_cm"], "width_cm": m["width_cm"],
              "ruler_area_cm2": m["ruler_area_cm2"], "photo_id": photo_id,
              "method": m["method"], "recorded_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     p["history"].append(entry)

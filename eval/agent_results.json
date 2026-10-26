@@ -1,0 +1,291 @@
+{
+ "summary": {
+  "cases": 8,
+  "ran_on_bedrock": 0,
+  "model": "us.amazon.nova-2-lite-v1:0",
+  "agreement": 0.0,
+  "by_scenario": {
+   "baseline": "0/0",
+   "on_track": "0/0",
+   "stalled": "0/0",
+   "worsening": "0/0",
+   "tilted": "0/0",
+   "too_far": "0/0",
+   "blurry": "0/0",
+   "glare": "0/0"
+  },
+  "cases_with_refusal": 0,
+  "refusals_then_correct": 0,
+  "grounded_messages": 0.0,
+  "median_steps": null,
+  "median_ms": null,
+  "p95_ms": null,
+  "input_tokens_per_visit": 0.0,
+  "output_tokens_per_visit": 0.0
+ },
+ "rows": [
+  {
+   "scenario": "baseline",
+   "variant": 0,
+   "skin": 0,
+   "true_cm2": 6.12515625,
+   "expected": {
+    "kind": "recorded",
+    "alerts": [],
+    "records": 1
+   },
+   "got": {
+    "kind": "recorded",
+    "alerts": [],
+    "records": 1
+   },
+   "agree": true,
+   "engine": "rules",
+   "note": "Bedrock unavailable (ClientError: An error occurred (UnrecognizedClientException) when calling the Converse operation: The security token included in the request is invalid.); rules engine ran instead.",
+   "steps": 5,
+   "rules_steps": 5,
+   "refusals": [],
+   "grounded": true,
+   "ms": 2689,
+   "usage": null,
+   "answer": "Measured 6.30 cm\u00b2 and saved it to your record.",
+   "tools": [
+    "check_photo",
+    "measure_wound",
+    "get_history",
+    "assess_healing",
+    "record_measurement"
+   ]
+  },
+  {
+   "scenario": "on_track",
+   "variant": 0,
+   "skin": 0,
+   "true_cm2": 3.6840625,
+   "expected": {
+    "kind": "recorded",
+    "alerts": [],
+    "records": 3
+   },
+   "got": {
+    "kind": "recorded",
+    "alerts": [],
+    "records": 3
+   },
+   "agree": true,
+   "engine": "rules",
+   "note": "Bedrock unavailable (ClientError: An error occurred (UnrecognizedClientException) when calling the Converse operation: The security token included in the request is invalid.); rules engine ran instead.",
+   "steps": 5,
+   "rules_steps": 5,
+   "refusals": [],
+   "grounded": true,
+   "ms": 1490,
+   "usage": null,
+   "answer": "Measured 3.73 cm\u00b2 and saved it to your record.",
+   "tools": [
+    "check_photo",
+    "measure_wound",
+    "get_history",
+    "assess_healing",
+    "record_measurement"
+   ]
+  },
+  {
+   "scenario": "stalled",
+   "variant": 0,
+   "skin": 0,
+   "true_cm2": 6.45859375,
+   "expected": {
+    "kind": "nurse_review",
+    "alerts": [
+     "care_plan_review"
+    ],
+    "records": 3
+   },
+   "got": {
+    "kind": "nurse_review",
+    "alerts": [
+     "care_plan_review"
+    ],
+    "records": 3
+   },
+   "agree": true,
+   "engine": "rules",
+   "note": "Bedrock unavailable (ClientError: An error occurred (UnrecognizedClientException) when calling the Converse operation: The security token included in the request is invalid.); rules engine ran instead.",
+   "steps": 6,
+   "rules_steps": 6,
+   "refusals": [],
+   "grounded": true,
+   "ms": 1667,
+   "usage": null,
+   "answer": "Measured 6.57 cm\u00b2 and saved it to your record. I've asked your nurse to review how it's healing.",
+   "tools": [
+    "check_photo",
+    "measure_wound",
+    "get_history",
+    "assess_healing",
+    "record_measurement",
+    "request_nurse_review"
+   ]
+  },
+  {
+   "scenario": "worsening",
+   "variant": 0,
+   "skin": 0,
+   "true_cm2": 6.18875,
+   "expected": {
+    "kind": "nurse_review",
+    "alerts": [
+     "care_plan_review"
+    ],
+    "records": 3
+   },
+   "got": {
+    "kind": "nurse_review",
+    "alerts": [
+     "care_plan_review"
+    ],
+    "records": 3
+   },
+   "agree": true,
+   "engine": "rules",
+   "note": "Bedrock unavailable (ClientError: An error occurred (UnrecognizedClientException) when calling the Converse operation: The security token included in the request is invalid.); rules engine ran instead.",
+   "steps": 6,
+   "rules_steps": 6,
+   "refusals": [],
+   "grounded": true,
+   "ms": 1654,
+   "usage": null,
+   "answer": "Measured 6.25 cm\u00b2 and saved it to your record. I've asked your nurse to review how it's healing.",
+   "tools": [
+    "check_photo",
+    "measure_wound",
+    "get_history",
+    "assess_healing",
+    "record_measurement",
+    "request_nurse_review"
+   ]
+  },
+  {
+   "scenario": "tilted",
+   "variant": 0,
+   "skin": 0,
+   "true_cm2": 5.63125,
+   "expected": {
+    "kind": "retake",
+    "alerts": [],
+    "records": 1
+   },
+   "got": {
+    "kind": "retake",
+    "alerts": [],
+    "records": 1
+   },
+   "agree": true,
+   "engine": "rules",
+   "note": "Bedrock unavailable (ClientError: An error occurred (UnrecognizedClientException) when calling the Converse operation: The security token included in the request is invalid.); rules engine ran instead.",
+   "steps": 2,
+   "rules_steps": 2,
+   "refusals": [],
+   "grounded": true,
+   "ms": 448,
+   "usage": null,
+   "answer": "I couldn't measure this photo. Hold the phone flat, straight above the wound, not at an angle.",
+   "tools": [
+    "check_photo",
+    "request_retake"
+   ]
+  },
+  {
+   "scenario": "too_far",
+   "variant": 0,
+   "skin": 0,
+   "true_cm2": 5.63921875,
+   "expected": {
+    "kind": "retake",
+    "alerts": [],
+    "records": 1
+   },
+   "got": {
+    "kind": "retake",
+    "alerts": [],
+    "records": 1
+   },
+   "agree": true,
+   "engine": "rules",
+   "note": "Bedrock unavailable (ClientError: An error occurred (UnrecognizedClientException) when calling the Converse operation: The security token included in the request is invalid.); rules engine ran instead.",
+   "steps": 2,
+   "rules_steps": 2,
+   "refusals": [],
+   "grounded": true,
+   "ms": 384,
+   "usage": null,
+   "answer": "I couldn't measure this photo. Move the phone closer so the wound and card fill most of the picture.",
+   "tools": [
+    "check_photo",
+    "request_retake"
+   ]
+  },
+  {
+   "scenario": "blurry",
+   "variant": 0,
+   "skin": 0,
+   "true_cm2": 5.6390625,
+   "expected": {
+    "kind": "retake",
+    "alerts": [],
+    "records": 1
+   },
+   "got": {
+    "kind": "retake",
+    "alerts": [],
+    "records": 1
+   },
+   "agree": true,
+   "engine": "rules",
+   "note": "Bedrock unavailable (ClientError: An error occurred (UnrecognizedClientException) when calling the Converse operation: The security token included in the request is invalid.); rules engine ran instead.",
+   "steps": 2,
+   "rules_steps": 2,
+   "refusals": [],
+   "grounded": true,
+   "ms": 372,
+   "usage": null,
+   "answer": "I couldn't measure this photo. Hold still and tap the screen to focus before taking the photo.",
+   "tools": [
+    "check_photo",
+    "request_retake"
+   ]
+  },
+  {
+   "scenario": "glare",
+   "variant": 0,
+   "skin": 0,
+   "true_cm2": 5.59921875,
+   "expected": {
+    "kind": "retake",
+    "alerts": [],
+    "records": 1
+   },
+   "got": {
+    "kind": "retake",
+    "alerts": [],
+    "records": 1
+   },
+   "agree": true,
+   "engine": "rules",
+   "note": "Bedrock unavailable (ClientError: An error occurred (UnrecognizedClientException) when calling the Converse operation: The security token included in the request is invalid.); rules engine ran instead.",
+   "steps": 3,
+   "rules_steps": 3,
+   "refusals": [],
+   "grounded": true,
+   "ms": 1890,
+   "usage": null,
+   "answer": "I couldn't measure this photo reliably. There is shine on the wound. Turn off the flash or tilt the light away.",
+   "tools": [
+    "check_photo",
+    "measure_wound",
+    "request_retake"
+   ]
+  }
+ ]
+}

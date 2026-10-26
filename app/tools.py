@@ -109,6 +109,7 @@ def measure_wound(v: Visit, photo_id: str, method: str) -> dict:
         ok, buf = cv2.imencode(".jpg", ann, [cv2.IMWRITE_JPEG_QUALITY, 85])
         store.put(f"annotated/{photo_id}-{method}.jpg", buf.tobytes(), "image/jpeg")
         result["annotated"] = f"annotated/{photo_id}-{method}.jpg"
+        result["area_sd_cm2"] = vision.area_sd_cm2(result, v.check["metrics"])
     clean = {k: val for k, val in result.items() if not k.startswith("_")}
     v.measures[method] = clean
     others = [m for k, m in v.measures.items() if k != method]
@@ -131,12 +132,14 @@ def get_history(v: Visit, patient_id: str) -> dict:
 def assess_healing(v: Visit, patient_id: str, photo_id: str) -> dict:
     """Compare this photo's measured area with the baseline and the last visit using the
     4-week rule (an ulcer that has not shrunk by half in 4 weeks needs its care plan
-    reviewed). Uses the measured number from measure_wound."""
+    reviewed). Uses the measured number from measure_wound and its uncertainty: a change
+    smaller than the measurement noise is not called worsening."""
     m = v.measures.get("grabcut") or next(iter(v.measures.values()), None)
     if not m or not m.get("found"):
         raise PermissionError("measure_wound has not produced an area for this photo")
     p = patients.get(patient_id)
-    v.healing = policy.assess_healing(p["history"], m["area_cm2"], patients.day_of(p))
+    v.healing = policy.assess_healing(p["history"], m["area_cm2"], patients.day_of(p),
+                                      m.get("area_sd_cm2"))
     return v.healing
 
 

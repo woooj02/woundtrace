@@ -163,6 +163,22 @@ def check_photo(img: np.ndarray) -> dict:
             "problems": [{"code": p, "fix": FIX[p]} for p in problems]}
 
 
+# Area uncertainty (relative sd) from this photo's own evidence. Edge placement
+# dominates: a boundary off by d mm changes the area by about perimeter x d.
+# Constants fitted by eval/fit_uncertainty.py on the tuning seed; coverage of the
+# +/- 2 sd interval is checked on a held-out seed (see eval/uncertainty.md).
+AREA_SD_K = (0.0039, 0.2052, 0.0)  # floor, edge term, card-flatness term (0: synthetic cards are flat)
+
+
+def area_sd_cm2(m: dict, photo: dict) -> float:
+    a_mm2, p_mm = m["area_cm2"] * 100, m["perimeter_cm"] * 10
+    soft = photo.get("edge_mm", 1.0) + 1 / photo["px_per_mm"]
+    k0, k1, k2 = AREA_SD_K
+    rel = math.sqrt(k0 ** 2 + (k1 * p_mm * soft / max(a_mm2, 1e-6)) ** 2
+                    + (k2 * photo.get("card_rms_mm", 0.0)) ** 2)
+    return round(m["area_cm2"] * rel, 2)
+
+
 def rectify(img: np.ndarray, H: np.ndarray):
     """Warp the photo onto the skin plane at RECT_PX_PER_MM, plus a mask of valid pixels."""
     x0, y0, x1, y1 = WINDOW_MM

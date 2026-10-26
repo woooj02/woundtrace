@@ -1,7 +1,8 @@
 """Reproducible evaluation on synthetic photos with known ground truth.
 
-    venv/bin/python -m eval.run_eval            # 600 hard + 150 clean cases, held-out seed 7
-    venv/bin/python -m eval.run_eval --seed 2026 # the seed the gates were tuned on
+    venv/bin/python -m eval.run_eval            # 600 hard + 150 clean cases, held-out seed 11
+    venv/bin/python -m eval.run_eval --seed 2026 # tuning seed (gates, uncertainty fit)
+    venv/bin/python -m eval.run_eval --seed 7    # earlier held-out seed, since used to diagnose failures
     venv/bin/python -m eval.run_eval --n 100    # quick run
 
 Every case is measured twice: as the pipeline decides (gates on), and forced
@@ -49,7 +50,8 @@ def one(args):
     if first.get("found"):
         row.update(area=first["area_cm2"], err=first["area_cm2"] / shot.true_cm2 - 1,
                    ruler_err=first["ruler_area_cm2"] / shot.true_cm2 - 1,
-                   glare_fraction=first["glare_fraction"], edge_contrast=first["edge_contrast"])
+                   glare_fraction=first["glare_fraction"], edge_contrast=first["edge_contrast"],
+                   perimeter_cm=first["perimeter_cm"], length_cm=first["length_cm"])
     return row
 
 
@@ -132,7 +134,7 @@ def markdown(s):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=600)
-    ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument("--seed", type=int, default=11)
     a = ap.parse_args()
     jobs = [(a.seed * 10000 + i, True) for i in range(a.n)]
     jobs += [(a.seed * 10000 + 5000 + i, False) for i in range(a.n // 4)]
