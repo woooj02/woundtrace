@@ -62,6 +62,14 @@ def seed() -> None:
             clean = {k: v for k, v in m.items() if not k.startswith("_")}
             e = patients.add_measurement(d["id"], pid, clean, on=start + timedelta(days=7 * week))
             print(f"{d['id']} day {e['day']:2d}: true {true_mm2 / 100:.2f} cm², measured {e['area_cm2']:.2f}")
+    patients.save({**NEW_PATIENT, "start_date": date.today().isoformat(), "history": []})
+    print("demo-c: new patient, card not checked")
+
+
+NEW_PATIENT = {"id": "demo-c", "name": "Demo patient C",
+               "wound": "New patient: printed card not size-checked yet (test object)",
+               "demo": "Test object, not a person. Shows the one-time card check: the agent will not "
+                       "record until a plastic card (or a ruler reading) confirms the card's print size."}
 
 
 def sheets() -> None:
@@ -177,6 +185,17 @@ def samples() -> None:
         cv2.imwrite(str(out / f"{name}.jpg"), img, [cv2.IMWRITE_JPEG_QUALITY, 88])
         print(name, f"true {mm2 / 100:.2f}", vision.check_photo(img)["ok"], m.get("area_cm2"),
               m.get("glare_fraction"))
+    # New patient C: a card the printer shrank to 92.5%, without and with a plastic card beside it.
+    for name, id1 in (("c-no-card", False), ("c-card-check", True)):
+        rng = np.random.default_rng(77)
+        plane, mm2 = synth.render_plane(rng, 5.0, 2, size_mm=(230.0, 150.0), print_scale=0.925,
+                                        id1_at=(128.0, 58.0) if id1 else None)
+        img = synth.photograph(rng, plane, 8.0, synth.Shot(tilt_deg=10, px_per_mm=4.5, blur_sigma=0.0,
+                                                           glare=False, skin=2, true_cm2=mm2 / 100))
+        cv2.imwrite(str(out / f"{name}.jpg"), img, [cv2.IMWRITE_JPEG_QUALITY, 88])
+        cal = vision.find_id1_card(img)
+        print(name, f"true {mm2 / 100:.2f}", "uncorrected", vision.measure(img).get("area_cm2"),
+              "card scale", cal.get("scale"))
 
 
 def _set_png_dpi(path: Path, dpi: int) -> None:

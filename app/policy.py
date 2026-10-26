@@ -1,13 +1,19 @@
 """The plain-code rules the agent must obey. The LLM can reason about these
 results and word the messages, but it cannot override a gate.
 
-Healing rule: a diabetic foot ulcer whose area has not fallen by at least half
-after four weeks of standard care is unlikely to heal by twelve weeks
-(Sheehan et al., Diabetes Care 2003). We use it as a prompt for a nurse to
-review the care plan, never as a diagnosis.
+Healing rule (configurable): flag a wound for clinician review when its area has not
+fallen by more than 50% after at least 4 weeks. The Society for Vascular Surgery
+guideline (Hingorani et al., J Vasc Surg 2016) recommends considering adjunctive
+therapy for diabetic foot ulcers that fail to improve by >50% in area after a minimum
+of 4 weeks of standard care; Sheehan et al. (Diabetes Care 2003, n=203) found the
+4-week percent area change predicts 12-week healing. It is a prompt for a clinician to
+review the care plan: never a diagnosis, a prediction for this patient, or a treatment
+recommendation.
 """
 
 from __future__ import annotations
+
+import os
 
 MIN_EDGE_CONTRAST = 6.0      # below this the outline is unreliable: a nurse must trace or confirm it
 CROSS_CHECK_CONTRAST = 9.0   # below this, cross-check with a second segmentation method
@@ -15,8 +21,8 @@ MAX_METHOD_DISAGREEMENT = 0.15
 MAX_GLARE = 0.04
 MAX_ELONGATION = 8.0         # length / width: longer and thinner than this is not a plausible outline
 MIN_THICKNESS_CM = 0.3       # widest point inside the outline; thinner is a line or an edge, not a wound
-STALL_DAYS = 28
-STALL_REDUCTION = 0.50
+STALL_DAYS = int(os.environ.get("STALL_DAYS", "28"))
+STALL_REDUCTION = float(os.environ.get("STALL_REDUCTION", "0.50"))
 WORSE_INCREASE = 0.10        # 10% larger than the last measurement
 
 
@@ -56,8 +62,8 @@ def assess_healing(history: list[dict], area_cm2: float, day: int,
                    detail=f"Area grew {change_last:.0%} since the last photo.")
     elif days >= STALL_DAYS and reduction < STALL_REDUCTION:
         out.update(status="stalled",
-                   detail=f"Only {reduction:.0%} smaller after {days} days; "
-                          f"the 4-week benchmark is {STALL_REDUCTION:.0%}.")
+                   detail=f"{reduction:.0%} smaller after {days} days, below the >{STALL_REDUCTION:.0%} "
+                          f"area reduction by week 4 used to prompt a care-plan review (SVS 2016).")
     elif days < STALL_DAYS:
         out.update(status="too_early",
                    detail=f"{reduction:.0%} smaller after {days} days; benchmark is checked at 4 weeks.")

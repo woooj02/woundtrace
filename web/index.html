@@ -117,6 +117,10 @@
   .foot { color: var(--muted); font-size: 13px; margin-top: 24px; }
   a { color: var(--accent); }
   [hidden] { display: none !important; }
+  .calib { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: var(--accent-soft); border: 1px solid var(--accent); font-size: 14px; }
+  .cardform { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .cardform input { width: 80px; padding: 6px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: inherit; }
+  #tab-how h3 { margin: 16px 0 6px; font-size: 15px; }
 </style>
 </head>
 <body>
@@ -127,7 +131,7 @@
     <nav role="tablist">
       <button role="tab" aria-selected="true" data-tab="patient">Patient</button>
       <button role="tab" aria-selected="false" data-tab="nurse">Nurse <span class="count" id="pendingCount" hidden></span></button>
-      <button role="tab" aria-selected="false" data-tab="how">How it works</button>
+      <button role="tab" aria-selected="false" data-tab="how">How it works · evidence</button>
     </nav>
   </div>
 </header>
@@ -171,7 +175,7 @@
   <section id="tab-how" hidden>
     <div class="card">
       <h2>Perception → decision → action</h2>
-      <svg class="arch" viewBox="0 0 1000 300" role="img" aria-label="Agent workflow diagram">
+      <svg class="arch" viewBox="0 0 1000 400" role="img" aria-label="Agent workflow diagram">
         <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
         <g font-size="13">
           <rect x="10" y="110" width="140" height="70" rx="10" fill="var(--code)" stroke="var(--line)"/>
@@ -189,6 +193,11 @@
           <text x="320" y="226" text-anchor="middle">Lab colour + edge-seeking threshold</text>
           <text x="320" y="246" text-anchor="middle">GrabCut refine · glare · contrast</text>
           <text x="320" y="266" text-anchor="middle">area · length · width · perimeter</text>
+          <rect x="190" y="300" width="260" height="90" rx="10" fill="var(--accent-soft)" stroke="var(--accent)"/>
+          <text x="320" y="324" text-anchor="middle" style="fill:var(--ink);font-weight:700">calibrate_card (OpenCV 5, once)</text>
+          <text x="320" y="346" text-anchor="middle">Canny + contours → plastic ID-1 card</text>
+          <text x="320" y="366" text-anchor="middle">85.60 × 53.98 mm → true print scale</text>
+          <path d="M450 330 L498 190" stroke="var(--muted)" fill="none" marker-end="url(#ar)"/>
           <rect x="500" y="90" width="200" height="110" rx="10" fill="var(--warn-soft)" stroke="var(--bench)"/>
           <text x="600" y="116" text-anchor="middle" style="fill:var(--ink);font-weight:700">Agent (Bedrock)</text>
           <text x="600" y="138" text-anchor="middle">picks the next tool</text>
@@ -219,8 +228,8 @@
       <p class="muted small">Runs on AWS: Lambda (OpenCV 5 + FastAPI) behind a Function URL, photos and records in S3, the agent on Amazon Bedrock, logs in CloudWatch.</p>
     </div>
     <div class="card" id="evalCard">
-      <h2>Evaluation (synthetic test targets with known area)</h2>
-      <div id="evalBody" class="muted small">See the README and eval/summary.md in the repository.</div>
+      <h2>Evidence</h2>
+      <div id="evalBody" class="muted small">Loading…</div>
     </div>
   </section>
   <p class="foot">WoundTrace measures; it does not diagnose. Demo patients are printed test targets. <span id="engineNote"></span></p>
@@ -237,13 +246,17 @@ const SAMPLES = [
   { file: "a-tilted.jpg", patient: "demo-a", label: "Patient A · tilted" },
   { file: "a-glare.jpg", patient: "demo-a", label: "Patient A · flash glare" },
   { file: "b-good.jpg", patient: "demo-b", label: "Patient B · good photo" },
+  { file: "c-no-card.jpg", patient: "demo-c", label: "Patient C · card not checked" },
+  { file: "c-card-check.jpg", patient: "demo-c", label: "Patient C · with a bank card" },
 ];
 
 const TOOL_LABEL = {
   check_photo: "Checked the photo", measure_wound: "Measured the wound", get_history: "Read earlier visits",
   assess_healing: "Compared with baseline", record_measurement: "Saved to the record",
   request_retake: "Asked for a new photo", request_nurse_review: "Drafted a note for the nurse",
+  calibrate_card: "Checked the printed card's size",
 };
+const pct = x => `${(100 * x).toFixed(1)}%`;
 
 async function api(path, opts = {}) {
   const r = await fetch(path, opts);
@@ -324,6 +337,7 @@ function renderRun(run) {
   const o = run.outcome || { kind: "none" };
   const meas = [...run.steps].reverse().find(s => s.tool === "measure_wound" && s.output && s.output.found)?.output;
   const heal = run.steps.find(s => s.tool === "assess_healing" && s.output)?.output;
+  const cal = run.steps.find(s => s.tool === "calibrate_card" && s.output)?.output;
   const head = { recorded: `Measured ${fmt(meas?.area_cm2)} cm²`, retake: "Please take a new photo",
                  nurse_review: o.recorded ? `Measured ${fmt(meas?.area_cm2)} cm² · nurse asked to review` : "Sent to your nurse to check" }[o.kind] || "Done";
   // A retake is not a result: show the photo, not numbers that look like one.
@@ -333,8 +347,15 @@ function renderRun(run) {
     <div class="outcome ${esc(o.kind)}">
       <div class="head">${esc(head)}</div>
       <div class="say">${esc(run.answer)}</div>
-      ${o.kind === "retake" && o.fixes?.length ? `<ul class="small" style="margin:8px 0 0">${o.fixes.map(f => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}
+      ${o.kind === "retake" && o.fixes?.some(f => !run.answer.includes(f)) ? `<ul class="small" style="margin:8px 0 0">${o.fixes.map(f => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}
+      ${o.reasons?.includes("card_not_calibrated") ? `<form class="cardform small" id="cardForm">No plastic card? Measure one black
+        square on your printed card with a ruler: <input type="number" step="0.1" min="20" max="40" required id="markerMm"
+        aria-label="Black square width in mm"> mm <button class="btn">Save</button></form>` : ""}
     </div>
+    ${cal?.calibrated ? `<div class="calib"><b>Card check:</b> your printer printed the card at <b>${pct(cal.scale)}</b> of its
+      true size. Uncorrected, every area would be ${Math.round(100 * (1 / cal.scale ** 2 - 1))}% ${cal.scale < 1 ? "too large" : "too small"};
+      this and every later measurement is corrected.</div>` : ""}
+    ${run.message_replaced ? `<div class="small muted">The model's reply was replaced by the standard message (${esc(run.message_replaced)}).</div>` : ""}
     <img class="photo" src="${img}" alt="Photo with the measured outline">
     ${shown ? `<div class="stats">
       <div class="stat"><b>${fmt(meas.area_cm2)}${meas.area_sd_cm2 != null ? ` <small>± ${fmt(2 * meas.area_sd_cm2)}</small>` : ""}</b><span>area, cm² (± 2 sd, from this photo's sharpness and resolution)</span></div>
@@ -345,6 +366,15 @@ function renderRun(run) {
     <h2 style="margin-top:16px">What the agent did <span class="badge ${run.engine === "bedrock" ? "ok" : "warn"}">${run.engine === "bedrock" ? "Bedrock · " + esc(run.model) : "rules engine (no LLM)"}</span> <span class="badge">${run.ms} ms</span></h2>
     ${run.note ? `<div class="small muted" style="margin-bottom:6px">${esc(run.note)}</div>` : ""}
     <ol class="trace">${run.steps.map(stepHtml).join("")}</ol>`;
+  const form = $("#cardForm");
+  if (form) form.onsubmit = async e => {
+    e.preventDefault();
+    try {
+      const c = await api(`/api/patients/${run.patient_id}/card`, { method: "POST",
+        headers: { "Content-Type": "application/json" }, body: JSON.stringify({ marker_mm: Number($("#markerMm").value) }) });
+      form.outerHTML = `<div class="small">Saved: your card printed at <b>${pct(c.scale)}</b>. Take the photo again.</div>`;
+    } catch (err) { form.insertAdjacentHTML("beforeend", ` <span class="bad">${esc(err.message)}</span>`); }
+  };
 }
 
 function stepHtml(s) {
@@ -365,6 +395,9 @@ function stepHtml(s) {
   else if (s.tool === "record_measurement") why = `saved ${fmt(o.saved?.area_cm2)} cm² on day ${o.saved?.day}`;
   else if (s.tool === "request_retake") why = `“${esc(s.input.message)}”`;
   else if (s.tool === "request_nurse_review") why = `${esc(s.input.kind)} · waiting for approval`;
+  else if (s.tool === "calibrate_card") why = o.calibrated
+    ? `plastic card measured ${fmt(o.measured_mm[0], 1)} × ${fmt(o.measured_mm[1], 1)} card-mm (true 85.6 × 54.0) → card printed at <b>${pct(o.scale)}</b>, areas corrected`
+    : `<span class="bad">no plastic card found</span>`;
   return `<li><span class="t">${esc(TOOL_LABEL[s.tool] || s.tool)}</span> <span class="why">${why}</span>
     <details><summary>${esc(s.tool)} · ${s.ms ?? 0} ms</summary><pre>${esc(JSON.stringify({ input: s.input, output: s.output, error: s.error }, null, 1))}</pre></details></li>`;
 }
@@ -379,6 +412,7 @@ async function loadNurse() {
     <div class="card">
       <h3>${esc(p.name)}</h3>
       <div class="muted small">${esc(p.wound)} · day ${p.day} · <span title="${esc(p.demo)}">test target</span></div>
+      <div class="small">Printed card: ${p.card ? `${pct(p.card.scale)} of true size · ${esc(p.card.method)}` : `<span class="bad">not size-checked yet</span>`}</div>
       ${chart(p)}
       <table><tr><th>Day</th><th>Date</th><th>Area cm²</th><th>Ruler L×W</th><th>Photo</th></tr>
         ${p.history.map(h => `<tr><td>${h.day}</td><td>${esc(h.date)}</td><td><b>${fmt(h.area_cm2)}</b>${h.area_sd_cm2 != null ? ` <span class="muted">± ${fmt(2 * h.area_sd_cm2)}</span>` : ""}</td><td>${fmt(h.ruler_area_cm2)}</td>
@@ -405,7 +439,7 @@ function alertHtml(a) {
       <div class="say small">${esc(a.note)}</div>
       ${h?.baseline_cm2 ? `<div class="small muted">Evidence: ${fmt(h.baseline_cm2)} → ${fmt(m?.area_cm2)} cm² over ${h.days_since_baseline} days (${Math.round(h.reduction_from_baseline * 100)}% smaller; benchmark 50% at 4 weeks)</div>` : ""}
       ${a.status === "awaiting_approval" ? `<div class="actions">
-        <button class="btn primary" data-decide="approve" data-id="${esc(a.id)}">Approve and send</button>
+        <button class="btn primary" data-decide="approve" data-id="${esc(a.id)}">Approve</button>
         <button class="btn" data-decide="reject" data-id="${esc(a.id)}">Dismiss</button></div>` : ""}
     </div></div></div>`;
 }
@@ -429,6 +463,32 @@ function chart(p) {
     ${H.map(h => `<circle cx="${x(h.day)}" cy="${y(h.area_cm2)}" r="4" fill="var(--chart)"><title>day ${h.day}: ${fmt(h.area_cm2)} cm²${h.area_sd_cm2 ? " ± " + fmt(2 * h.area_sd_cm2) : ""}</title></circle>`).join("")}
   </svg>
   <div class="legend"><span><i style="background:var(--chart)"></i>measured area</span><span><i style="background:var(--bench)"></i>on track: half the baseline by day 28</span></div>`;
+}
+
+fetch("/static/evidence.json").then(r => r.json()).then(renderEvidence).catch(() => $("#evalBody").textContent = "Evidence file missing.");
+function renderEvidence(e) {
+  const tile = (v, k) => `<div class="stat"><b>${v}</b><span>${k}</span></div>`;
+  $("#evalBody").outerHTML = `<div>
+    <h3>Synthetic photos with known area · held-out set (${e.synthetic.cases} photos, 6 skin tones)</h3>
+    <div class="stats">${tile(pct(e.synthetic.recorded_mape), "mean area error when recorded")}
+      ${tile(e.synthetic.bad_accepts, "recorded with error over 10%")}
+      ${tile(pct(e.synthetic.forced_mape), "error if the quality gates were off")}
+      ${tile("+" + pct(e.synthetic.ruler), "what a ruler (length × width) overestimates")}</div>
+    <h3>Measurement uncertainty · held-out</h3>
+    <div class="stats">${tile(pct(e.uncertainty.within_2sd), "true area inside the stated ± 2 sd (target 95%)")}
+      ${tile("± " + pct(2 * e.uncertainty.median_sd), "typical ± 2 sd")}</div>
+    <h3>Real phone photos with known area (${e.real.photos} photos; printed targets and a coin, not wounds)</h3>
+    <div class="stats">${tile(`${e.real.card_found}/${e.real.photos}`, "card found")}
+      ${tile(e.real.recorded, "recorded")}${tile(pct(e.real.mape), "mean error when recorded")}
+      ${tile(e.real.bad_accepts, "recorded with error over 10%")}</div>
+    <h3>The agent (${e.agent.cases} visits on ${esc(e.agent.model)})</h3>
+    <div class="stats">${tile(pct(e.agent.agreement), "same outcome as the clinic's rules")}
+      ${tile(e.agent.refusals, "tool calls the guards refused")}
+      ${tile(e.agent.replaced, "patient replies replaced by the message guard")}
+      ${tile(`${(e.agent.median_ms / 1000).toFixed(1)} s`, "median visit")}</div>
+    <h3>Not validated</h3>
+    <ul class="small">${e.limits.map(l => `<li>${esc(l)}</li>`).join("")}</ul>
+    <p class="muted small">Generated from eval/ and real/ by scripts/evidence.py · ${esc(e.generated)}</p></div>`;
 }
 
 api("/api/health").then(h => {

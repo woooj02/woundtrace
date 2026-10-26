@@ -1,0 +1,41 @@
+{
+ "generated": "2026-10-26 02:40 UTC",
+ "synthetic": {
+  "cases": 750,
+  "recorded_mape": 0.013934018027783782,
+  "bad_accepts": 0,
+  "forced_mape": 0.1453889060597979,
+  "ruler": 0.4395301358287604
+ },
+ "uncertainty": {
+  "within_2sd": 0.9665809768637532,
+  "median_sd": 0.011521689513647246
+ },
+ "real": {
+  "photos": 26,
+  "card_found": 26,
+  "recorded": 7,
+  "bad_accepts": 1,
+  "mape": 0.07225727373255642,
+  "inside_2sd": [
+   2,
+   7
+  ]
+ },
+ "agent": {
+  "cases": 60,
+  "model": "us.amazon.nova-2-lite-v1:0",
+  "agreement": 1.0,
+  "refusals": 0,
+  "replaced": 18,
+  "median_ms": 6031.5
+ },
+ "limits": [
+  "Not tested on real wounds or patients: accuracy on real wounds is unknown.",
+  "Synthetic skin is flat, smooth and evenly lit; curved limbs, hair and real tissue are not modelled.",
+  "On real photos the stated uncertainty is too narrow: 2 of 7 recorded measurements fell inside their \u00b1 2 sd.",
+  "Real test targets: colour sheets from a faulty printer, a black-ink sheet and a coin (3 mm thick, so it reads about 4-5% large).",
+  "A card printed at the wrong size biases every area: the app requires a one-time card check (plastic card or ruler) before it records anything.",
+  "The healing flag follows a guideline threshold for diabetic foot ulcers and only prompts a clinician review: it does not diagnose, predict an outcome or recommend treatment."
+ ]
+}

@@ -1,10 +1,12 @@
-# Real photos of printed test sheets
+# Real phone photos with known true areas
 
-23 phone photos (iPhone, ordinary room light) of two printed sheets. The printer had a colour fault (banding), so the printed skin is striped: a harder background than real skin. True areas are printed on the sheets.
+26 iPhone photos in ordinary room light. Colour sheets A and B: the printer had a colour fault (banding), so the printed skin is striped, a harder background than real skin. bw-medium: black-ink sheet. coin: a real object (Australian $1, 25.00 mm), card calibrated by ruler (92.3% print); its 3 mm thickness alone reads ~4-5% large. Not real wounds.
 
-Card found: 23/23 · recorded: 4 · bad accepts (recorded, error > 10%): 1
+Card found: 26/26 · recorded: 7 · bad accepts (recorded, error > 10%): 1
 
-Recorded area error: mean 8.8%, max 20.7%
+Recorded area error: mean 7.2%, max 20.7%
+
+Recorded measurements inside their stated ±2 sd: 2/7
 
 | Photo | True cm² | Measured cm² | Error | Decision | Reasons | Tilt ° | px/mm | Edge contrast |
 |---|---|---|---|---|---|---|---|---|
@@ -31,3 +33,6 @@ Recorded area error: mean 8.8%, max 20.7%
 | b-10.jpg | 2.66 | 18.82 | +607.5% | nurse_outline | weak_edge | 14.1 | 5.2 | 1.3 |
 | b-11.jpg | 2.66 | 9.56 | +259.4% | nurse_outline | weak_edge | 7.5 | 5.41 | 5.3 |
 | b-12.jpg | 2.66 | 22.93 | +762.0% | nurse_outline | weak_edge | 12.0 | 5.23 | 1.5 |
+| bw-medium-01.jpg | 4.11 | 4.2 | +2.2% | record |  | 16.8 | 5.32 | 16.7 |
+| coin-paper-01.jpg | 4.909 | 5.25 | +6.9% | record |  | 5.4 | 9.58 | 21.2 |
+| coin-paper-02.jpg | 4.909 | 5.21 | +6.1% | record |  | 3.9 | 11.71 | 21.4 |

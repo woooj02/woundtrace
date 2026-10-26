@@ -41,7 +41,8 @@ How to work:
    - nurse_outline: request_nurse_review with kind "confirm_outline".
    - record: call get_history and assess_healing, then record_measurement.
      If assess_healing says needs_nurse, also call request_nurse_review with kind
-     "care_plan_review" and a note giving baseline, current area, days and change.
+     "care_plan_review" and a note giving baseline, current area ± its uncertainty, days
+     and change, and saying it is a photo measurement, not a diagnosis.
 3. Your final reply is sent to the patient word for word: speak to them as "you", in
    two or three plain sentences with no markdown. Say what happened and what happens
    next, and mention the area if one was recorded. Never describe your steps, tools or
@@ -129,9 +130,16 @@ def run(patient_id: str, photo_id: str) -> dict:
             eng, result = "rules", None
     if eng == "rules":
         result = _run_rules(visit)
-    if eng == "bedrock" and (why := message_problem(result["answer"], visit)):
-        result["model_answer"], result["answer"] = result["answer"], template_message(visit)
-        result["message_replaced"] = why
+    if eng == "bedrock":
+        # A retake ends the visit with a message the model already wrote for the patient
+        # (request_retake's message); use it, not whatever text the model adds afterwards.
+        o = visit.outcome or {}
+        if o.get("kind") == "retake" and o.get("message"):
+            result["model_answer"], result["answer"] = result["answer"], o["message"]
+        if why := message_problem(result["answer"], visit):
+            result.setdefault("model_answer", result["answer"])
+            result["answer"] = template_message(visit)
+            result["message_replaced"] = why
     result.update(engine=eng, model=MODEL if eng == "bedrock" else None, note=note,
                   ms=int((time.monotonic() - started) * 1000),
                   patient_id=patient_id, photo_id=photo_id, outcome=visit.outcome,
@@ -195,11 +203,13 @@ def _run_rules(visit: tools.Visit) -> dict:
     _step(visit, "record_measurement", {"patient_id": pid, "photo_id": ph}, steps)
     answer = f"Measured {m['area_cm2']:.2f} cm² and saved it to your record."
     if h.get("needs_nurse"):
+        sd = m.get("area_sd_cm2")
         _step(visit, "request_nurse_review", {
             "patient_id": pid, "photo_id": ph, "kind": "care_plan_review",
-            "note": f"Area {m['area_cm2']:.2f} cm² on day {h['days_since_baseline']}, baseline "
-                    f"{h['baseline_cm2']:.2f} cm² ({h['reduction_from_baseline']:.0%} smaller). "
-                    f"{h['detail']}"}, steps)
+            "note": f"Area {m['area_cm2']:.2f}{f' ± {2 * sd:.2f}' if sd else ''} cm² on day "
+                    f"{h['days_since_baseline']}, baseline {h['baseline_cm2']:.2f} cm² "
+                    f"({h['reduction_from_baseline']:.0%} smaller). {h['detail']} "
+                    "Photo measurement from a printed reference card; not a diagnosis."}, steps)
         answer += " I've asked your nurse to review how it's healing."
     return {"answer": answer, "steps": steps}
 

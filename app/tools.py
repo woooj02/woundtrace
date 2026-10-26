@@ -131,7 +131,7 @@ def measure_wound(v: Visit, photo_id: str, method: str) -> dict:
     result = vision.measure(v.image(), method, card_scale=scale or 1.0, exclude=exclude)
     result["card_calibrated"] = scale is not None
     if result.get("found"):
-        ann = vision.annotate(v.image(), result)
+        ann = vision.annotate(v.image(), result, extra_quads=exclude)
         ok, buf = cv2.imencode(".jpg", ann, [cv2.IMWRITE_JPEG_QUALITY, 85])
         store.put(f"annotated/{photo_id}-{method}.jpg", buf.tobytes(), "image/jpeg")
         result["annotated"] = f"annotated/{photo_id}-{method}.jpg"

@@ -540,10 +540,13 @@ def find_id1_card(img: np.ndarray) -> dict:
             "corners_px": corners.round(1).tolist()}
 
 
-def annotate(img: np.ndarray, result: dict, card_found: dict | None = None) -> np.ndarray:
-    """The photo with the measured outline projected back onto it."""
+def annotate(img: np.ndarray, result: dict, card_found: dict | None = None,
+             extra_quads: list | None = None) -> np.ndarray:
+    """The photo with the measured outline projected back onto it (and any calibration card)."""
     out = img.copy()
     t = max(2, round(max(img.shape[:2]) / 600))
+    for q in extra_quads or []:
+        cv2.polylines(out, [np.round(np.array(q)).astype(np.int32)], True, (255, 0, 255), t)
     found = card_found or find_card(img)
     for q in found.get("corners", {}).values():
         cv2.polylines(out, [q.astype(np.int32)], True, (255, 160, 0), t)

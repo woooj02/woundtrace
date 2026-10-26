@@ -1,6 +1,6 @@
 """Evaluate the agent itself, not just the measurements.
 
-    venv/bin/python -m eval.agent_eval            # Bedrock vs the rules engine, 8 scenarios x 6
+    venv/bin/python -m eval.agent_eval            # Bedrock vs the rules engine, 10 scenarios x 6
     venv/bin/python -m eval.agent_eval --n 2      # quick run
 
 Each case is a synthetic photo plus a patient history. The same case runs through
@@ -42,24 +42,37 @@ SCENARIOS = [
     ("too_far", {"ppm": 2.0}, [(14, 6.0)], 5.5),
     ("blurry", {"blur": 5.0}, [(14, 6.0)], 5.5),
     ("glare", {"glare": True}, [(14, 6.0)], 5.5),
+    # Printed card never size-checked: no plastic card in the photo, then one in it
+    # (and the printer shrank the card to 92.5%).
+    ("uncalibrated", {"calibrated": False}, [(14, 6.0)], 5.5),
+    ("calibrate", {"calibrated": False, "print_scale": 0.925, "id1": True}, [(14, 6.0)], 5.5),
 ]
 
 
-def make_photo(rng, area, skin, tilt=12.0, ppm=6.0, blur=0.0, glare=False):
-    plane, mm2 = synth.render_plane(rng, area, skin)
+def make_photo(rng, area, skin, tilt=12.0, ppm=6.0, blur=0.0, glare=False,
+               calibrated=True, print_scale=1.0, id1=False):
+    if id1:
+        plane, mm2 = synth.render_plane(rng, area, skin, size_mm=(230.0, 150.0),
+                                        print_scale=print_scale, id1_at=(128.0, 58.0))
+        ppm = min(ppm, 4.5)  # step back so the plastic card fits in the frame
+    else:
+        plane, mm2 = synth.render_plane(rng, area, skin, print_scale=print_scale)
     shot = synth.Shot(tilt, ppm, blur, glare, skin, mm2 / 100)
     return synth.photograph(rng, plane, 8.0, shot), mm2 / 100
 
 
-def reset(history, today_area_true=None):
+def reset(history, calibrated=True):
     for k in store.keys("alerts/"):
         store.delete(k)
     start = date.today() - timedelta(days=max([d for d, _ in history], default=0))
     hist = [{"date": (date.today() - timedelta(days=d)).isoformat(),
              "day": (date.today() - timedelta(days=d) - start).days, "area_cm2": a,
              "area_sd_cm2": round(0.02 * a, 2)} for d, a in history]
-    patients.save({"id": "e1", "name": "Eval", "wound": "test target", "demo": "evaluation",
-                   "start_date": start.isoformat(), "history": hist})
+    p = {"id": "e1", "name": "Eval", "wound": "test target", "demo": "evaluation",
+         "start_date": start.isoformat(), "history": hist}
+    if calibrated:
+        p["card"] = {"scale": 1.0, "method": "evaluation"}
+    patients.save(p)
 
 
 def summary_key(run):
@@ -85,8 +98,8 @@ def grounded(run):
     return all(any(matches(n, v) for v in seen) for n in numbers(run["answer"]))
 
 
-def run_case(engine, history, img_bytes):
-    reset(history)
+def run_case(engine, history, img_bytes, calibrated=True):
+    reset(history, calibrated)
     store.put("photos/eval.jpg", img_bytes, "image/jpeg")
     os.environ["AGENT_ENGINE"] = engine
     run = agent.run("e1", "eval")
@@ -105,10 +118,14 @@ def main():
             rng = np.random.default_rng(1000 * len(rows) + i)
             img, true = make_photo(rng, area, skin=i % 6, **settings)
             ok, buf = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 92])
-            rules, want = run_case("rules", history, buf.tobytes())
-            llm, got = run_case("bedrock", history, buf.tobytes())
+            cal = settings.get("calibrated", True)
+            rules, want = run_case("rules", history, buf.tobytes(), cal)
+            llm, got = run_case("bedrock", history, buf.tobytes(), cal)
+            new = patients.get("e1")["history"][len(history):]
             refusals = [s for s in llm["steps"] if "error" in s]
             row = {"scenario": name, "variant": i, "skin": i % 6, "true_cm2": true,
+                   "recorded_err": new[0]["area_cm2"] / true - 1 if new else None,
+                   "card_scale": (patients.get("e1").get("card") or {}).get("scale"),
                    "expected": want, "got": got, "agree": want == got, "engine": llm["engine"],
                    "note": llm.get("note"), "steps": len([s for s in llm["steps"] if s["tool"] != "agent_note"]),
                    "rules_steps": len(rules["steps"]), "refusals": [s["error"] for s in refusals],
@@ -155,7 +172,14 @@ def main():
          f"| Median tool calls per visit | {s['median_steps']} |",
          f"| Latency per visit, median / p95 | {s['median_ms']:.0f} / {s['p95_ms']:.0f} ms |",
          f"| Tokens per visit, input / output | {s['input_tokens_per_visit']:.0f} / {s['output_tokens_per_visit']:.0f} |",
-         "", "| Scenario | Agreement |", "|---|---|"]
+         ""]
+    calib = [r for r in llm_rows if r["scenario"] == "calibrate" and r["recorded_err"] is not None]
+    if calib:
+        L += [f"Calibration (card printed at 92.5%): measured scale "
+              f"{np.mean([r['card_scale'] for r in calib]):.3f}, recorded area error "
+              f"{100 * np.mean([abs(r['recorded_err']) for r in calib]):.1f}% mean abs "
+              f"(uncorrected it would be about +17%).", ""]
+    L += ["| Scenario | Agreement |", "|---|---|"]
     L += [f"| {k} | {v} |" for k, v in s["by_scenario"].items()]
     bad = [r for r in llm_rows if not r["agree"]]
     if bad:

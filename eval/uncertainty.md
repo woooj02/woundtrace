@@ -12,7 +12,7 @@ d grows with blur and coarser pixels. Fitted by maximum likelihood on the tuning
 | Synthetic set | Recorded | Inside ±1 sd | Inside ±2 sd | Median sd |
 |---|---|---|---|---|
 | Tuning seed 2026 (fit) | 372 | 63.7% | 97.0% | 1.3% |
-| Held-out seed 11 (check) | 389 | 68.1% | 96.1% | 1.2% |
+| Held-out seed 11 (check) | 389 | 66.3% | 96.6% | 1.2% |
 
 A calibrated model would put 68% inside ±1 sd and 95% inside ±2 sd: the held-out check matches.
 

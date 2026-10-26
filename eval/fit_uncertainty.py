@@ -1,6 +1,6 @@
 """Fit and check the per-measurement area uncertainty.
 
-    venv/bin/python -m eval.fit_uncertainty FIT.json CHECK.json
+    venv/bin/python -m eval.fit_uncertainty FIT.json CHECK.json [eval/uncertainty.json]
 
 The model gives each recorded area a standard deviation (relative):
 
@@ -68,6 +68,8 @@ def main():
     out = {"k": [round(float(v), 4) for v in k], "fit": coverage(k, X, err),
            "check": coverage(k, Xc, errc), "bias_check": float(np.mean(errc))}
     print(json.dumps(out, indent=1))
+    if len(sys.argv) > 3:
+        open(sys.argv[3], "w").write(json.dumps(out, indent=1))
 
 
 if __name__ == "__main__":
