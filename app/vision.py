@@ -203,41 +203,28 @@ def segment(flat: np.ndarray, valid: np.ndarray, method: str = "grabcut") -> dic
     # when most of the frame is bed sheet or table.
     band = (_card_mask(flat.shape, 15) > 0) & region
     skin = np.median(lab[band if band.sum() > 500 else region], axis=0)
-    d = lab - skin
-    dist = np.sqrt(0.25 * d[..., 0] ** 2 + d[..., 1] ** 2 + d[..., 2] ** 2)
-    dist = cv2.GaussianBlur(dist, (0, 0), 0.6 * s)
-    vals = dist[region]
-    hi = np.percentile(vals, 99.5)
-    d8 = np.clip(dist / max(hi, 1e-6) * 255, 0, 255).astype(np.uint8)
-    t, _ = cv2.threshold(d8[region][:, None], 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    mask = ((d8 > t) & region).astype(np.uint8) * 255
     k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (round(1.5 * s) | 1,) * 2)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, k)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, k)
-
     # A wound lies wholly inside the photo. Blobs touching the photo's edge are
     # background (table, clothing) or a wound cut off by the frame.
     edge = (valid == 0).astype(np.uint8)
     edge[[0, -1], :] = 1
     edge[:, [0, -1]] = 1
     edge = cv2.dilate(edge, np.ones((round(2 * s),) * 2, np.uint8))
-    n, lab_cc, stats, cents = cv2.connectedComponentsWithStats(mask)
-    best, best_score, cut_off = 0, 0.0, False
-    h, w = mask.shape
-    for i in range(1, n):
-        x, y, bw, bh, area = stats[i]
-        if area < 30 * s * s:  # under 0.3 cm²
-            continue
-        comp = lab_cc[y:y + bh, x:x + bw] == i
-        if edge[y:y + bh, x:x + bw][comp].any():
-            cut_off = True
-            continue
-        score = area * float(dist[y:y + bh, x:x + bw][comp].mean())
-        if score > best_score:
-            best, best_score = i, score
-    if not best:
+    h, w = flat.shape[:2]
+
+    d, dist, seed, background = _seed(lab, skin, region, edge, k)
+    if seed is None:
         return {"found": False}
-    seed = (lab_cc == best).astype(np.uint8) * 255
+    # Second pass: the skin right around the wound is a better reference than the
+    # skin around the card, which may be partly bed sheet or table.
+    near = cv2.dilate(seed, np.ones((round(15 * s),) * 2, np.uint8))
+    ring = (near > 0) & (cv2.dilate(seed, np.ones((round(6 * s),) * 2, np.uint8)) == 0)
+    ring &= region & ~background
+    if ring.sum() > 500:
+        skin = np.median(lab[ring], axis=0)
+        d2, dist2, seed2, _ = _seed(lab, skin, region, edge, k)
+        if seed2 is not None:
+            d, dist, seed = d2, dist2, seed2
     blob, sweep = _edge_seeking_outline(seed, d, dist, region, edge, k)
 
     # If the outline still swallowed far more than the seed, the edge is weak
@@ -281,6 +268,65 @@ def segment(flat: np.ndarray, valid: np.ndarray, method: str = "grabcut") -> dic
             "skin_lab": [round(float(v), 1) for v in skin]}
 
 
+MAX_ELONGATION = 8.0  # long side / short side of the tightest rotated box
+MIN_THICKNESS_MM = 3.0  # diameter of the largest circle that fits inside
+
+
+def _elongation(mask: np.ndarray) -> float:
+    pts = cv2.findNonZero(mask.astype(np.uint8))
+    (_, _), (w, h), _ = cv2.minAreaRect(pts)
+    return max(w, h) / max(min(w, h), 1.0)
+
+
+def _thickness_mm(mask: np.ndarray) -> float:
+    m = cv2.copyMakeBorder(mask.astype(np.uint8), 1, 1, 1, 1, cv2.BORDER_CONSTANT)
+    return 2 * float(cv2.distanceTransform(m, cv2.DIST_L2, 5).max()) / RECT_PX_PER_MM
+
+
+def _seed(lab, skin, region, edge, k):
+    """Colour distance from skin, and the most wound-like blob that doesn't touch the frame.
+
+    Off-skin background is usually the most distinct colour in the photo, so a
+    single Otsu split can put "table + slough" against "skin + wound bed". Blobs
+    touching the frame are dropped and the split is redone without them.
+    """
+    s = RECT_PX_PER_MM
+    d = lab - skin
+    dist = np.sqrt(0.25 * d[..., 0] ** 2 + d[..., 1] ** 2 + d[..., 2] ** 2)
+    dist = cv2.GaussianBlur(dist, (0, 0), 0.6 * s)
+    background = np.zeros(region.shape, bool)
+    for _ in range(2):
+        pool = region & ~background
+        if pool.sum() < 1000:
+            return d, dist, None, background
+        hi = np.percentile(dist[pool], 99.5)
+        d8 = np.clip(dist / max(hi, 1e-6) * 255, 0, 255).astype(np.uint8)
+        t, _ = cv2.threshold(d8[pool][:, None], 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        mask = ((d8 > t) & pool).astype(np.uint8) * 255
+        mask = cv2.morphologyEx(cv2.morphologyEx(mask, cv2.MORPH_OPEN, k), cv2.MORPH_CLOSE, k)
+        n, cc, stats, _ = cv2.connectedComponentsWithStats(mask)
+        best, best_score, touching = 0, 0.0, []
+        for i in range(1, n):
+            x, y, bw, bh, area = stats[i]
+            if area < 30 * s * s:  # under 0.3 cm²
+                continue
+            comp = cc[y:y + bh, x:x + bw] == i
+            if edge[y:y + bh, x:x + bw][comp].any():
+                touching.append(i)
+                continue
+            if _elongation(comp) > MAX_ELONGATION or _thickness_mm(comp) < MIN_THICKNESS_MM:
+                continue  # a line or thin edge (text, a bandage or paper edge, a seam), not a wound
+            score = area * float(dist[y:y + bh, x:x + bw][comp].mean())
+            if score > best_score:
+                best, best_score = i, score
+        if not touching:
+            break
+        background |= np.isin(cc, touching)
+    if not best:
+        return d, dist, None, background
+    return d, dist, (cc == best).astype(np.uint8) * 255, background
+
+
 def _edge_seeking_outline(seed, d, dist, region, edge, k, steps: int = 16):
     """Choose the colour threshold whose outline sits on the strongest edge.
 
@@ -306,7 +352,13 @@ def _edge_seeking_outline(seed, d, dist, region, edge, k, steps: int = 16):
     if not core.any():
         core = sd
     top = float(np.percentile(dr[sd > 0], 90))
-    seed_area = np.count_nonzero(_fill_holes(sd))
+    filled = _fill_holes(sd)
+    seed_area = np.count_nonzero(filled)
+    # Periwound redness sits at the rim of the seed, so trimming it removes pixels
+    # near the border. An outline that leaves holes deep inside the seed is tracing
+    # something within the wound (slough flecks), not the wound's edge.
+    dt = cv2.distanceTransform(filled, cv2.DIST_L2, 5)
+    deep = dt >= 0.6 * dt.max()
     best, best_score, tried = None, -1.0, []
     for T in np.linspace(0.25 * top, 0.85 * top, steps):
         m = (((dr > T) | slough) & reg).astype(np.uint8) * 255
@@ -323,6 +375,8 @@ def _edge_seeking_outline(seed, d, dist, region, edge, k, steps: int = 16):
         keep = _fill_holes(keep)
         area = np.count_nonzero(keep)
         if area < 0.3 * seed_area or area > 4 * seed_area:
+            continue
+        if np.count_nonzero(keep[deep]) < 0.9 * np.count_nonzero(deep):
             continue
         boundary = cv2.subtract(keep, cv2.erode(keep, np.ones((3, 3), np.uint8))) > 0
         score = float(grad[boundary].mean()) if boundary.any() else 0.0
@@ -368,6 +422,7 @@ def shape_metrics(mask: np.ndarray) -> dict:
         # What a paper ruler gives: length x width. It overestimates irregular wounds.
         "ruler_area_cm2": round(float(length * width) / 100, 2),
         "perimeter_cm": round(float(cv2.arcLength(c, True)) / s / 10, 2),
+        "thickness_cm": round(_thickness_mm(mask) / 10, 2),
         "solidity": round(float(cv2.contourArea(c) / max(cv2.contourArea(hull.astype(np.float32)), 1)), 3),
     }
 

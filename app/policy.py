@@ -13,6 +13,8 @@ MIN_EDGE_CONTRAST = 6.0      # below this the outline is unreliable: a nurse mus
 CROSS_CHECK_CONTRAST = 9.0   # below this, cross-check with a second segmentation method
 MAX_METHOD_DISAGREEMENT = 0.15
 MAX_GLARE = 0.04
+MAX_ELONGATION = 8.0         # length / width: longer and thinner than this is not a plausible outline
+MIN_THICKNESS_CM = 0.3       # widest point inside the outline; thinner is a line or an edge, not a wound
 STALL_DAYS = 28
 STALL_REDUCTION = 0.50
 WORSE_INCREASE = 0.10        # 10% larger than the last measurement
@@ -67,6 +69,9 @@ def decide(photo_check: dict, first: dict | None, second: dict | None = None) ->
     probs = measurement_problems(first)
     if probs:
         return {"action": "retake", "reasons": probs}
+    if (first["length_cm"] > MAX_ELONGATION * max(first["width_cm"], 0.01)
+            or first["thickness_cm"] < MIN_THICKNESS_CM):
+        return {"action": "nurse_outline", "reasons": ["implausible_shape"]}
     if first["edge_contrast"] < MIN_EDGE_CONTRAST:
         return {"action": "nurse_outline", "reasons": ["weak_edge"]}
     if first["edge_contrast"] < CROSS_CHECK_CONTRAST:
