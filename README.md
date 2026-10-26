@@ -82,7 +82,7 @@ percentile of our Dice so the figure shows a typical and a poor result, not only
 ```bash
 ./run.sh setup        # venv + pinned dependencies (requirements-dev.txt)
 ./run.sh              # http://127.0.0.1:8100 · rules engine, local storage, no AWS needed
-./run.sh test         # 17 offline tests
+./run.sh test         # 18 offline tests
 venv/bin/python -m scripts.demo_data seed   # demo patients A, B, C in data/store
 ```
 

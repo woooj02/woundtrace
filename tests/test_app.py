@@ -1,6 +1,7 @@
 """Offline tests: rules engine, local storage in a temp folder, synthetic photos."""
 
 import io
+import json
 from datetime import date, timedelta
 
 import cv2
@@ -211,3 +212,26 @@ def test_visits_are_rate_limited_per_visitor(monkeypatch):
     pid = upload(photo()[0])
     assert client.post("/api/visits", json={"patient_id": "t1", "photo_id": pid}).status_code == 200
     assert client.post("/api/visits", json={"patient_id": "t1", "photo_id": pid}).status_code == 429
+
+
+class FakeBedrock:
+    """Answers the outline check with a fixed wound box (0-1000 coordinates)."""
+
+    def __init__(self, box, visible=True):
+        self.reply = json.dumps({"wound_visible": visible, "box": box})
+
+    def converse(self, **kw):
+        assert "image" in kw["messages"][0]["content"][0]  # the plain photo, no outline drawn
+        return {"output": {"message": {"content": [{"text": self.reply}]}}, "usage": {}}
+
+
+def test_outline_check_compares_the_models_box_with_the_outline():
+    from app import review
+    img = np.zeros((1000, 1000, 3), np.uint8)
+    mask = np.zeros((1000, 1000), np.uint8)
+    mask[400:600, 400:600] = 255
+    assert review.review(img, mask, FakeBedrock([390, 410, 610, 590]))["verdict"] == "follows"
+    far = review.review(img, mask, FakeBedrock([50, 50, 150, 150]))
+    assert far["verdict"] == "misses" and far["iou"] == 0.0
+    assert review.review(img, mask, FakeBedrock(None, visible=False))["verdict"] == "misses"
+    assert review.review(img, mask, client=object())["verdict"] == "error"  # never raises
