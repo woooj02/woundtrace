@@ -18,7 +18,8 @@ def offline(monkeypatch, tmp_path):
     monkeypatch.delenv("BUCKET", raising=False)
     monkeypatch.setattr(store, "LOCAL", tmp_path)
     patients.save({"id": "t1", "name": "Test", "wound": "test target", "demo": "test",
-                   "start_date": (date.today() - timedelta(days=28)).isoformat(), "history": []})
+                   "start_date": (date.today() - timedelta(days=28)).isoformat(), "history": [],
+                   "card": {"scale": 1.0, "method": "test"}})
 
 
 client = TestClient(app)
@@ -137,3 +138,48 @@ def test_measurement_reports_uncertainty():
     m = [s for s in r["steps"] if s["tool"] == "measure_wound"][0]["output"]
     assert 0 < m["area_sd_cm2"] < 0.1 * m["area_cm2"]
     assert abs(m["area_cm2"] - true) < 4 * m["area_sd_cm2"] + 0.05
+
+
+def card_photo(print_scale, with_id1, area=6.0, seed=5):
+    rng = np.random.default_rng(seed)
+    plane, mm2 = synth.render_plane(rng, area, 1, size_mm=(230.0, 150.0), print_scale=print_scale,
+                                    id1_at=(128.0, 58.0) if with_id1 else None)
+    return synth.photograph(rng, plane, 8.0, synth.Shot(12.0, 4.5, 0.0, False, 1, mm2 / 100)), mm2 / 100
+
+
+def uncalibrated():
+    p = patients.get("t1")
+    p.pop("card")
+    patients.save(p)
+
+
+def test_uncalibrated_card_without_plastic_card_asks_for_card_check():
+    uncalibrated()
+    img, _ = card_photo(0.925, with_id1=False)
+    r = client.post("/api/visits", json={"patient_id": "t1", "photo_id": upload(img)}).json()
+    assert r["outcome"]["kind"] == "retake" and r["outcome"]["reasons"] == ["card_not_calibrated"]
+    assert patients.get("t1")["history"] == []
+
+
+def test_plastic_card_corrects_a_shrunken_print():
+    uncalibrated()
+    img, true = card_photo(0.925, with_id1=True)
+    raw = vision.measure(img)["area_cm2"]
+    assert raw / true - 1 > 0.12  # uncorrected: the shrunken card inflates the area
+    r = client.post("/api/visits", json={"patient_id": "t1", "photo_id": upload(img)}).json()
+    assert r["outcome"]["kind"] == "recorded"
+    assert abs(patients.get("t1")["card"]["scale"] - 0.925) < 0.01
+    assert abs(patients.get("t1")["history"][0]["area_cm2"] / true - 1) < 0.03
+
+
+def test_manual_card_check_and_record_guard():
+    uncalibrated()
+    img, _ = photo()
+    pid = upload(img)
+    v = tools.Visit("t1", pid)
+    tools.call(v, "check_photo", {"photo_id": pid})
+    tools.call(v, "measure_wound", {"photo_id": pid, "method": "grabcut"})
+    with pytest.raises(PermissionError):
+        tools.call(v, "record_measurement", {"patient_id": "t1", "photo_id": pid})
+    assert client.post("/api/patients/t1/card", json={"marker_mm": 27.7}).json()["scale"] == 0.9233
+    assert client.post("/api/patients/t1/card", json={"marker_mm": 3}).status_code == 422

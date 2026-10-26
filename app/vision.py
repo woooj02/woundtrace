@@ -35,6 +35,8 @@ FIX = {
     "too_dark": "Turn on a light or move near a window. The photo is too dark.",
     "glare": "There is shine on the wound. Turn off the flash or tilt the light away.",
     "wound_not_found": "No wound edge was found next to the card. Make sure the wound is in the photo.",
+    "card_not_calibrated": "One-time check of your printed card: lay any bank, library or gift card "
+                           "flat next to it (cover the card number) and take the photo again.",
 }
 
 ARUCO = cv2.aruco.ArucoDetector(card.DICT, (lambda p: (
@@ -419,8 +421,10 @@ def _fill_holes(mask: np.ndarray) -> np.ndarray:
     return out
 
 
-def shape_metrics(mask: np.ndarray) -> dict:
-    s = RECT_PX_PER_MM
+def shape_metrics(mask: np.ndarray, card_scale: float = 1.0) -> dict:
+    """card_scale: how large the printed card really is relative to its design (0.925 = the
+    printer shrank it to 92.5%). Rectified pixels are design-mm, so true mm = design mm x scale."""
+    s = RECT_PX_PER_MM / card_scale
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     c = max(contours, key=cv2.contourArea)
     area_mm2 = float(np.count_nonzero(mask)) / s ** 2
@@ -438,17 +442,24 @@ def shape_metrics(mask: np.ndarray) -> dict:
         # What a paper ruler gives: length x width. It overestimates irregular wounds.
         "ruler_area_cm2": round(float(length * width) / 100, 2),
         "perimeter_cm": round(float(cv2.arcLength(c, True)) / s / 10, 2),
-        "thickness_cm": round(_thickness_mm(mask) / 10, 2),
+        "thickness_cm": round(_thickness_mm(mask) * card_scale / 10, 2),
         "solidity": round(float(cv2.contourArea(c) / max(cv2.contourArea(hull.astype(np.float32)), 1)), 3),
     }
 
 
-def measure(img: np.ndarray, method: str = "grabcut") -> dict:
-    """Rectify and measure. Returns metrics plus the mask and warp for drawing."""
+def measure(img: np.ndarray, method: str = "grabcut", card_scale: float = 1.0,
+            exclude: list | None = None) -> dict:
+    """Rectify and measure. Returns metrics plus the mask and warp for drawing.
+
+    exclude: image-space quads to leave out (a calibration card lying in the photo)."""
     found = find_card(img)
     if "H" not in found:
         return {"found": False, "reason": "card_not_found"}
     flat, valid, M = rectify(img, found["H"])
+    for quad in exclude or []:
+        q = cv2.perspectiveTransform(np.array([quad], np.float32), M)[0]
+        cv2.fillConvexPoly(valid, np.round(q).astype(np.int32), 0)
+        valid = cv2.erode(valid, np.ones((round(3 * RECT_PX_PER_MM),) * 2, np.uint8))
     seg = segment(flat, valid, method)
     if not seg["found"]:
         return {"found": False, "reason": "wound_not_found"}
@@ -461,9 +472,72 @@ def measure(img: np.ndarray, method: str = "grabcut") -> dict:
     glare = float(shiny[zone].mean()) if zone.any() else 0.0
     out = {"found": True, "method": seg["method"], "edge_contrast": seg["edge_contrast"],
            "slough_growth_refused": seg["flooded"],
-           "glare_fraction": round(glare, 4), **shape_metrics(mask)}
+           "glare_fraction": round(glare, 4), "card_scale": card_scale,
+           **shape_metrics(mask, card_scale)}
     out["_mask"], out["_M"], out["_flat"] = mask, M, flat
     return out
+
+
+ID1_MM = (85.60, 53.98)  # ISO/IEC 7810 ID-1: bank, library, gift and ID cards
+
+
+def find_id1_card(img: np.ndarray) -> dict:
+    """Calibrate the printed card's real size against a standard plastic card in the photo.
+
+    Home printers often shrink "100%" prints to fit their margins, and a card printed at
+    92.5% makes every area 17% too large, while still looking perfect. The fix: rectify the
+    photo with the printed card (design mm), find a rounded rectangle with the ID-1 aspect
+    ratio, and compare its measured size with its known 85.60 x 53.98 mm.
+    Returns found, scale (true size / design size of the printed card), and evidence.
+    """
+    found = find_card(img)
+    if "H" not in found:
+        return {"found": False, "reason": "card_not_found"}
+    s = 4.0  # px per design-mm, enough for a sub-mm side estimate
+    x0, y0, x1, y1 = -150.0, -150.0, 300.0, 280.0  # the plastic card can lie anywhere nearby
+    T = np.array([[s, 0, -x0 * s], [0, s, -y0 * s], [0, 0, 1]])
+    size = (round((x1 - x0) * s), round((y1 - y0) * s))
+    M = T @ found["H"]
+    flat = cv2.warpPerspective(img, M, size, flags=cv2.INTER_LINEAR)
+    valid = cv2.warpPerspective(np.full(img.shape[:2], 255, np.uint8), M, size, flags=cv2.INTER_NEAREST)
+    gray = cv2.GaussianBlur(cv2.cvtColor(flat, cv2.COLOR_BGR2GRAY), (5, 5), 0)
+    med = float(np.median(gray[valid > 0])) if valid.any() else 128.0
+    edges = cv2.Canny(gray, 0.4 * med, 1.0 * med)
+    edges[cv2.erode(valid, np.ones((9, 9), np.uint8)) == 0] = 0
+    edges = cv2.dilate(edges, np.ones((3, 3), np.uint8))
+    contours, _ = cv2.findContours(edges, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    want = ID1_MM[0] / ID1_MM[1]
+    cands = []
+    for c in contours:
+        (cx, cy), (w, h), ang = cv2.minAreaRect(c)
+        long_, short = max(w, h) / s, min(w, h) / s
+        if not (55 < long_ < 115 and 35 < short < 75):  # a card printed at 75%-155%
+            continue
+        if abs(long_ / short / want - 1) > 0.04:
+            continue
+        fill = cv2.contourArea(cv2.convexHull(c)) / (w * h)
+        if fill < 0.93:  # a closed, nearly rectangular outline (ID-1 corners are rounded)
+            continue
+        cands.append((long_, short, (cx, cy), (w, h), ang))
+    if not cands:
+        return {"found": False, "reason": "id_card_not_found"}
+    # The thickened edge line yields an outer and an inner contour around the same card;
+    # the true edge lies midway, so average the largest and smallest of that pair.
+    best = max(cands, key=lambda k: k[0] * k[1])
+    same = [k for k in cands if np.hypot(k[2][0] - best[2][0], k[2][1] - best[2][1]) < 3 * s]
+    inner = min(same, key=lambda k: k[0] * k[1])
+    long_, short = (best[0] + inner[0]) / 2, (best[1] + inner[1]) / 2
+    _, _, centre, wh, ang = best
+    scale_long, scale_short = ID1_MM[0] / long_, ID1_MM[1] / short
+    if abs(scale_long - scale_short) > 0.025:
+        return {"found": False, "reason": "id_card_inconsistent",
+                "scale_long": round(scale_long, 4), "scale_short": round(scale_short, 4)}
+    box = cv2.boxPoints((centre, wh, ang))
+    corners = cv2.perspectiveTransform(box[None].astype(np.float32), np.linalg.inv(M))[0]
+    return {"found": True, "scale": round((scale_long + scale_short) / 2, 4),
+            "measured_mm": [round(long_, 1), round(short, 1)],
+            "scale_long": round(scale_long, 4), "scale_short": round(scale_short, 4),
+            "corners_px": corners.round(1).tolist()}
 
 
 def annotate(img: np.ndarray, result: dict, card_found: dict | None = None) -> np.ndarray:

@@ -46,7 +46,11 @@ def wound_polygon(rng, area_cm2: float, center=WOUND_CENTER, n=360) -> np.ndarra
 
 
 def render_plane(rng, area_cm2: float, skin: int, px_per_mm: float = 8.0,
-                 size_mm=PAGE_MM, slough: bool = True, shape_seed: int | None = None):
+                 size_mm=PAGE_MM, slough: bool = True, shape_seed: int | None = None,
+                 print_scale: float = 1.0, id1_at: tuple | None = None):
+    """print_scale: the printed card's real size / its design size (a home printer that
+    shrank it to fit the margins gives ~0.93). id1_at: top-left (mm) of a plastic ID-1 card
+    lying on the skin, for calibration; needs a wider plane than the default."""
     """Skin, wound and card on the plane. Returns (BGR image, true area in mm²)."""
     w, h = round(size_mm[0] * px_per_mm), round(size_mm[1] * px_per_mm)
     tone = np.array(SKIN_TONES[skin][::-1], np.float32)
@@ -78,8 +82,25 @@ def render_plane(rng, area_cm2: float, skin: int, px_per_mm: float = 8.0,
     soft = cv2.GaussianBlur(mask.astype(np.float32) / 255, (0, 0), px_per_mm * 0.15)[..., None]
     img = img * (1 - soft) + wound * soft
     img = np.clip(img, 0, 255).astype(np.uint8)
-    card.draw(img, px_per_mm)
+    if id1_at is not None:
+        draw_id1(img, px_per_mm, id1_at)
+    card.draw(img, px_per_mm * print_scale)
     return img, true_mm2
+
+
+ID1 = (85.60, 53.98, 3.18)  # width, height, corner radius in mm (ISO/IEC 7810 ID-1)
+
+
+def draw_id1(img: np.ndarray, px_per_mm: float, at_mm: tuple, colour=(170, 90, 30)) -> None:
+    """A plain plastic card with rounded corners, true size, top-left at at_mm."""
+    w, h, r = (v * px_per_mm for v in ID1)
+    x0, y0 = at_mm[0] * px_per_mm, at_mm[1] * px_per_mm
+    m = np.zeros(img.shape[:2], np.uint8)
+    cv2.rectangle(m, (round(x0 + r), round(y0)), (round(x0 + w - r), round(y0 + h)), 255, -1)
+    cv2.rectangle(m, (round(x0), round(y0 + r)), (round(x0 + w), round(y0 + h - r)), 255, -1)
+    for cx, cy in ((x0 + r, y0 + r), (x0 + w - r, y0 + r), (x0 + r, y0 + h - r), (x0 + w - r, y0 + h - r)):
+        cv2.circle(m, (round(cx), round(cy)), round(r), 255, -1)
+    img[m > 0] = colour
 
 
 @dataclass

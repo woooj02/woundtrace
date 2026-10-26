@@ -41,3 +41,15 @@ def add_measurement(pid: str, photo_id: str, m: dict, on: date | None = None) ->
     p["history"].append(entry)
     save(p)
     return entry
+
+
+def card_scale(p: dict) -> float | None:
+    """How large this patient's printed card really is vs its design (None: not checked yet)."""
+    return (p.get("card") or {}).get("scale")
+
+
+def set_card(pid: str, card: dict) -> dict:
+    p = get(pid)
+    p["card"] = {**card, "date": date.today().isoformat()}
+    save(p)
+    return p["card"]

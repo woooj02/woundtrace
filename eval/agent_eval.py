@@ -78,7 +78,11 @@ def grounded(run):
     blob = json.dumps([s.get("output") for s in run["steps"]], default=str)
     seen = [float(x) for x in re.findall(r"-?\d+\.\d+", blob)]
     seen += [abs(v) * 100 for v in seen]  # fractions shown as percentages
-    return all(any(abs(n - s) < 0.011 for s in seen) for n in numbers(run["answer"]))
+
+    def matches(n, v):  # equal, or v rounded to the decimals the message used
+        places = len(f"{n}".split(".")[1])
+        return abs(n - v) < 0.011 or abs(n - round(v, places)) < 1e-9
+    return all(any(matches(n, v) for v in seen) for n in numbers(run["answer"]))
 
 
 def run_case(engine, history, img_bytes):
@@ -109,7 +113,9 @@ def main():
                    "note": llm.get("note"), "steps": len([s for s in llm["steps"] if s["tool"] != "agent_note"]),
                    "rules_steps": len(rules["steps"]), "refusals": [s["error"] for s in refusals],
                    "grounded": grounded(llm), "ms": llm["ms"], "usage": llm.get("usage"),
-                   "answer": llm["answer"], "tools": [s["tool"] for s in llm["steps"]]}
+                   "answer": llm["answer"], "model_answer": llm.get("model_answer"),
+                   "message_replaced": llm.get("message_replaced"),
+                   "tools": [s["tool"] for s in llm["steps"]]}
             rows.append(row)
             print(f"{name:10s} v{i} skin{i % 6} agree={row['agree']} steps={row['steps']} "
                   f"refusals={len(refusals)} grounded={row['grounded']} {row['ms']} ms")
@@ -124,6 +130,7 @@ def main():
         "cases_with_refusal": sum(bool(r["refusals"]) for r in llm_rows),
         "refusals_then_correct": sum(bool(r["refusals"]) and r["agree"] for r in llm_rows),
         "grounded_messages": sum(r["grounded"] for r in llm_rows) / max(len(llm_rows), 1),
+        "messages_replaced": sum(bool(r["message_replaced"]) for r in llm_rows),
         "median_steps": float(np.median([r["steps"] for r in llm_rows])) if llm_rows else None,
         "median_ms": float(np.median([r["ms"] for r in llm_rows])) if llm_rows else None,
         "p95_ms": float(np.percentile([r["ms"] for r in llm_rows], 95)) if llm_rows else None,
@@ -143,6 +150,8 @@ def main():
          f"| Visits where a guard refused a tool call | {s['cases_with_refusal']} "
          f"({s['refusals_then_correct']} still ended correctly) |",
          f"| Patient messages whose numbers all come from tool outputs | {100 * s['grounded_messages']:.0f}% |",
+         f"| Model replies replaced by the message guard (leaked internals, opinion, length) | "
+         f"{s['messages_replaced']} |",
          f"| Median tool calls per visit | {s['median_steps']} |",
          f"| Latency per visit, median / p95 | {s['median_ms']:.0f} / {s['p95_ms']:.0f} ms |",
          f"| Tokens per visit, input / output | {s['input_tokens_per_visit']:.0f} / {s['output_tokens_per_visit']:.0f} |",

@@ -39,6 +39,9 @@ def seed() -> None:
         p = {"id": d["id"], "name": d["name"], "wound": d["wound"], "start_date": start.isoformat(),
              "demo": "Test target, not a person. Earlier visits are software photos of the same "
                      "printed target design, measured by the real pipeline.",
+             "card": {"scale": 1.0, "method": "test sheet",
+                      "note": "The sheet's card and wound are printed together, so print scale cancels.",
+                      "date": start.isoformat()},
              "history": []}
         patients.save(p)
         rng = np.random.default_rng(d["shape_seed"])

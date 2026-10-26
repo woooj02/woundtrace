@@ -117,6 +117,22 @@ def image(kind: str, name: str):
     return Response(data, media_type="image/jpeg", headers={"Cache-Control": "max-age=86400"})
 
 
+class CardCheck(BaseModel):
+    marker_mm: float = Field(ge=20, le=40, description="Measured width of one black square, in mm")
+
+
+@app.post("/api/patients/{pid}/card")
+def card_check(pid: str, c: CardCheck):
+    """Manual card calibration: the patient measured one 30 mm black square with a ruler."""
+    _safe(pid)
+    try:
+        patients.get(pid)
+    except KeyError:
+        raise HTTPException(404, "no such patient")
+    return patients.set_card(pid, {"scale": round(c.marker_mm / 30.0, 4), "method": "ruler on black square",
+                                   "measured_mm": c.marker_mm})
+
+
 class Decision(BaseModel):
     decision: str = Field(pattern="^(approve|reject)$")
     note: str = Field(default="", max_length=500)

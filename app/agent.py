@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import time
 from datetime import date
 
@@ -31,6 +32,9 @@ when the numbers say they should look.
 How to work:
 1. Call check_photo first. If it fails, call request_retake with a short, kind
    message built from the fixes it returned. Do not measure a failed photo.
+   If it passes but card_calibrated is false, call calibrate_card. If that fails, call
+   request_retake asking for the one-time card check (a plastic card next to the printed
+   card); do not measure.
 2. Otherwise call measure_wound with method "grabcut". Follow its decision:
    - retake: request_retake, explaining the problem (for example glare).
    - cross_check: call measure_wound again with method "colour"; follow the new decision.
@@ -38,11 +42,13 @@ How to work:
    - record: call get_history and assess_healing, then record_measurement.
      If assess_healing says needs_nurse, also call request_nurse_review with kind
      "care_plan_review" and a note giving baseline, current area, days and change.
-3. Your final reply is shown to the patient: speak to them as "you", in two or three
-   plain sentences with no markdown. Say what happened and what happens next, and
-   mention the area if one was recorded.
+3. Your final reply is sent to the patient word for word: speak to them as "you", in
+   two or three plain sentences with no markdown. Say what happened and what happens
+   next, and mention the area if one was recorded. Never describe your steps, tools or
+   ids in it.
 
-Rules: you measure, you never diagnose; don't comment on infection or treatment.
+Rules: you measure, you never diagnose. Don't say how the wound looks or whether it is
+healthy, and don't comment on infection or treatment.
 Nurse messages are drafts that a human approves. Use only numbers the tools returned."""
 
 
@@ -67,6 +73,46 @@ def _count_llm_run(usage: dict) -> None:
     store.put_json(key, u)
 
 
+# Outgoing-message guard: the model's reply goes to a patient, so plain code checks it.
+# A reply that leaks internals (tool names, ids, "the user"), offers a clinical opinion,
+# or runs long is replaced by the template message for the same outcome, and the trace
+# says so.
+LEAK = re.compile(r"check_photo|calibrate_card|measure_wound|get_history|assess_healing|record_measurement|"
+                  r"request_retake|request_nurse_review|photo_id|patient_id|\bthe user\b|\btool",
+                  re.I)
+OPINION = re.compile(r"looks? (good|great|fine|healthy|bad|worse|infected)|\bhealthy\b|"
+                     r"\binfect|\bdiagnos|antibiotic", re.I)
+MAX_MESSAGE = 500
+
+
+def message_problem(text: str, visit: tools.Visit) -> str | None:
+    if not text.strip():
+        return "empty"
+    if len(text) > MAX_MESSAGE:
+        return "too long"
+    if LEAK.search(text) or visit.patient_id in text or visit.photo_id in text:
+        return "mentions internal steps or ids"
+    if OPINION.search(text):
+        return "clinical opinion"
+    return None
+
+
+def template_message(visit: tools.Visit) -> str:
+    o = visit.outcome or {}
+    m = visit.measures.get("grabcut") or next(iter(visit.measures.values()), {})
+    if o.get("kind") == "retake":
+        return f"I couldn't measure this photo. {' '.join(o.get('fixes') or [o.get('message', '')])}".strip()
+    if o.get("kind") == "recorded":
+        return f"Measured {m['area_cm2']:.2f} cm² and saved it to your record."
+    if o.get("kind") == "nurse_review" and o.get("recorded"):
+        return (f"Measured {m['area_cm2']:.2f} cm² and saved it to your record. "
+                "I've asked your nurse to review how it's healing.")
+    if o.get("kind") == "nurse_review":
+        return ("Your photo is saved. The edge of the wound is hard to see, so your nurse "
+                "will check the outline before it is recorded.")
+    return "Your photo was received. Your nurse will follow up if anything is needed."
+
+
 def run(patient_id: str, photo_id: str) -> dict:
     started = time.monotonic()
     visit = tools.Visit(patient_id, photo_id)
@@ -83,6 +129,9 @@ def run(patient_id: str, photo_id: str) -> dict:
             eng, result = "rules", None
     if eng == "rules":
         result = _run_rules(visit)
+    if eng == "bedrock" and (why := message_problem(result["answer"], visit)):
+        result["model_answer"], result["answer"] = result["answer"], template_message(visit)
+        result["message_replaced"] = why
     result.update(engine=eng, model=MODEL if eng == "bedrock" else None, note=note,
                   ms=int((time.monotonic() - started) * 1000),
                   patient_id=patient_id, photo_id=photo_id, outcome=visit.outcome,
@@ -94,6 +143,7 @@ def run(patient_id: str, photo_id: str) -> dict:
                       "outcome": (visit.outcome or {}).get("kind"),
                       "decision": (visit.decision or {}).get("action"),
                       "steps": [s["tool"] for s in result["steps"]], "ms": result["ms"],
+                      "message_replaced": result.get("message_replaced"),
                       "usage": result.get("usage")}))
     return result
 
@@ -119,6 +169,12 @@ def _run_rules(visit: tools.Visit) -> dict:
         fixes = " ".join(p["fix"] for p in chk["problems"])
         _step(visit, "request_retake", {"photo_id": ph, "message": fixes}, steps)
         return {"answer": f"I couldn't measure this photo. {fixes}", "steps": steps}
+    if not chk["card_calibrated"]:
+        cal = _step(visit, "calibrate_card", {"patient_id": pid, "photo_id": ph}, steps)["output"]
+        if not cal["calibrated"]:
+            fix = vision.FIX["card_not_calibrated"]
+            _step(visit, "request_retake", {"photo_id": ph, "message": fix}, steps)
+            return {"answer": f"Before I can measure: {fix}", "steps": steps}
     m = _step(visit, "measure_wound", {"photo_id": ph, "method": "grabcut"}, steps)["output"]
     if m["decision"]["action"] == "cross_check":
         m = _step(visit, "measure_wound", {"photo_id": ph, "method": "colour"}, steps)["output"]

@@ -56,6 +56,7 @@ class Visit:
         self.measures: dict[str, dict] = {}
         self.decision: dict | None = None
         self.healing: dict | None = None
+        self.calibration: dict | None = None
         self.outcome: dict | None = None  # set by the tool that ends the visit
         self._img = None
         self._card = None
@@ -87,10 +88,32 @@ PATIENT = {"type": "string", "description": "The patient_id given in the task."}
 def check_photo(v: Visit, photo_id: str) -> dict:
     """Run OpenCV quality checks on the photo: finds the printed ArUco card, then
     estimates resolution (px/mm), camera tilt, blur (marker edge width in mm), card
-    flatness and brightness. Returns ok, metrics, and problems each with a plain fix
-    for the patient. Always call this first."""
+    flatness and brightness. Returns ok, metrics, problems each with a plain fix for the
+    patient, and card_calibrated (whether this patient's printed card has been size-checked).
+    Always call this first."""
     v.check = vision.check_photo(v.image())
-    return v.check
+    return {**v.check, "card_calibrated": patients.card_scale(patients.get(v.patient_id)) is not None}
+
+
+@tool(patient_id=PATIENT, photo_id=PHOTO)
+def calibrate_card(v: Visit, patient_id: str, photo_id: str) -> dict:
+    """Check how large the patient's printed card really came out, using a standard plastic
+    card (bank, library or gift card, 85.60 x 53.98 mm) lying in the same photo. Home
+    printers often shrink the card, which would make every area too large. Needed once per
+    printed card, before any measurement can be recorded. Returns the scale or why it failed."""
+    if v.check is None or not v.check["ok"]:
+        raise PermissionError("check_photo has not passed for this photo")
+    r = vision.find_id1_card(v.image())
+    v.calibration = r
+    out = {k: val for k, val in r.items() if k != "corners_px"}
+    if r["found"]:
+        patients.set_card(patient_id, {"scale": r["scale"], "method": "plastic card (ID-1)",
+                                       "photo_id": photo_id, "measured_mm": r["measured_mm"]})
+        out["calibrated"] = True
+        out["meaning"] = f"The printed card is {r['scale']:.1%} of its intended size; measurements are corrected."
+    else:
+        out["calibrated"] = False
+    return out
 
 
 @tool(photo_id=PHOTO, method={"type": "string", "enum": ["grabcut", "colour"],
@@ -103,7 +126,10 @@ def measure_wound(v: Visit, photo_id: str, method: str) -> dict:
     again with the other method) or nurse_outline."""
     if v.check is None or not v.check["ok"]:
         raise PermissionError("check_photo has not passed for this photo; ask for a retake instead")
-    result = vision.measure(v.image(), method)
+    scale = patients.card_scale(patients.get(v.patient_id))
+    exclude = [v.calibration["corners_px"]] if v.calibration and v.calibration.get("found") else None
+    result = vision.measure(v.image(), method, card_scale=scale or 1.0, exclude=exclude)
+    result["card_calibrated"] = scale is not None
     if result.get("found"):
         ann = vision.annotate(v.image(), result)
         ok, buf = cv2.imencode(".jpg", ann, [cv2.IMWRITE_JPEG_QUALITY, 85])
@@ -124,7 +150,7 @@ def measure_wound(v: Visit, photo_id: str, method: str) -> dict:
 def get_history(v: Visit, patient_id: str) -> dict:
     """The patient's wound profile and earlier measurements (date, day number, area)."""
     p = patients.get(patient_id)
-    return {"patient": {k: p[k] for k in ("id", "name", "wound", "start_date", "demo")},
+    return {"patient": {k: p.get(k) for k in ("id", "name", "wound", "start_date", "demo", "card")},
             "history": p["history"]}
 
 
@@ -149,6 +175,9 @@ def record_measurement(v: Visit, patient_id: str, photo_id: str) -> dict:
     clinic's rules decided 'record'."""
     if not v.decision or v.decision["action"] != "record":
         raise PermissionError(f"rules decided {v.decision and v.decision['action']!r}, not 'record'")
+    if patients.card_scale(patients.get(patient_id)) is None:
+        raise PermissionError("the printed card has not been size-checked: call calibrate_card on a "
+                              "photo with a plastic card, or ask the patient for one")
     m = v.measures.get("grabcut") or next(iter(v.measures.values()))
     entry = patients.add_measurement(patient_id, photo_id, m)
     v.outcome = v.outcome or {"kind": "recorded", "entry": entry}
@@ -158,12 +187,16 @@ def record_measurement(v: Visit, patient_id: str, photo_id: str) -> dict:
 @tool(photo_id=PHOTO, message={"type": "string",
                                "description": "Short, kind instruction to the patient: what to change and why."})
 def request_retake(v: Visit, photo_id: str, message: str) -> dict:
-    """Ask the patient for a new photo. Use when check_photo failed or the measurement
-    decision is 'retake'. Ends the visit."""
+    """Ask the patient for a new photo. Use when check_photo failed, calibrate_card failed,
+    or the measurement decision is 'retake'. Ends the visit."""
     if v.decision and v.decision["action"] == "record":
         raise PermissionError("this photo is measurable; record it instead of asking for a retake")
-    reasons = ([p["code"] for p in v.check["problems"]] if v.check and not v.check["ok"]
-               else (v.decision or {}).get("reasons", []))
+    if v.check and not v.check["ok"]:
+        reasons = [p["code"] for p in v.check["problems"]]
+    elif v.calibration and not v.calibration.get("found"):
+        reasons = ["card_not_calibrated"]
+    else:
+        reasons = (v.decision or {}).get("reasons", [])
     v.outcome = {"kind": "retake", "message": message, "reasons": reasons,
                  "fixes": [vision.FIX[r] for r in reasons if r in vision.FIX]}
     return {"sent_to_patient": True, **v.outcome}
