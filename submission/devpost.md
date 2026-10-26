@@ -94,4 +94,8 @@ retake and the calibration.
 - A measurement aid, not a diagnosis.
 
 **Built with:** opencv, python, fastapi, amazon-web-services, aws-lambda, amazon-bedrock, amazon-s3,
-amazon-cloudwatch, graviton, numpy · _[user to decide whether to list AI coding tools]_
+amazon-cloudwatch, graviton, numpy, claude-code
+
+**AI use (say it plainly):** I used Claude Code, an AI coding assistant, to help write and test the code and
+docs. The rules note that an AI coding assistant is not an agentic workflow; WoundTrace's agentic workflow is
+the runtime agent on Amazon Bedrock, whose decisions are driven by the OpenCV results.

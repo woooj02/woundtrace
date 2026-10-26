@@ -135,5 +135,7 @@ report and on the app's evidence page.
 
 ## Credits
 
-Built by aryan-neopane (solo). The FastAPI app skeleton comes from our own starter kit, written before this
-event. OpenCV 5, FastAPI, Mangum, NumPy, boto3. MIT licence (`LICENSE`).
+Built by aryan-neopane (solo), with help from Claude Code (an AI coding assistant) during development. The
+agent that counts for this entry is the runtime agent in the app (Amazon Bedrock), not the coding assistant.
+The FastAPI app skeleton comes from our own starter kit, written before this event. OpenCV 5, FastAPI,
+Mangum, NumPy, boto3. MIT licence (`LICENSE`).
