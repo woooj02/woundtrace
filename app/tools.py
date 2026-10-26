@@ -120,8 +120,9 @@ def calibrate_card(v: Visit, patient_id: str, photo_id: str) -> dict:
                               "description": "grabcut (default) or colour, for a second opinion"})
 def measure_wound(v: Visit, photo_id: str, method: str) -> dict:
     """Rectify the photo to true millimetres using the card, outline the wound and
-    measure area, length, width and perimeter. Also reports glare on the wound and
-    edge_contrast (how clear the outline is). Only allowed after check_photo passed.
+    measure area, length, width and perimeter. area_plus_minus_cm2 is the area's
+    uncertainty from this photo (about a 95% range): quote the area as "area ± that".
+    Also reports glare on the wound and edge_contrast (how clear the outline is). Only allowed after check_photo passed.
     Returns a 'decision' from the clinic's rules: record, retake, cross_check (measure
     again with the other method) or nurse_outline."""
     if v.check is None or not v.check["ok"]:
@@ -136,6 +137,7 @@ def measure_wound(v: Visit, photo_id: str, method: str) -> dict:
         store.put(f"annotated/{photo_id}-{method}.jpg", buf.tobytes(), "image/jpeg")
         result["annotated"] = f"annotated/{photo_id}-{method}.jpg"
         result["area_sd_cm2"] = vision.area_sd_cm2(result, v.check["metrics"])
+        result["area_plus_minus_cm2"] = round(2 * result["area_sd_cm2"], 2)  # about a 95% range
     clean = {k: val for k, val in result.items() if not k.startswith("_")}
     v.measures[method] = clean
     others = [m for k, m in v.measures.items() if k != method]

@@ -131,6 +131,7 @@ def run(patient_id: str, photo_id: str) -> dict:
     if eng == "rules":
         result = _run_rules(visit)
     if eng == "bedrock":
+        result["answer"] = re.sub(r"\*\*|__|`|^#+\s*", "", result["answer"], flags=re.M)  # plain text only
         # A retake ends the visit with a message the model already wrote for the patient
         # (request_retake's message); use it, not whatever text the model adds afterwards.
         o = visit.outcome or {}
