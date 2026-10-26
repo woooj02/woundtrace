@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 640" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <title>WoundTrace architecture</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5b6470"/></marker>
+  </defs>
+  <rect width="1120" height="640" fill="#ffffff"/>
+  <text x="20" y="32" font-size="20" font-weight="700" fill="#16202a">WoundTrace: architecture on AWS</text>
+  <text x="20" y="52" fill="#5b6470">OpenCV 5 measures. An agent on Amazon Bedrock decides the next step. Plain code gates every action. A nurse approves every alert.</text>
+
+  <!-- clients -->
+  <rect x="20" y="90" width="180" height="70" rx="10" fill="#f3f5f7" stroke="#c8ced6"/>
+  <text x="110" y="118" text-anchor="middle" font-weight="700" fill="#16202a">Patient phone</text>
+  <text x="110" y="138" text-anchor="middle" fill="#5b6470">mobile web: photo + card</text>
+  <rect x="20" y="200" width="180" height="70" rx="10" fill="#f3f5f7" stroke="#c8ced6"/>
+  <text x="110" y="228" text-anchor="middle" font-weight="700" fill="#16202a">Nurse browser</text>
+  <text x="110" y="248" text-anchor="middle" fill="#5b6470">chart · approve alerts</text>
+
+  <!-- AWS boundary -->
+  <rect x="240" y="72" width="860" height="300" rx="14" fill="none" stroke="#e8912d" stroke-dasharray="6 5"/>
+  <text x="256" y="92" font-weight="700" fill="#b8620b">AWS us-east-1 · least-privilege IAM role</text>
+
+  <rect x="260" y="120" width="150" height="70" rx="10" fill="#fff7ed" stroke="#e8912d"/>
+  <text x="335" y="148" text-anchor="middle" font-weight="700" fill="#16202a">Function URL</text>
+  <text x="335" y="168" text-anchor="middle" fill="#5b6470">HTTPS, public demo</text>
+
+  <rect x="450" y="104" width="300" height="250" rx="10" fill="#e6f3f1" stroke="#0f766e"/>
+  <text x="600" y="128" text-anchor="middle" font-weight="700" fill="#16202a">AWS Lambda · arm64 (Graviton) · Python 3.12</text>
+  <text x="600" y="150" text-anchor="middle" fill="#334">FastAPI via Mangum · 2048 MB</text>
+  <rect x="468" y="164" width="264" height="62" rx="8" fill="#ffffff" stroke="#0f766e"/>
+  <text x="600" y="186" text-anchor="middle" font-weight="700" fill="#0f766e">OpenCV 5 tools</text>
+  <text x="600" y="204" text-anchor="middle" fill="#334">ArUco · IPPE pose · homography · warp</text>
+  <text x="600" y="219" text-anchor="middle" fill="#334">Lab + edge-seeking + GrabCut · contours</text>
+  <rect x="468" y="234" width="264" height="44" rx="8" fill="#ffffff" stroke="#0f766e"/>
+  <text x="600" y="253" text-anchor="middle" font-weight="700" fill="#0f766e">Plain-code policy and guards</text>
+  <text x="600" y="270" text-anchor="middle" fill="#334">quality gates · healing rule · approval</text>
+  <rect x="468" y="286" width="264" height="56" rx="8" fill="#ffffff" stroke="#0f766e"/>
+  <text x="600" y="306" text-anchor="middle" font-weight="700" fill="#0f766e">Agent loop (max 10 steps)</text>
+  <text x="600" y="323" text-anchor="middle" fill="#334">message guard · daily LLM cap</text>
+  <text x="600" y="337" text-anchor="middle" fill="#334">rules-engine fallback</text>
+
+  <rect x="800" y="104" width="280" height="70" rx="10" fill="#fff7ed" stroke="#e8912d"/>
+  <text x="940" y="132" text-anchor="middle" font-weight="700" fill="#16202a">Amazon Bedrock</text>
+  <text x="940" y="152" text-anchor="middle" fill="#5b6470">Nova 2 Lite · Converse tool use</text>
+  <rect x="800" y="192" width="280" height="80" rx="10" fill="#fff7ed" stroke="#e8912d"/>
+  <text x="940" y="218" text-anchor="middle" font-weight="700" fill="#16202a">Amazon S3 (private bucket)</text>
+  <text x="940" y="238" text-anchor="middle" fill="#5b6470">photos · annotated · patients · alerts</text>
+  <text x="940" y="256" text-anchor="middle" fill="#5b6470">runs (agent traces) · usage</text>
+  <rect x="800" y="288" width="280" height="66" rx="10" fill="#fff7ed" stroke="#e8912d"/>
+  <text x="940" y="314" text-anchor="middle" font-weight="700" fill="#16202a">CloudWatch Logs (14 days)</text>
+  <text x="940" y="334" text-anchor="middle" fill="#5b6470">one JSON line per visit</text>
+
+  <path d="M200 125 L258 150" stroke="#5b6470" fill="none" marker-end="url(#a)"/>
+  <path d="M200 235 L258 168" stroke="#5b6470" fill="none" marker-end="url(#a)"/>
+  <path d="M410 155 L448 155" stroke="#5b6470" fill="none" marker-end="url(#a)"/>
+  <path d="M750 139 L798 139" stroke="#5b6470" fill="none" marker-end="url(#a)"/>
+  <path d="M750 232 L798 232" stroke="#5b6470" fill="none" marker-end="url(#a)"/>
+  <path d="M750 321 L798 321" stroke="#5b6470" fill="none" marker-end="url(#a)"/>
+
+  <!-- agent workflow -->
+  <text x="20" y="410" font-size="16" font-weight="700" fill="#16202a">One visit: perceive → decide → act</text>
+  <g font-size="12">
+    <rect x="20" y="428" width="130" height="58" rx="8" fill="#e6f3f1" stroke="#0f766e"/>
+    <text x="85" y="452" text-anchor="middle" font-weight="700">check_photo</text>
+    <text x="85" y="470" text-anchor="middle">tilt · blur · scale</text>
+    <rect x="180" y="428" width="140" height="58" rx="8" fill="#e6f3f1" stroke="#0f766e"/>
+    <text x="250" y="452" text-anchor="middle" font-weight="700">calibrate_card</text>
+    <text x="250" y="470" text-anchor="middle">once: true print size</text>
+    <rect x="350" y="428" width="140" height="58" rx="8" fill="#e6f3f1" stroke="#0f766e"/>
+    <text x="420" y="452" text-anchor="middle" font-weight="700">measure_wound</text>
+    <text x="420" y="470" text-anchor="middle">cm² ± uncertainty</text>
+    <rect x="520" y="428" width="140" height="58" rx="8" fill="#e6f3f1" stroke="#0f766e"/>
+    <text x="590" y="452" text-anchor="middle" font-weight="700">assess_healing</text>
+    <text x="590" y="470" text-anchor="middle">vs baseline, noise</text>
+    <rect x="690" y="428" width="160" height="58" rx="8" fill="#f3f5f7" stroke="#c8ced6"/>
+    <text x="770" y="452" text-anchor="middle" font-weight="700">record_measurement</text>
+    <text x="770" y="470" text-anchor="middle">only if rules say record</text>
+    <rect x="880" y="428" width="220" height="58" rx="8" fill="#edf7ee" stroke="#2f855a"/>
+    <text x="990" y="452" text-anchor="middle" font-weight="700">request_nurse_review</text>
+    <text x="990" y="470" text-anchor="middle">draft · waits for human approval</text>
+    <path d="M150 457 L178 457" stroke="#5b6470" marker-end="url(#a)"/>
+    <path d="M320 457 L348 457" stroke="#5b6470" marker-end="url(#a)"/>
+    <path d="M490 457 L518 457" stroke="#5b6470" marker-end="url(#a)"/>
+    <path d="M660 457 L688 457" stroke="#5b6470" marker-end="url(#a)"/>
+    <path d="M850 457 L878 457" stroke="#5b6470" marker-end="url(#a)"/>
+    <rect x="180" y="530" width="480" height="58" rx="8" fill="#fff7ed" stroke="#e8912d"/>
+    <text x="420" y="554" text-anchor="middle" font-weight="700">request_retake: a specific fix for the patient</text>
+    <text x="420" y="572" text-anchor="middle">tilted · blurry · too far · glare · card bent · card not size-checked</text>
+    <path d="M85 486 C 85 540, 120 559, 178 559" stroke="#b8620b" fill="none" stroke-dasharray="4 4" marker-end="url(#a)"/>
+    <path d="M250 486 L250 528" stroke="#b8620b" fill="none" stroke-dasharray="4 4" marker-end="url(#a)"/>
+    <path d="M420 486 L420 528" stroke="#b8620b" fill="none" stroke-dasharray="4 4" marker-end="url(#a)"/>
+    <text x="690" y="552">weak edge → measure again with a second method;</text>
+    <text x="690" y="570">still unsure → nurse confirms the outline</text>
+  </g>
+  <text x="20" y="620" fill="#5b6470">Solid: normal path. Dashed: the image result changes the plan. The LLM picks tools and words messages; it cannot override a gate.</text>
+</svg>
