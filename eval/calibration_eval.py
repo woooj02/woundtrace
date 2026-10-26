@@ -25,8 +25,8 @@ def main():
             true = mm2 / 100
             img = synth.photograph(rng, plane, 8.0, synth.Shot(tilt, 4.5, 0.0, False, 1, true))
             cal = vision.find_id1_card(img)
-            raw = vision.measure(img)
-            fixed = vision.measure(img, card_scale=cal.get("scale", 1.0),
+            raw = vision.measure(img, vision.PRIMARY)
+            fixed = vision.measure(img, vision.PRIMARY, card_scale=cal.get("scale", 1.0),
                                    exclude=[cal["corners_px"]] if cal.get("found") else None)
             err = lambda m: f"{m['area_cm2']} ({100 * (m['area_cm2'] / true - 1):+.1f}%)" if m.get("found") else "–"
             print(f"| {ps:.1%} | {tilt}° | {cal.get('scale', cal.get('reason'))} | {true:.2f} | {err(raw)} | {err(fixed)} |")

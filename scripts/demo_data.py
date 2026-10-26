@@ -52,7 +52,7 @@ def seed() -> None:
             img = synth.photograph(rng, plane, 8.0, shot)
             chk = vision.check_photo(img)
             assert chk["ok"], "seed photo failed its own quality check"
-            m = vision.measure(img, "grabcut")
+            m = vision.measure(img, vision.PRIMARY)
             m["area_sd_cm2"] = vision.area_sd_cm2(m, chk["metrics"])
             pid = f"seed-{d['id']}-w{week}"
             ok, buf = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 90])

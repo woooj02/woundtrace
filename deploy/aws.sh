@@ -26,6 +26,13 @@ if ! aws s3api head-bucket --bucket "$BUCKET" 2>/dev/null; then
     BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
 fi
 
+# Responsible operation: uploads, annotated photos and agent traces delete themselves after 30 days.
+aws s3api put-bucket-lifecycle-configuration --bucket "$BUCKET" --lifecycle-configuration '{"Rules": [
+  {"ID": "expire-photos", "Status": "Enabled", "Filter": {"Prefix": "photos/"}, "Expiration": {"Days": 30}},
+  {"ID": "expire-annotated", "Status": "Enabled", "Filter": {"Prefix": "annotated/"}, "Expiration": {"Days": 30}},
+  {"ID": "expire-runs", "Status": "Enabled", "Filter": {"Prefix": "runs/"}, "Expiration": {"Days": 30}},
+  {"ID": "expire-usage", "Status": "Enabled", "Filter": {"Prefix": "usage/"}, "Expiration": {"Days": 7}}]}'
+
 echo "== package (linux arm64, python 3.12)"
 rm -rf "$BUILD" && mkdir -p "$BUILD"
 # boto3 is already in the Lambda runtime; leave it out to keep the package small.
@@ -93,6 +100,9 @@ else
     --code "S3Bucket=$BUCKET,S3Key=deploy/woundtrace.zip" --environment "$ENV" >/dev/null
 fi
 aws lambda wait function-updated --function-name "$NAME"
+# Cap concurrent runs: bounds cost on a public URL.
+aws lambda put-function-concurrency --function-name "$NAME" --reserved-concurrent-executions 5 >/dev/null || \
+  echo "   (reserved concurrency not set: account limit too low; the daily LLM cap still applies)"
 
 if ! aws lambda get-function-url-config --function-name "$NAME" >/dev/null 2>&1; then
   aws lambda create-function-url-config --function-name "$NAME" --auth-type NONE >/dev/null
@@ -102,6 +112,24 @@ if ! aws lambda get-function-url-config --function-name "$NAME" >/dev/null 2>&1;
     --action lambda:InvokeFunction --principal "*" --invoked-via-function-url >/dev/null 2>&1 || true
 fi
 URL=$(aws lambda get-function-url-config --function-name "$NAME" --query FunctionUrl --output text)
+
+echo "== CloudWatch dashboard"
+aws cloudwatch put-dashboard --dashboard-name "$NAME" --dashboard-body "$(python3 - "$REGION" "$NAME" <<'PY'
+import json, sys
+region, name = sys.argv[1], sys.argv[2]
+src = f"SOURCE '/aws/lambda/{name}' | filter event = 'visit'"
+def w(title, q, x, y, view="table"):
+    return {"type": "log", "x": x, "y": y, "width": 12, "height": 6,
+            "properties": {"title": title, "region": region, "view": view, "query": f"{src} | {q}"}}
+print(json.dumps({"widgets": [
+    w("Visits by outcome (hourly)", "stats count(*) by outcome, bin(1h)", 0, 0, "bar"),
+    w("Latency per visit, ms", "stats avg(ms), pct(ms, 95), max(ms) by bin(1h)", 12, 0, "timeSeries"),
+    w("Engine (bedrock vs rules fallback)", "stats count(*) by engine", 0, 6, "pie"),
+    w("Outline reviews by verdict", "filter ispresent(review) | stats count(*) by review", 12, 6, "pie"),
+    w("Replies replaced by the message guard", "filter ispresent(message_replaced) and message_replaced != '' | stats count(*) by message_replaced", 0, 12),
+    w("Latest visits", "fields @timestamp, patient, outcome, decision, review, ms | sort @timestamp desc | limit 20", 12, 12)]}))
+PY
+)" >/dev/null
 
 if [ "${1:-}" = seed ]; then
   echo "== demo patients"

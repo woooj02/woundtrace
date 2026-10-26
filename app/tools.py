@@ -17,7 +17,9 @@ from datetime import date
 
 import cv2
 
-from . import patients, policy, store, vision
+import numpy as np
+
+from . import patients, policy, review, store, vision
 
 TOOLS: dict[str, dict] = {}
 
@@ -57,9 +59,16 @@ class Visit:
         self.decision: dict | None = None
         self.healing: dict | None = None
         self.calibration: dict | None = None
+        self.review: dict | None = None
+        self.needs_review = False  # set by the Bedrock engine: no record without an outline review
+        self._raw: dict[str, dict] = {}
         self.outcome: dict | None = None  # set by the tool that ends the visit
         self._img = None
         self._card = None
+
+    def primary(self) -> dict | None:
+        """The visit's main measurement: the first method measured (the second is a cross-check)."""
+        return next(iter(self.measures.values()), None)
 
     def image(self):
         if self._img is None:
@@ -116,8 +125,9 @@ def calibrate_card(v: Visit, patient_id: str, photo_id: str) -> dict:
     return out
 
 
-@tool(photo_id=PHOTO, method={"type": "string", "enum": ["grabcut", "colour"],
-                              "description": "grabcut (default) or colour, for a second opinion"})
+@tool(photo_id=PHOTO, method={"type": "string", "enum": ["dnn", "grabcut", "colour"],
+                              "description": "dnn (default: the learned segmenter), or grabcut / colour "
+                                             "(classical colour segmentation) for a second opinion"})
 def measure_wound(v: Visit, photo_id: str, method: str) -> dict:
     """Rectify the photo to true millimetres using the card, outline the wound and
     measure area, length, width and perimeter. area_plus_minus_cm2 is the area's
@@ -127,6 +137,8 @@ def measure_wound(v: Visit, photo_id: str, method: str) -> dict:
     again with the other method) or nurse_outline."""
     if v.check is None or not v.check["ok"]:
         raise PermissionError("check_photo has not passed for this photo; ask for a retake instead")
+    if method == "dnn" and not vision.DNN_AVAILABLE:
+        method = "grabcut"  # no model file: the classical method stands in, and the output says so
     scale = patients.card_scale(patients.get(v.patient_id))
     exclude = [v.calibration["corners_px"]] if v.calibration and v.calibration.get("found") else None
     result = vision.measure(v.image(), method, card_scale=scale or 1.0, exclude=exclude)
@@ -140,12 +152,32 @@ def measure_wound(v: Visit, photo_id: str, method: str) -> dict:
         result["area_plus_minus_cm2"] = round(2 * result["area_sd_cm2"], 2)  # about a 95% range
     clean = {k: val for k, val in result.items() if not k.startswith("_")}
     v.measures[method] = clean
-    others = [m for k, m in v.measures.items() if k != method]
-    first = v.measures.get("grabcut") or clean
-    second = clean if first is not clean else (others[0] if others else None)
+    v._raw[method] = result
+    v.review = None  # a new outline needs a new review
+    first = v.primary()
+    second = clean if first is not clean else None
     v.decision = policy.decide(v.check, first, second)
     clean["decision"] = v.decision
     return clean
+
+
+@tool(photo_id=PHOTO)
+def review_outline(v: Visit, photo_id: str) -> dict:
+    """Look at OpenCV's outline yourself: the vision model is shown the photo and the same photo
+    with the outline side by side, and says whether the outline follows the wound's edge
+    (follows / misses / unsure). Call it after measure_wound and before record_measurement.
+    If it says 'misses', the clinic's rules send the outline to the nurse instead of recording it."""
+    method = next((k for k, m in v.measures.items() if m.get("found")), None)
+    if method is None:
+        raise PermissionError("measure_wound has not produced an outline for this photo")
+    raw, img = v._raw[method], v.image()
+    mask = cv2.warpPerspective(raw["_mask"], np.linalg.inv(raw["_M"]), (img.shape[1], img.shape[0]),
+                               flags=cv2.INTER_NEAREST)
+    v.review = review.review(img, mask)
+    first = v.primary()
+    second = next((m for m in v.measures.values() if m is not first), None)
+    v.decision = policy.decide(v.check, first, second, review=v.review)
+    return {**v.review, "decision": v.decision}
 
 
 @tool(patient_id=PATIENT)
@@ -162,7 +194,7 @@ def assess_healing(v: Visit, patient_id: str, photo_id: str) -> dict:
     4-week rule (an ulcer that has not shrunk by half in 4 weeks needs its care plan
     reviewed). Uses the measured number from measure_wound and its uncertainty: a change
     smaller than the measurement noise is not called worsening."""
-    m = v.measures.get("grabcut") or next(iter(v.measures.values()), None)
+    m = v.primary()
     if not m or not m.get("found"):
         raise PermissionError("measure_wound has not produced an area for this photo")
     p = patients.get(patient_id)
@@ -177,10 +209,12 @@ def record_measurement(v: Visit, patient_id: str, photo_id: str) -> dict:
     clinic's rules decided 'record'."""
     if not v.decision or v.decision["action"] != "record":
         raise PermissionError(f"rules decided {v.decision and v.decision['action']!r}, not 'record'")
+    if v.needs_review and v.review is None:
+        raise PermissionError("review_outline has not checked this outline yet")
     if patients.card_scale(patients.get(patient_id)) is None:
         raise PermissionError("the printed card has not been size-checked: call calibrate_card on a "
                               "photo with a plastic card, or ask the patient for one")
-    m = v.measures.get("grabcut") or next(iter(v.measures.values()))
+    m = v.primary()
     entry = patients.add_measurement(patient_id, photo_id, m)
     v.outcome = v.outcome or {"kind": "recorded", "entry": entry}
     return {"saved": entry}
@@ -216,7 +250,7 @@ def request_nurse_review(v: Visit, patient_id: str, photo_id: str, kind: str, no
         "id": uuid.uuid4().hex[:10], "patient_id": patient_id, "photo_id": photo_id,
         "kind": kind, "note": note, "status": "awaiting_approval",
         "created": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "evidence": {"measure": v.measures.get("grabcut"), "healing": v.healing,
+        "evidence": {"measure": v.primary(), "healing": v.healing, "outline_review": v.review,
                      "decision": v.decision},
     }
     store.put_json(f"alerts/{alert['id']}.json", alert)

@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+import hashlib
+import os
 import re
 import time
 import uuid
 from pathlib import Path
 
 import cv2
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -17,6 +19,7 @@ from . import agent, patients, store, tools, vision
 
 WEB = Path(__file__).resolve().parent.parent / "web"
 MAX_UPLOAD = 6 * 1024 * 1024
+VISITS_PER_HOUR = int(os.environ.get("VISITS_PER_HOUR", "30"))  # per visitor (hashed IP), public demo
 
 app = FastAPI(title="woundtrace")
 app.mount("/static", StaticFiles(directory=WEB), name="static")
@@ -82,9 +85,21 @@ class VisitRequest(BaseModel):
     photo_id: str = Field(min_length=1, max_length=40)
 
 
+def _rate_limit(request: Request) -> None:
+    """At most VISITS_PER_HOUR agent visits per visitor per hour. The IP is only kept as a salted hash."""
+    ip = (request.headers.get("x-forwarded-for") or (request.client.host if request.client else "")).split(",")[0]
+    who = hashlib.sha256(f"woundtrace:{ip.strip()}".encode()).hexdigest()[:16]
+    key = f"usage/visitors/{time.strftime('%Y-%m-%d-%H', time.gmtime())}/{who}.json"
+    n = store.get_json(key, {"visits": 0})["visits"]
+    if n >= VISITS_PER_HOUR:
+        raise HTTPException(429, "Too many visits from this connection in the last hour. Please try later.")
+    store.put_json(key, {"visits": n + 1})
+
+
 @app.post("/api/visits")
-def visit(req: VisitRequest):
+def visit(req: VisitRequest, request: Request):
     _safe(req.patient_id), _safe(req.photo_id)
+    _rate_limit(request)
     try:
         patients.get(req.patient_id)
     except KeyError:

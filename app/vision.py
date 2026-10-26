@@ -8,6 +8,7 @@ numbers and the plain-code quality gates in GATES.
 from __future__ import annotations
 
 import math
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -42,6 +43,42 @@ FIX = {
 ARUCO = cv2.aruco.ArucoDetector(card.DICT, (lambda p: (
     setattr(p, "cornerRefinementMethod", cv2.aruco.CORNER_REFINE_SUBPIX), p)[1])(
     cv2.aruco.DetectorParameters()))
+
+# Learned wound segmenter (ONNX), run with OpenCV's DNN module. Trained by eval/train_segmenter.py.
+MODEL_PATH = Path(__file__).resolve().parent / "models" / "wound_seg.onnx"
+DNN_AVAILABLE = MODEL_PATH.exists()
+PRIMARY = "dnn" if DNN_AVAILABLE else "grabcut"  # what the app measures with first
+
+
+DNN_SIZE = 512
+_MEAN = np.array([0.485, 0.456, 0.406], np.float32).reshape(1, 3, 1, 1)
+_STD = np.array([0.229, 0.224, 0.225], np.float32).reshape(1, 3, 1, 1)
+_NET = None
+
+
+def dnn_prob(img: np.ndarray) -> np.ndarray:
+    """Per-pixel wound probability for the photo, from the ONNX model via cv2.dnn."""
+    global _NET
+    if _NET is None:
+        _NET = cv2.dnn.readNetFromONNX(str(MODEL_PATH))
+    h, w = img.shape[:2]
+    k = DNN_SIZE / max(h, w)
+    sh, sw = round(h * k), round(w * k)
+    box = np.zeros((DNN_SIZE, DNN_SIZE, 3), np.uint8)  # letterbox, as in training
+    box[:sh, :sw] = cv2.resize(img, (sw, sh), interpolation=cv2.INTER_AREA)
+    blob = (cv2.dnn.blobFromImage(box, 1 / 255.0, swapRB=True) - _MEAN) / _STD
+    _NET.setInput(blob)
+    logit = _NET.forward()[0, 0, :sh, :sw]
+    return cv2.resize(1 / (1 + np.exp(-logit)), (w, h), interpolation=cv2.INTER_LINEAR)
+
+
+def dnn_mask(img: np.ndarray, thr: float = 0.5) -> np.ndarray:
+    """All wound regions in a photo without a card (used for the FUSeg evaluation)."""
+    m = (dnn_prob(img) > thr).astype(np.uint8) * 255
+    n, cc, st, _ = cv2.connectedComponentsWithStats(m)
+    keep = [i for i in range(1, n) if st[i, cv2.CC_STAT_AREA] >= 0.0002 * m.size]
+    return _fill_holes(np.isin(cc, keep).astype(np.uint8) * 255)
+
 
 RECT_PX_PER_MM = 6.0
 # Measurement window around the card, in mm. The wound must lie inside it.
@@ -301,6 +338,58 @@ def _thickness_mm(mask: np.ndarray) -> float:
     return 2 * float(cv2.distanceTransform(m, cv2.DIST_L2, 5).max()) / RECT_PX_PER_MM
 
 
+def segment_dnn(img: np.ndarray, flat: np.ndarray, valid: np.ndarray, M: np.ndarray) -> dict:
+    """Wound mask on the rectified plane from the learned segmenter.
+
+    The model scores every pixel of the original photo; the probability map is warped onto the skin
+    plane with the same homography as the photo, then the same plain-code rules apply: not on the
+    card, not cut off by the frame, at least 0.3 cm², one wound (the most confident one)."""
+    s = RECT_PX_PER_MM
+    prob = cv2.warpPerspective(dnn_prob(img).astype(np.float32), M, (flat.shape[1], flat.shape[0]),
+                               flags=cv2.INTER_LINEAR)
+    region = (valid > 0) & (_card_mask(flat.shape) == 0)
+    mask = ((prob > 0.5) & region).astype(np.uint8) * 255
+    k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (round(1.5 * s) | 1,) * 2)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, k)
+    edge = (valid == 0).astype(np.uint8)
+    edge[[0, -1], :] = 1
+    edge[:, [0, -1]] = 1
+    edge = cv2.dilate(edge, np.ones((round(2 * s),) * 2, np.uint8))
+    n, cc, st, _ = cv2.connectedComponentsWithStats(mask)
+    best, best_score = 0, 0.0
+    for i in range(1, n):
+        if st[i, cv2.CC_STAT_AREA] < 30 * s * s:
+            continue
+        comp = cc == i
+        if edge[comp].any():
+            continue
+        score = float(prob[comp].sum())
+        if score > best_score:
+            best, best_score = i, score
+    if not best:
+        return {"found": False}
+    blob = _fill_holes((cc == best).astype(np.uint8) * 255)
+    lab = cv2.cvtColor(flat, cv2.COLOR_BGR2Lab).astype(np.float32)
+    return {"found": True, "mask": blob, "method": "dnn",
+            "edge_contrast": round(_edge_contrast(lab, blob, region), 1),
+            "confidence": round(float(prob[blob > 0].mean()), 3), "flooded": False}
+
+
+def _edge_contrast(lab: np.ndarray, blob: np.ndarray, region: np.ndarray) -> float:
+    """Colour distance from the surrounding skin, just inside vs just outside the outline."""
+    s = RECT_PX_PER_MM
+    near = cv2.dilate(blob, np.ones((round(15 * s),) * 2, np.uint8))
+    ring = (near > 0) & (cv2.dilate(blob, np.ones((round(6 * s),) * 2, np.uint8)) == 0) & region
+    if ring.sum() < 200:
+        return 0.0
+    d = lab - np.median(lab[ring], axis=0)
+    dist = cv2.GaussianBlur(np.sqrt(0.25 * d[..., 0] ** 2 + d[..., 1] ** 2 + d[..., 2] ** 2), (0, 0), 0.6 * s)
+    ring_in = cv2.subtract(blob, cv2.erode(blob, np.ones((round(1.5 * s),) * 2, np.uint8)))
+    ring_out = cv2.subtract(cv2.dilate(blob, np.ones((round(1.5 * s),) * 2, np.uint8)), blob)
+    ring_out[~region] = 0
+    return float(dist[ring_in > 0].mean() - dist[ring_out > 0].mean()) if ring_out.any() else 0.0
+
+
 def _seed(lab, skin, region, edge, k):
     """Colour distance from skin, and the most wound-like blob that doesn't touch the frame.
 
@@ -447,11 +536,13 @@ def shape_metrics(mask: np.ndarray, card_scale: float = 1.0) -> dict:
     }
 
 
-def measure(img: np.ndarray, method: str = "grabcut", card_scale: float = 1.0,
+def measure(img: np.ndarray, method: str | None = None, card_scale: float = 1.0,
             exclude: list | None = None) -> dict:
     """Rectify and measure. Returns metrics plus the mask and warp for drawing.
 
-    exclude: image-space quads to leave out (a calibration card lying in the photo)."""
+    method: dnn, grabcut or colour (default: PRIMARY). exclude: image-space quads to leave out
+    (a calibration card lying in the photo)."""
+    method = method or PRIMARY
     found = find_card(img)
     if "H" not in found:
         return {"found": False, "reason": "card_not_found"}
@@ -460,7 +551,7 @@ def measure(img: np.ndarray, method: str = "grabcut", card_scale: float = 1.0,
         q = cv2.perspectiveTransform(np.array([quad], np.float32), M)[0]
         cv2.fillConvexPoly(valid, np.round(q).astype(np.int32), 0)
         valid = cv2.erode(valid, np.ones((round(3 * RECT_PX_PER_MM),) * 2, np.uint8))
-    seg = segment(flat, valid, method)
+    seg = segment_dnn(img, flat, valid, M) if method == "dnn" else segment(flat, valid, method)
     if not seg["found"]:
         return {"found": False, "reason": "wound_not_found"}
     mask = seg["mask"]
@@ -471,6 +562,7 @@ def measure(img: np.ndarray, method: str = "grabcut", card_scale: float = 1.0,
     shiny = (hsv[..., 2] > 235) & (hsv[..., 1] < 50)
     glare = float(shiny[zone].mean()) if zone.any() else 0.0
     out = {"found": True, "method": seg["method"], "edge_contrast": seg["edge_contrast"],
+           **({"dnn_confidence": seg["confidence"]} if "confidence" in seg else {}),
            "slough_growth_refused": seg["flooded"],
            "glare_fraction": round(glare, 4), "card_scale": card_scale,
            **shape_metrics(mask, card_scale)}

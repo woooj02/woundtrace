@@ -183,3 +183,31 @@ def test_manual_card_check_and_record_guard():
         tools.call(v, "record_measurement", {"patient_id": "t1", "photo_id": pid})
     assert client.post("/api/patients/t1/card", json={"marker_mm": 27.7}).json()["scale"] == 0.9233
     assert client.post("/api/patients/t1/card", json={"marker_mm": 3}).status_code == 422
+
+
+def test_disputed_outline_goes_to_the_nurse():
+    ok = {"ok": True, "problems": []}
+    m = {"found": True, "glare_fraction": 0.0, "edge_contrast": 20.0, "length_cm": 3.0, "width_cm": 2.5,
+         "thickness_cm": 2.0, "area_cm2": 6.0}
+    assert policy.decide(ok, m, review={"verdict": "follows"})["action"] == "record"
+    assert policy.decide(ok, m, review={"verdict": "misses"}) == {"action": "nurse_outline",
+                                                                  "reasons": ["outline_disputed"]}
+
+
+def test_bedrock_visits_cannot_record_without_an_outline_review():
+    img, _ = photo()
+    pid = upload(img)
+    v = tools.Visit("t1", pid)
+    v.needs_review = True
+    tools.call(v, "check_photo", {"photo_id": pid})
+    tools.call(v, "measure_wound", {"photo_id": pid, "method": "dnn"})
+    with pytest.raises(PermissionError):
+        tools.call(v, "record_measurement", {"patient_id": "t1", "photo_id": pid})
+
+
+def test_visits_are_rate_limited_per_visitor(monkeypatch):
+    from app import main
+    monkeypatch.setattr(main, "VISITS_PER_HOUR", 1)
+    pid = upload(photo()[0])
+    assert client.post("/api/visits", json={"patient_id": "t1", "photo_id": pid}).status_code == 200
+    assert client.post("/api/visits", json={"patient_id": "t1", "photo_id": pid}).status_code == 429

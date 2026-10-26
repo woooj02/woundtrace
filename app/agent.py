@@ -35,11 +35,13 @@ How to work:
    If it passes but card_calibrated is false, call calibrate_card. If that fails, call
    request_retake asking for the one-time card check (a plastic card next to the printed
    card); do not measure.
-2. Otherwise call measure_wound with method "grabcut". Follow its decision:
+2. Otherwise call measure_wound with method "dnn". Follow its decision:
    - retake: request_retake, explaining the problem (for example glare).
    - cross_check: call measure_wound again with method "colour"; follow the new decision.
    - nurse_outline: request_nurse_review with kind "confirm_outline".
-   - record: call get_history and assess_healing, then record_measurement.
+   - record: first call review_outline to check the outline against the photo. If its decision
+     becomes nurse_outline, call request_nurse_review with kind "confirm_outline" and say what the
+     review saw. If it stays record: call get_history and assess_healing, then record_measurement.
      If assess_healing says needs_nurse, also call request_nurse_review with kind
      "care_plan_review" and a note giving baseline, current area ± its uncertainty, days
      and change, and saying it is a photo measurement, not a diagnosis.
@@ -78,7 +80,7 @@ def _count_llm_run(usage: dict) -> None:
 # A reply that leaks internals (tool names, ids, "the user"), offers a clinical opinion,
 # or runs long is replaced by the template message for the same outcome, and the trace
 # says so.
-LEAK = re.compile(r"check_photo|calibrate_card|measure_wound|get_history|assess_healing|record_measurement|"
+LEAK = re.compile(r"check_photo|calibrate_card|measure_wound|review_outline|get_history|assess_healing|record_measurement|"
                   r"request_retake|request_nurse_review|photo_id|patient_id|\bthe user\b|\btool",
                   re.I)
 OPINION = re.compile(r"looks? (good|great|fine|healthy|bad|worse|infected)|\bhealthy\b|"
@@ -100,7 +102,7 @@ def message_problem(text: str, visit: tools.Visit) -> str | None:
 
 def template_message(visit: tools.Visit) -> str:
     o = visit.outcome or {}
-    m = visit.measures.get("grabcut") or next(iter(visit.measures.values()), {})
+    m = visit.primary() or {}
     if o.get("kind") == "retake":
         return f"I couldn't measure this photo. {' '.join(o.get('fixes') or [o.get('message', '')])}".strip()
     if o.get("kind") == "recorded":
@@ -153,6 +155,7 @@ def run(patient_id: str, photo_id: str) -> dict:
                       "decision": (visit.decision or {}).get("action"),
                       "steps": [s["tool"] for s in result["steps"]], "ms": result["ms"],
                       "message_replaced": result.get("message_replaced"),
+                      "review": (visit.review or {}).get("verdict"),
                       "usage": result.get("usage")}))
     return result
 
@@ -184,7 +187,7 @@ def _run_rules(visit: tools.Visit) -> dict:
             fix = vision.FIX["card_not_calibrated"]
             _step(visit, "request_retake", {"photo_id": ph, "message": fix}, steps)
             return {"answer": f"Before I can measure: {fix}", "steps": steps}
-    m = _step(visit, "measure_wound", {"photo_id": ph, "method": "grabcut"}, steps)["output"]
+    m = _step(visit, "measure_wound", {"photo_id": ph, "method": "dnn"}, steps)["output"]
     if m["decision"]["action"] == "cross_check":
         m = _step(visit, "measure_wound", {"photo_id": ph, "method": "colour"}, steps)["output"]
     action = m["decision"]["action"]
@@ -218,6 +221,7 @@ def _run_rules(visit: tools.Visit) -> dict:
 def _run_bedrock(visit: tools.Visit) -> dict:
     import boto3
 
+    visit.needs_review = True  # with a vision model available, every outline is checked before it's recorded
     client = boto3.client("bedrock-runtime", region_name=REGION)
     tool_config = {"tools": [{"toolSpec": {"name": s["name"], "description": s["description"],
                                            "inputSchema": {"json": s["input_schema"]}}}

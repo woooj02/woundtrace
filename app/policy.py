@@ -73,9 +73,12 @@ def assess_healing(history: list[dict], area_cm2: float, day: int,
     return out
 
 
-def decide(photo_check: dict, first: dict | None, second: dict | None = None) -> dict:
+def decide(photo_check: dict, first: dict | None, second: dict | None = None,
+           review: dict | None = None) -> dict:
     """The deterministic pipeline used by the rules engine and the evaluation:
-    gate the photo, measure, cross-check a weak outline, and settle on an action."""
+    gate the photo, measure, cross-check a weak outline, and settle on an action.
+    review: the vision model's check of the outline overlay (review.py); 'misses' means a nurse
+    confirms the outline before anything is recorded."""
     if not photo_check["ok"]:
         return {"action": "retake", "reasons": [p["code"] for p in photo_check["problems"]]}
     probs = measurement_problems(first)
@@ -91,4 +94,6 @@ def decide(photo_check: dict, first: dict | None, second: dict | None = None) ->
             return {"action": "cross_check"}
         if not second.get("found") or methods_disagree(first, second) > MAX_METHOD_DISAGREEMENT:
             return {"action": "nurse_outline", "reasons": ["uncertain_edge"]}
+    if review and review.get("verdict") == "misses":
+        return {"action": "nurse_outline", "reasons": ["outline_disputed"]}
     return {"action": "record", "reasons": []}

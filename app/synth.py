@@ -47,11 +47,13 @@ def wound_polygon(rng, area_cm2: float, center=WOUND_CENTER, n=360) -> np.ndarra
 
 def render_plane(rng, area_cm2: float, skin: int, px_per_mm: float = 8.0,
                  size_mm=PAGE_MM, slough: bool = True, shape_seed: int | None = None,
-                 print_scale: float = 1.0, id1_at: tuple | None = None):
-    """print_scale: the printed card's real size / its design size (a home printer that
-    shrank it to fit the margins gives ~0.93). id1_at: top-left (mm) of a plastic ID-1 card
-    lying on the skin, for calibration; needs a wider plane than the default."""
-    """Skin, wound and card on the plane. Returns (BGR image, true area in mm²)."""
+                 print_scale: float = 1.0, id1_at: tuple | None = None, return_mask: bool = False):
+    """Skin, wound and card on the plane. Returns (BGR image, true area in mm²), plus the wound mask
+    if return_mask.
+
+    print_scale: the printed card's real size / its design size (a home printer that shrank it to
+    fit the margins gives ~0.93). id1_at: top-left (mm) of a plastic ID-1 card lying on the skin,
+    for calibration; needs a wider plane than the default."""
     w, h = round(size_mm[0] * px_per_mm), round(size_mm[1] * px_per_mm)
     tone = np.array(SKIN_TONES[skin][::-1], np.float32)
     img = np.empty((h, w, 3), np.float32)
@@ -85,7 +87,7 @@ def render_plane(rng, area_cm2: float, skin: int, px_per_mm: float = 8.0,
     if id1_at is not None:
         draw_id1(img, px_per_mm, id1_at)
     card.draw(img, px_per_mm * print_scale)
-    return img, true_mm2
+    return (img, true_mm2, mask) if return_mask else (img, true_mm2)
 
 
 ID1 = (85.60, 53.98, 3.18)  # width, height, corner radius in mm (ISO/IEC 7810 ID-1)
@@ -117,8 +119,9 @@ class Shot:
 
 
 def photograph(rng, plane: np.ndarray, plane_px_per_mm: float, shot: Shot,
-               size=(1600, 1200)) -> np.ndarray:
-    """Simulate a phone photo of the plane: perspective, blur, glare, noise, JPEG."""
+               size=(1600, 1200), mask: np.ndarray | None = None):
+    """Simulate a phone photo of the plane: perspective, blur, glare, noise, JPEG.
+    With a plane mask, also returns that mask as the camera sees it (for training)."""
     W, H = size
     f = 0.75 * max(W, H)
     K = np.array([[f, 0, W / 2], [0, f, H / 2], [0, 0, 1]])
@@ -150,7 +153,10 @@ def photograph(rng, plane: np.ndarray, plane_px_per_mm: float, shot: Shot,
     img += rng.normal(0, 3, img.shape)
     img = np.clip(img, 0, 255).astype(np.uint8)
     ok, buf = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 88])
-    return cv2.imdecode(buf, cv2.IMREAD_COLOR)
+    photo = cv2.imdecode(buf, cv2.IMREAD_COLOR)
+    if mask is None:
+        return photo
+    return photo, cv2.warpPerspective(mask, Hm, (W, H), flags=cv2.INTER_NEAREST)
 
 
 def random_case(rng, hard: bool = True):

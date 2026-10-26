@@ -255,6 +255,7 @@ const TOOL_LABEL = {
   assess_healing: "Compared with baseline", record_measurement: "Saved to the record",
   request_retake: "Asked for a new photo", request_nurse_review: "Drafted a note for the nurse",
   calibrate_card: "Checked the printed card's size",
+  review_outline: "Looked at the outline itself",
 };
 const pct = x => `${(100 * x).toFixed(1)}%`;
 
@@ -388,13 +389,16 @@ function stepHtml(s) {
                : `<span class="bad">failed: ${o.problems.map(p => esc(p.code)).join(", ")}</span>` +
                  (m.tilt_deg != null ? ` · tilt ${fmt(m.tilt_deg, 0)}°` : "");
   } else if (s.tool === "measure_wound") {
-    why = o.found ? `${esc(s.input.method)}: ${fmt(o.area_cm2)} cm² · glare ${fmt(o.glare_fraction * 100, 1)}% · edge contrast ${fmt(o.edge_contrast, 1)} → <b>${esc(o.decision?.action)}</b>${o.decision?.reasons?.length ? " (" + o.decision.reasons.map(esc).join(", ") + ")" : ""}`
+    why = o.found ? `${esc(o.method)}${o.dnn_confidence != null ? ` (confidence ${fmt(o.dnn_confidence)})` : ""}: ${fmt(o.area_cm2)} cm² · glare ${fmt(o.glare_fraction * 100, 1)}% · edge contrast ${fmt(o.edge_contrast, 1)} → <b>${esc(o.decision?.action)}</b>${o.decision?.reasons?.length ? " (" + o.decision.reasons.map(esc).join(", ") + ")" : ""}`
                   : `<span class="bad">no wound found</span>`;
   } else if (s.tool === "assess_healing") why = `${esc(o.status)}: ${esc(o.detail)}`;
   else if (s.tool === "get_history") why = `${o.history?.length ?? 0} earlier measurements`;
   else if (s.tool === "record_measurement") why = `saved ${fmt(o.saved?.area_cm2)} cm² on day ${o.saved?.day}`;
   else if (s.tool === "request_retake") why = `“${esc(s.input.message)}”`;
   else if (s.tool === "request_nurse_review") why = `${esc(s.input.kind)} · waiting for approval`;
+  else if (s.tool === "review_outline") why = o.verdict === "follows"
+    ? `vision model: the outline follows the wound <span class="muted">(${esc(o.issue)})</span>`
+    : `<span class="bad">vision model: ${esc(o.verdict)}</span> · ${esc(o.issue)} → <b>${esc(o.decision?.action)}</b>`;
   else if (s.tool === "calibrate_card") why = o.calibrated
     ? `plastic card measured ${fmt(o.measured_mm[0], 1)} × ${fmt(o.measured_mm[1], 1)} card-mm (true 85.6 × 54.0) → card printed at <b>${pct(o.scale)}</b>, areas corrected`
     : `<span class="bad">no plastic card found</span>`;

@@ -37,7 +37,7 @@ def main():
         for f in sorted(glob.glob(str(ROOT / sheet / "*.jpg"))):
             img = cv2.imread(f)
             c = vision.check_photo(img)
-            m = vision.measure(img, "grabcut", card_scale=scale)
+            m = vision.measure(img, vision.PRIMARY, card_scale=scale)
             d = policy.decide(c, m)
             if d["action"] == "cross_check":
                 d = policy.decide(c, m, vision.measure(img, "colour", card_scale=scale))

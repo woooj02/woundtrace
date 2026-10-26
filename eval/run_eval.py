@@ -37,7 +37,7 @@ def one(args):
     img, shot = synth.random_case(rng, hard=hard)
     t = time.perf_counter()
     check = vision.check_photo(img)
-    first = vision.measure(img, "grabcut")
+    first = vision.measure(img, vision.PRIMARY)
     second = None
     d = policy.decide(check, first)
     if d["action"] == "cross_check":
