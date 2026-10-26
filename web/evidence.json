@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-26 02:40 UTC",
+ "generated": "2026-10-26 03:24 UTC",
  "synthetic": {
   "cases": 750,
   "recorded_mape": 0.013934018027783782,
@@ -27,8 +27,8 @@
   "model": "us.amazon.nova-2-lite-v1:0",
   "agreement": 1.0,
   "refusals": 0,
-  "replaced": 18,
-  "median_ms": 6031.5
+  "replaced": 2,
+  "median_ms": 4946.0
  },
  "limits": [
   "Not tested on real wounds or patients: accuracy on real wounds is unknown.",
