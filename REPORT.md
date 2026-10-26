@@ -28,12 +28,16 @@ One visit (diagram: [docs/architecture.svg](docs/architecture.svg)):
 3. `measure_wound`: rectify to true millimetres, outline the wound, measure area ± uncertainty, length,
    width, perimeter; the clinic's rules decide record, retake (glare), measure again with a second method
    (weak edge), or ask the nurse to confirm the outline.
-4. `get_history`, `assess_healing`: compare with baseline and last visit. Growth counts as worsening only if
+4. `review_outline`: the vision model marks the wound on the plain photo; if its box and OpenCV's outline
+   disagree, the outline goes to the nurse instead of the record.
+5. `get_history`, `assess_healing`: compare with baseline and last visit. Growth counts as worsening only if
    it exceeds 10% **and** the measurement noise of both photos.
-5. `record_measurement`; `request_nurse_review` drafts a note (numbers, uncertainty, "photo measurement, not
+6. `record_measurement`; `request_nurse_review` drafts a note (numbers, uncertainty, "photo measurement, not
    a diagnosis") that waits in the nurse queue until a human approves it.
 
 ## 3. OpenCV 5 pipeline (`app/vision.py`)
+
+![Pipeline stages on a sample photo](docs/pipeline.png)
 
 - **Card:** two 30 mm ArUco markers (`DICT_4X4_50`), `ArucoDetector` with sub-pixel corner refinement.
   Eight corners → `findHomography` to card millimetres; its RMS residual (mm) checks the card is flat.
@@ -41,13 +45,16 @@ One visit (diagram: [docs/architecture.svg](docs/architecture.svg)):
   markers' outer edges, sampled along normals with `remap`, in mm; resolution in px/mm; brightness of the
   card's white strip. Gates: ≥ 2.5 px/mm, tilt ≤ 45°, edge ≤ 1.3 mm, residual ≤ 0.6 mm, brightness ≥ 70.
 - **Rectification:** `warpPerspective` onto the skin plane at 6 px/mm.
-- **Segmentation:** distance from the skin colour in Lab. Otsu split; blobs touching the frame are treated
-  as background and the split is redone without them; the skin colour is then re-estimated from a ring 6-15
-  mm around the first wound candidate. An **edge-seeking threshold** sweeps 16 thresholds and keeps the
-  outline whose boundary has the strongest Sobel gradient (wound edges are sharp, periwound redness fades);
-  yellow slough always counts as wound; outlines that leave holes deep inside the candidate (slough flecks)
-  are rejected. Line-like or thin shapes (aspect > 8 or no point ≥ 3 mm across, from
-  `minAreaRect` and `distanceTransform`) are not wounds. `grabCut` refines the outline.
+- **Segmentation (default):** a learned segmenter (LR-ASPP, MobileNetV3-Large; [model card](app/models/README.md))
+  exported to ONNX and run by `cv2.dnn` on the whole photo at 512 px; no PyTorch at runtime. Its probability
+  map is warped onto the plane with the same homography, and `grabCut` seeded from it (sure > 0.9, likely
+  > 0.5, background beyond 8 mm) snaps the outline to the colour edge at 6 px/mm. The most confident
+  component that is off the card and not cut by the frame is the wound. Trained on the FUSeg train split
+  plus 500 synthetic photos (`eval/train_segmenter.py`, ~1 h on a GTX 1660 Ti).
+- **Segmentation (classical, the cross-check):** Lab distance from the skin colour, a background-free Otsu
+  split, a ring skin sample, an edge-seeking threshold (strongest Sobel boundary of 16), slough handling,
+  then `grabCut`. Line-like or thin shapes (aspect > 8 or nothing ≥ 3 mm across, from `minAreaRect` and
+  `distanceTransform`) are not wounds.
 - **Measurement:** area, maximum Feret length and perpendicular width (convex hull), the ruler's L × W,
   perimeter, solidity, glare fraction, and edge contrast across the boundary.
 - **Card calibration:** rectify a wide window, `Canny` + `findContours`, keep rounded rectangles with the ID-1
@@ -58,48 +65,62 @@ One visit (diagram: [docs/architecture.svg](docs/architecture.svg)):
 
 ## 4. Agent (`app/agent.py`, `app/tools.py`)
 
-Amazon Bedrock Converse with tool use (Nova 2 Lite), up to 10 steps, 8 tools. The model chooses tools and
+Amazon Bedrock Converse with tool use (Nova 2 Lite), up to 10 steps, 9 tools. The model chooses tools and
 words messages; plain code enforces the rules: no measuring a failed photo, no recording without a "record"
 decision or an unchecked card, no retake for a measurable photo, ids pinned to the visit, nurse notes queued
-for approval. An **outgoing-message guard** checks each patient reply for leaked internals, clinical opinions
+for approval. **Outline check** (`app/review.py`): the same model is shown the plain photo (never OpenCV's
+outline) and asked for the wound's bounding box; code computes the IoU with the outline's box and a value
+below 0.1 sends the outline to the nurse. A Bedrock visit cannot record before this check. An **outgoing-message guard** checks each patient reply for leaked internals, clinical opinions
 ("looks good") and length, and substitutes the template message if it fails. A deterministic rules engine
 runs the same tools when Bedrock is unavailable or the daily cap (150 visits) is reached; the UI always says
 which engine ran. Each visit is stored as a trace in S3 and logged as one JSON line to CloudWatch.
 
 ## 5. Evaluation
 
-**Protocol.** Synthetic photos come from `app/synth.py`: an irregular wound (granulation texture, slough,
-periwound redness) on one of six skin tones, photographed by a simulated camera (perspective, distance,
-defocus, flash glare, noise, JPEG) with the exact true area known. Seed 2026 tuned the gates and fitted the
-uncertainty; seed 7 was used to diagnose failures (below); **seed 11 is the held-out set** reported here.
+**Real wounds: outline** (`eval/fuseg_summary.md`). FUSeg 2021 validation split: 200 de-identified clinic
+photos of foot ulcers with wound-care experts' masks, never used in training or model selection. No card
+in these photos, so only the outline is tested.
 
-| Synthetic, held-out (600 hard + 150 clean) | Result |
+| Method | Mean Dice | Dice ≥ 0.7 | Missed |
+|---|---|---|---|
+| Classical colour + GrabCut (my first pipeline, tuned on synthetic) | 0.033 | 2% | 97 |
+| Learned segmenter alone | 0.824 | 86% | 1 |
+| Learned + GrabCut snap (default) | **0.843** | 88% | 2 |
+
+Examples at the 90th, 50th and 10th percentile: [docs/fuseg_examples.png](docs/fuseg_examples.png).
+
+**Outline check** (`eval/review_summary.md`). 261 outlines on the same photos (learned and classical, so
+both good and bad ones), excluding the 40 used to design the check. Good: Dice ≥ 0.7; bad: < 0.4.
+
+| Outlines | Passed | Sent to the nurse |
+|---|---|---|
+| Good (159) | 72% | 28% |
+| Bad (86) | 21% | **79%** |
+
+**Synthetic photos with known area.** `app/synth.py` draws an irregular wound (granulation, slough, periwound
+redness) on one of six skin tones and photographs it with a simulated camera (perspective, distance,
+defocus, flash glare, noise, JPEG); the true area is exact. Seed 2026 tuned the gates and the uncertainty;
+seed 7 was used to diagnose failures; **seed 11 is held out** (600 hard + 150 clean photos).
+
+| Synthetic, held-out | Result |
 |---|---|
 | Recorded / retake / nurse outline (hard set) | 245 / 355 / 0 |
-| Mean area error when recorded · 95th percentile | 1.4% · 4.1% |
-| Recorded with error > 10% | **0** |
-| Same pipeline with gates off | 14.5% mean error |
-| Clean set mean error | 0.9% |
-| Ruler L × W vs true area | +44.0% |
-| Error by skin tone 1 → 6 (light → dark) | 1.9 · 1.6 · 1.6 · 0.8 · 1.0 · 1.4% |
-| Uncertainty: true area inside ± 1 sd / ± 2 sd | 66.3% / 96.6% (targets 68% / 95%) |
+| Mean area error when recorded · 95th percentile | 1.2% · 4.4% |
+| Recorded with error > 10% | 1 |
+| Same pipeline with gates off · clean set | 8.0% · 0.5% mean error |
+| Ruler L × W vs true area | +42.9% |
+| Error by skin tone 1 → 6 (light → dark) | 1.5 · 1.4 · 1.1 · 0.8 · 1.0 · 1.2% |
+| True area inside ± 1 sd / ± 2 sd | 85.9% / 98.2% (targets 68% / 95%; constants fitted with the classical outline, slightly wide now) |
 
-**Real phone photos with known area** (iPhone, room light; `real/summary.md`). Not wounds.
-
-| Set | Photos | Outcome | Recorded errors |
-|---|---|---|---|
-| Colour sheet A, faulty printer (colour banding) | 11 | 9 nurse outline, 1 retake, 1 recorded | −20.7% |
-| Colour sheet B, same printer | 12 | 6 nurse outline, 3 retakes, 3 recorded | −1.9, −5.3, −7.5% |
-| Black-ink geometry sheet | 1 | recorded | +2.2% |
-| $1 coin (25.00 mm), card calibrated by ruler | 2 | recorded | +6.1, +6.9% (≈ 4-5% is the coin's 3 mm thickness) |
-
-The card was found in 26/26 photos. Only 2 of 7 recorded measurements fell inside their ± 2 sd: the
-uncertainty model, calibrated on synthetic photos, is too confident on real ones.
+**Real phone photos with known area** (26 iPhone photos, room light; `real/summary.md`). Not wounds: colour
+sheets A and B from a faulty printer (banding), a black-ink sheet, and a $1 coin (25.00 mm). Card found
+26/26. Recorded 6, all within 10% (mean 6.3%; −7.1 to −9.0% on sheet B, +1.7% black ink, +5.7 and +6.1%
+on the coin, about 4-5% of which is its 3 mm thickness); 12 sent to the nurse, 8 retakes (4 of them because
+the model found no wound on the striped sheet A). Only 1 of the 6 fell inside its ± 2 sd.
 
 **Card calibration** (`eval/calibration_summary.md`). In 12 synthetic photos with cards printed at 92.5-104%
-and tilts of 5-35°, the plastic card was found in 11 (missed at 35° tilt, which leads to a retake); the print
-scale was within 1.4% and corrected areas within 1.4% of the truth (uncorrected: up to +19%). In the
-agent evaluation (card printed at 92.5%) the measured scale was 0.921 and recorded areas were 1.0% off.
+and tilts of 5-35°, the plastic card was found in 11 (missed at 35°, which leads to a retake); corrected
+areas were within 2.6% of the truth (uncorrected: up to +18%).
 
 **Agent on Bedrock** (`eval/agent_summary.md`): 60 visits, 10 scenarios × 6 skin tones, each also run through
 the rules engine from the same state.
@@ -107,50 +128,51 @@ the rules engine from the same state.
 | Result | Value |
 |---|---|
 | Same outcome as the rules (record / retake / which nurse request) | 60/60 |
+| Outline check on the 29 visits that measured a wound | agreed 29/29 (synthetic photos) |
 | Tool calls refused by the guards | 0 |
 | Numbers in patient messages that came from tool outputs | 100% |
-| Replies replaced by the message guard | 2 (clinical opinions) |
-| Latency per visit, median / p95 | 4.9 / 7.1 s |
-| Tokens per visit, input / output | 13,074 / 235 (≈ $0.005 at third-party listed Nova 2 Lite prices [5]) |
+| Replies replaced by the message guard | 1 |
+| Latency per visit, median / p95 | 4.8 / 7.7 s |
+| Tokens per visit, input / output | 16,169 / 236 (≈ $0.006 at third-party listed Nova 2 Lite prices [5]) |
+
+The agent run used the card printed at 92.5%: measured scale 0.921, recorded area error 0.8%.
 
 ## 6. Failure cases found, and what changed
 
-1. **Dark skin, slough only.** On held-out seed 7, 7 photos were recorded 64-98% too small, all on the
-   darker skin tones (4-6): the outline traced yellow slough and missed the red wound bed, whose colour is close
-   to dark skin. Causes: background polluting the Otsu split, a contaminated skin sample, and an outline
-   chosen inside the wound. Fixed by the background-free re-split, the ring skin sample and the deep-core
-   rule; on fresh seed 11, 0 bad accepts and no skin tone above 1.9%.
-2. **Printed text measured as a wound.** On real sheet A, 5 photos were recorded wrongly, 4 of them near
-   −60%: the outline was the printed caption or a thin paper edge. Added the line and thickness filters plus
-   a policy backstop (implausible shape → nurse). Remaining: a-06, a blurry hand-held photo recorded −20.7%
-   with edge contrast just above the gate.
-3. **Faulty printer.** Banded colour made the printed skin striped; 15 of 23 colour-sheet photos went to the
-   nurse instead of being recorded: correct caution, but no measurement.
-4. **Misprinted card.** The coin read +24.5% because the printer shrank the card to 92.3% (confirmed with a
-   ruler). Every home measurement would be biased the same way, and the photo looks perfect. Added card
-   calibration; the agent will not record until the card is checked.
-5. **Agent reasoning sent to patients.** In the first agent run, 16/60 replies on retake paths were the
-   model's working notes ("Okay, the user sent a photo from patient e1…") and 2 said "your wound looks good".
-   The message guard caught all 18; retake visits now use the patient message the model wrote for
-   `request_retake`. Re-run: 2/60 replaced, both opinions.
-6. **Conservative gates.** 220 of 322 measurable retakes would have measured within 5%: the gates trade
-   patient effort for zero bad accepts. Loosening them is the main next step once real-wound data exists.
+1. **The classical pipeline failed on real wounds.** Tuned on synthetic targets, it scored 1.4% area error
+   there, then Dice 0.03 on real foot ulcers, missing 97 of 200: real wound beds, callus, toes and bedding
+   break a colour rule. Replaced as the default by the learned segmenter (Dice 0.84); kept as a cross-check.
+2. **The outline check passed everything.** First design: show the model the photo and the outline overlay
+   and ask whether it follows the wound. It answered "follows" for 100% of good **and** 100% of bad outlines
+   (`eval/review_overlay_summary.md`). Redesigned so the model never sees the outline: it marks the wound
+   itself and code compares. Now 79% of bad outlines are caught, at the cost of 28% false alarms.
+3. **Dark skin, slough only** (classical, seed 7): 7 photos recorded 64-98% too small on skin tones 4-6.
+   Fixed with a background-free re-split, a ring skin sample and a deep-core rule.
+4. **Printed text measured as a wound** (real sheet A): line and thickness filters plus a policy backstop.
+5. **Misprinted card.** The coin read +24.5% because the printer shrank the card to 92.3% (confirmed with a
+   ruler); the photo looks perfect. Added card calibration; nothing is recorded until the card is checked.
+6. **Agent reasoning sent to patients.** In the first agent run, 16/60 retake replies were the model's
+   working notes and 2 said "your wound looks good". Added the message guard and use the model's own
+   `request_retake` message.
+7. **Conservative gates.** 216 of 322 measurable retakes would have measured within 5%: the gates trade
+   patient effort for few bad accepts. Loosening them needs real-wound data with known area.
 
 ## 7. Limitations
 
-- **Not validated on real wounds or patients.** Accuracy on real tissue (moisture, depth, hair, curved
-  limbs, undermining) is unknown; all ground truth here is synthetic, printed or a coin.
-- Synthetic skin is flat and evenly lit; the card-flatness term of the uncertainty could not be learned.
-- The uncertainty is too narrow on real photos (2 of 7 inside ± 2 sd).
-- Area only: no depth or volume, no tissue classification.
-- Tilt uses an assumed focal length; the card must lie in the wound's plane.
+- **Area accuracy on real wounds is untested.** The real-wound test is the outline on clinic photos of foot
+  ulcers without a card; patients' own photos, other wound types, depth and curved limbs are untested, and
+  FUSeg does not report skin tone, so fairness across skin tones is only tested on synthetic skin.
+- The outline check sends 28% of good outlines to the nurse; the ± range is too narrow on real photos (1/6).
+- Area only: no depth or volume, no tissue classification. Tilt uses an assumed focal length; the card must
+  lie in the wound's plane.
 - The healing threshold comes from diabetic foot ulcer evidence; for other wounds it is a configurable prompt.
 
 ## 8. Responsible use
 
 A measurement aid, never a diagnosis, outcome prediction or treatment recommendation. Every nurse note is
-a draft until a human approves it; the patient-facing text is checked by code. No real patient images were
-used; the author's own test photos are kept out of the repository. The S3 bucket is private, the Lambda
+a draft until a human approves it; the patient-facing text is checked by code. Real wound photos come only
+from a public, de-identified research dataset (FUSeg [6]); it is not redistributed here, and three cited
+examples appear in a figure. The author's own test photos are kept out of the repository. The S3 bucket is private, the Lambda
 role has least privilege, logs are kept 14 days, and Bedrock use is capped per day.
 
 ## 9. References
@@ -164,3 +186,6 @@ role has least privilege, logs are kept 14 days, and Bedrock use is capped per d
 4. ISO/IEC 7810: ID-1 card format, 85.60 × 53.98 mm.
 5. Amazon Nova 2 Lite on Bedrock, about $0.33 / $2.75 per million input / output tokens (us. inference
    profile), from third-party price trackers; check AWS pricing.
+6. Wang C, et al. Fully automatic wound segmentation with deep convolutional neural networks. Sci Rep
+   2020;10:21897; and the Foot Ulcer Segmentation Challenge (FUSeg), MICCAI 2021. Photos: AZH Wound and
+   Vascular Center, shared by the authors with the clinic's permission.

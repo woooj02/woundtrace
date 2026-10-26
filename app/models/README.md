@@ -16,7 +16,7 @@ The learned wound segmenter, run by OpenCV 5's DNN module (`cv2.dnn.readNetFromO
 
 Wang C. et al., *FUSeg: The Foot Ulcer Segmentation Challenge*, 2021 (MICCAI 2021 challenge), and
 Wang C. et al., *Fully automatic wound segmentation with deep convolutional neural networks*, Scientific
-Reports 10, 21897 (2020). Photos from the AZH Wound and Vascular Center, Milwaukee, shared publicly by the
+Reports 10, 21897 (2020). Photos from the AZH Wound and Vascular Center, shared publicly by the
 authors with the clinic's permission (github.com/uwm-bigdata/wound-segmentation). The dataset itself is not
 in this repository.
 

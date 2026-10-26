@@ -3,6 +3,7 @@
     venv/bin/python -m scripts.evidence
 
 Every number shown in the app comes from these files, written by the evaluation scripts:
+eval/fuseg_results.json (real wound photos), eval/review_results.json (the vision model's outline check),
 eval/results.json (synthetic, held-out seed), eval/uncertainty.json, real/results.json,
 eval/agent_results.json.
 """
@@ -25,9 +26,17 @@ def main():
     unc = load("eval/uncertainty.json")
     real = load("real/results.json")["summary"]
     agent = load("eval/agent_results.json")["summary"]
+    fus = load("eval/fuseg_results.json")["summary"]
+    rev = load("eval/review_results.json")["summary"]
     inside, n = real["inside_2sd"]
     out = {
         "generated": time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()),
+        "fuseg": {"photos": fus["dnn"]["n"], "dice": fus["dnn"]["dice"], "dice_ge_07": fus["dnn"]["dice_ge_07"],
+                  "missed": fus["dnn"]["missed"], "classical_dice": fus["grabcut"]["dice"],
+                  "classical_missed": fus["grabcut"]["missed"]},
+        "review": {"outlines": rev["reviews"], "bad": rev["bad"], "good": rev["good"],
+                   "bad_flagged": rev["bad_flagged"], "good_flagged": rev["good_flagged"],
+                   "median_ms": rev["median_ms"]},
         "synthetic": {"cases": syn["cases_hard"] + syn["cases_clean"], "recorded_mape": syn["recorded_mape"],
                       "bad_accepts": syn["bad_accepts_over_10pct"], "forced_mape": syn["forced_mape_all_hard"],
                       "ruler": syn["ruler_mean_overestimate"]},
@@ -37,7 +46,10 @@ def main():
                   "refusals": agent["cases_with_refusal"], "replaced": agent["messages_replaced"],
                   "median_ms": agent["median_ms"]},
         "limits": [
-            "Not tested on real wounds or patients: accuracy on real wounds is unknown.",
+            "Not tested on patients' own photos: the real-wound test (FUSeg) has outlines only, from clinic "
+            "photos of foot ulcers without a reference card, so area accuracy on real wounds is untested.",
+            "The vision model's outline check also sends 28% of good outlines to the nurse; its first design "
+            "(judging the overlay) passed every bad outline and was replaced.",
             "Synthetic skin is flat, smooth and evenly lit; curved limbs, hair and real tissue are not modelled.",
             f"On real photos the stated uncertainty is too narrow: {inside} of {n} recorded measurements "
             "fell inside their ± 2 sd.",

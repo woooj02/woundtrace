@@ -190,19 +190,20 @@
           <rect x="190" y="160" width="260" height="120" rx="10" fill="var(--accent-soft)" stroke="var(--accent)"/>
           <text x="320" y="184" text-anchor="middle" style="fill:var(--ink);font-weight:700">measure_wound (OpenCV 5)</text>
           <text x="320" y="206" text-anchor="middle">warpPerspective to true mm</text>
-          <text x="320" y="226" text-anchor="middle">Lab colour + edge-seeking threshold</text>
-          <text x="320" y="246" text-anchor="middle">GrabCut refine · glare · contrast</text>
+          <text x="320" y="226" text-anchor="middle">DNN segmenter (ONNX, cv2.dnn)</text>
+          <text x="320" y="246" text-anchor="middle">→ GrabCut snap · glare · contrast</text>
           <text x="320" y="266" text-anchor="middle">area · length · width · perimeter</text>
           <rect x="190" y="300" width="260" height="90" rx="10" fill="var(--accent-soft)" stroke="var(--accent)"/>
           <text x="320" y="324" text-anchor="middle" style="fill:var(--ink);font-weight:700">calibrate_card (OpenCV 5, once)</text>
           <text x="320" y="346" text-anchor="middle">Canny + contours → plastic ID-1 card</text>
           <text x="320" y="366" text-anchor="middle">85.60 × 53.98 mm → true print scale</text>
           <path d="M450 330 L498 190" stroke="var(--muted)" fill="none" marker-end="url(#ar)"/>
-          <rect x="500" y="90" width="200" height="110" rx="10" fill="var(--warn-soft)" stroke="var(--bench)"/>
-          <text x="600" y="116" text-anchor="middle" style="fill:var(--ink);font-weight:700">Agent (Bedrock)</text>
-          <text x="600" y="138" text-anchor="middle">picks the next tool</text>
-          <text x="600" y="158" text-anchor="middle">plain-code gates it</text>
-          <text x="600" y="178" text-anchor="middle">can't override</text>
+          <rect x="500" y="80" width="200" height="130" rx="10" fill="var(--warn-soft)" stroke="var(--bench)"/>
+          <text x="600" y="104" text-anchor="middle" style="fill:var(--ink);font-weight:700">Agent (Bedrock)</text>
+          <text x="600" y="126" text-anchor="middle">picks the next tool</text>
+          <text x="600" y="146" text-anchor="middle">finds the wound itself</text>
+          <text x="600" y="166" text-anchor="middle">to check OpenCV's outline</text>
+          <text x="600" y="190" text-anchor="middle">plain code gates it</text>
           <rect x="750" y="10" width="230" height="60" rx="10" fill="var(--code)" stroke="var(--line)"/>
           <text x="865" y="36" text-anchor="middle" style="fill:var(--ink);font-weight:700">request_retake</text>
           <text x="865" y="56" text-anchor="middle">specific fix for the patient</text>
@@ -474,6 +475,15 @@ fetch("/static/evidence.json").then(r => r.json()).then(renderEvidence).catch(()
 function renderEvidence(e) {
   const tile = (v, k) => `<div class="stat"><b>${v}</b><span>${k}</span></div>`;
   $("#evalBody").outerHTML = `<div>
+    <h3>Real wound photos · outline only (${e.fuseg.photos} expert-annotated foot ulcers, FUSeg 2021 validation set)</h3>
+    <div class="stats">${tile(fmt(e.fuseg.dice), "Dice vs the experts' outline (1 = perfect)")}
+      ${tile(pct(e.fuseg.dice_ge_07), "photos with Dice ≥ 0.7")}
+      ${tile(e.fuseg.missed, "wounds missed")}
+      ${tile(fmt(e.fuseg.classical_dice), "my first, colour-based method (missed " + e.fuseg.classical_missed + ")")}</div>
+    <h3>The vision model's outline check · ${e.review.outlines} real-wound outlines</h3>
+    <div class="stats">${tile(pct(e.review.bad_flagged), "bad outlines sent to the nurse")}
+      ${tile(pct(e.review.good_flagged), "good outlines also sent (false alarms)")}
+      ${tile(`${(e.review.median_ms / 1000).toFixed(1)} s`, "median check")}</div>
     <h3>Synthetic photos with known area · held-out set (${e.synthetic.cases} photos, 6 skin tones)</h3>
     <div class="stats">${tile(pct(e.synthetic.recorded_mape), "mean area error when recorded")}
       ${tile(e.synthetic.bad_accepts, "recorded with error over 10%")}
