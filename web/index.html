@@ -397,8 +397,9 @@ function stepHtml(s) {
   else if (s.tool === "request_retake") why = `“${esc(s.input.message)}”`;
   else if (s.tool === "request_nurse_review") why = `${esc(s.input.kind)} · waiting for approval`;
   else if (s.tool === "review_outline") why = o.verdict === "follows"
-    ? `vision model: the outline follows the wound <span class="muted">(${esc(o.issue)})</span>`
-    : `<span class="bad">vision model: ${esc(o.verdict)}</span> · ${esc(o.issue)} → <b>${esc(o.decision?.action)}</b>`;
+    ? `vision model found the wound on its own: its box overlaps OpenCV's outline (IoU ${fmt(o.iou)}) · agree`
+    : o.verdict === "error" ? `<span class="bad">vision check failed</span> · ${esc(o.issue)}`
+    : `<span class="bad">disagree</span>: ${esc(o.issue)} (IoU ${fmt(o.iou)}) → <b>${esc(o.decision?.action)}</b>`;
   else if (s.tool === "calibrate_card") why = o.calibrated
     ? `plastic card measured ${fmt(o.measured_mm[0], 1)} × ${fmt(o.measured_mm[1], 1)} card-mm (true 85.6 × 54.0) → card printed at <b>${pct(o.scale)}</b>, areas corrected`
     : `<span class="bad">no plastic card found</span>`;

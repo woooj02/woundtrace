@@ -30,8 +30,8 @@ OUT = Path(__file__).resolve().parent
 
 def outline(img: np.ndarray, method: str) -> np.ndarray:
     """The wound mask our pipeline gives for a photo without a card (the photo is the plane)."""
-    if method == "dnn":
-        return vision.dnn_mask(img)
+    if method in ("dnn", "dnn-raw"):  # dnn-raw: the model's outline without the GrabCut snap
+        return vision.dnn_mask(img, refine=method == "dnn")
     valid = (img.max(axis=2) > 8).astype(np.uint8) * 255  # FUSeg pads with black
     valid = cv2.erode(valid, np.ones((9, 9), np.uint8))
     seg = vision.segment(img, valid, method)
@@ -59,7 +59,7 @@ def main():
     ap.add_argument("--method", action="append", help="colour, grabcut, dnn (default: all available)")
     ap.add_argument("--split", default="validation")
     a = ap.parse_args()
-    methods = a.method or (["colour", "grabcut"] + (["dnn"] if vision.DNN_AVAILABLE else []))
+    methods = a.method or (["colour", "grabcut"] + (["dnn-raw", "dnn"] if vision.DNN_AVAILABLE else []))
     names = sorted(os.listdir(DATA / a.split / "images"))
     jobs = [(n, m, a.split) for m in methods for n in names]
     with Pool(max(1, (os.cpu_count() or 2) - 2)) as pool:
@@ -69,6 +69,11 @@ def main():
          "compared with the wound-care experts' masks. No reference card in these photos: outline only.", "",
          "| Method | Mean Dice | Mean IoU | Dice ≥ 0.7 | Missed (no outline) | Area ratio, median |",
          "|---|---|---|---|---|---|"]
+    notes = ["", "colour, grabcut: the classical pipeline (Lab colour distance from the skin, then GrabCut), tuned on "
+             "synthetic targets. dnn-raw: the learned segmenter alone (LR-ASPP MobileNetV3, ONNX, run by cv2.dnn). "
+             "dnn: the app's default, the same model with its outline snapped to the colour edge by GrabCut. "
+             "The model was trained on the FUSeg train split plus synthetic photos (eval/train_segmenter.py); "
+             "these validation photos were not used for training or for choosing the model."]
     summary = {}
     for m in methods:
         r = [x for x in rows if x["method"] == m]
@@ -81,6 +86,7 @@ def main():
         L.append(f"| {m} | {s['dice']:.3f} | {s['iou']:.3f} | {100 * s['dice_ge_07']:.0f}% | {s['missed']} | "
                  f"{s['area_ratio_median']:.2f} |" if s["area_ratio_median"] else f"| {m} | {s['dice']:.3f} | "
                  f"{s['iou']:.3f} | {100 * s['dice_ge_07']:.0f}% | {s['missed']} | – |")
+    L += notes
     (OUT / "fuseg_results.json").write_text(json.dumps({"summary": summary, "rows": rows}, indent=1))
     (OUT / "fuseg_summary.md").write_text("\n".join(L) + "\n")
     print("\n".join(L))

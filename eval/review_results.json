@@ -1,0 +1,7064 @@
+{
+ "summary": {
+  "reviews": 261,
+  "good": 159,
+  "bad": 86,
+  "bad_flagged": 0.7906976744186046,
+  "bad_passed": 0.20930232558139536,
+  "good_passed": 0.7169811320754716,
+  "good_flagged": 0.2830188679245283,
+  "errors": 0.0,
+  "min_box_iou": 0.1,
+  "input_tokens": 98397,
+  "median_ms": 1036.0
+ },
+ "rows": [
+  {
+   "photo": "0002.png",
+   "method": "dnn",
+   "dice": 0.93558331981178,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    117,
+    277,
+    220,
+    327
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    101,
+    216,
+    230,
+    345
+   ],
+   "iou": 0.309,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1630
+  },
+  {
+   "photo": "0003.png",
+   "method": "dnn",
+   "dice": 0.9470430661446528,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    160,
+    281,
+    230,
+    377
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    270,
+    230,
+    385
+   ],
+   "iou": 0.558,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1487
+  },
+  {
+   "photo": "0003.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    48,
+    245,
+    99,
+    420
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    270,
+    230,
+    384
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1652
+  },
+  {
+   "photo": "0004.png",
+   "method": "dnn",
+   "dice": 0.8405797101449275,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    184,
+    240,
+    221,
+    271
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    158,
+    225,
+    237,
+    287
+   ],
+   "iou": 0.237,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1664
+  },
+  {
+   "photo": "0005.png",
+   "method": "dnn",
+   "dice": 0.8569284642321161,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    148,
+    151,
+    204,
+    204
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    137,
+    139,
+    206,
+    216
+   ],
+   "iou": 0.559,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1488
+  },
+  {
+   "photo": "0006.png",
+   "method": "dnn",
+   "dice": 0.9221183800623053,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    147,
+    160,
+    196,
+    214
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    139,
+    206,
+    237
+   ],
+   "iou": 0.272,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1633
+  },
+  {
+   "photo": "0007.png",
+   "method": "dnn",
+   "dice": 0.6133427711909396,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    159,
+    124,
+    378,
+    224
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    146,
+    115,
+    451,
+    255
+   ],
+   "iou": 0.511,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1646
+  },
+  {
+   "photo": "0007.png",
+   "method": "grabcut",
+   "dice": 0.6726247987117552,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    221,
+    124,
+    377,
+    199
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    146,
+    115,
+    451,
+    255
+   ],
+   "iou": 0.273,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1460
+  },
+  {
+   "photo": "0008.png",
+   "method": "dnn",
+   "dice": 0.9171468309159547,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    134,
+    243,
+    178,
+    343
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    228,
+    182,
+    347
+   ],
+   "iou": 0.492,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1982
+  },
+  {
+   "photo": "0010.png",
+   "method": "dnn",
+   "dice": 0.9143185738930419,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    148,
+    167,
+    261,
+    347
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    158,
+    250,
+    345
+   ],
+   "iou": 0.71,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1985
+  },
+  {
+   "photo": "0010.png",
+   "method": "grabcut",
+   "dice": 0.8123591421301345,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    141,
+    161,
+    260,
+    347
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    158,
+    250,
+    345
+   ],
+   "iou": 0.788,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 2002
+  },
+  {
+   "photo": "0025.png",
+   "method": "dnn",
+   "dice": 0.8956485002112379,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    178,
+    212,
+    219,
+    252
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    157,
+    196,
+    216,
+    258
+   ],
+   "iou": 0.404,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1863
+  },
+  {
+   "photo": "0030.png",
+   "method": "dnn",
+   "dice": 0.9485806647136075,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    159,
+    238,
+    266,
+    311
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    0,
+    276,
+    315
+   ],
+   "iou": 0.164,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1876
+  },
+  {
+   "photo": "0033.png",
+   "method": "dnn",
+   "dice": 0.9260823653643083,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    145,
+    241,
+    204,
+    320
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    237,
+    182,
+    325
+   ],
+   "iou": 0.346,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1837
+  },
+  {
+   "photo": "0046.png",
+   "method": "dnn",
+   "dice": 0.859596960687149,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    138,
+    216,
+    234,
+    352
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    15,
+    51,
+    284,
+    426
+   ],
+   "iou": 0.129,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1870
+  },
+  {
+   "photo": "0046.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    25,
+    280,
+    84,
+    355
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    15,
+    51,
+    284,
+    426
+   ],
+   "iou": 0.044,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1852
+  },
+  {
+   "photo": "0047.png",
+   "method": "dnn",
+   "dice": 0.9122807017543859,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    198,
+    199,
+    240,
+    242
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    158,
+    175,
+    261,
+    270
+   ],
+   "iou": 0.185,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1439
+  },
+  {
+   "photo": "0047.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    135,
+    63,
+    189,
+    101
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    158,
+    175,
+    257,
+    270
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1422
+  },
+  {
+   "photo": "0057.png",
+   "method": "dnn",
+   "dice": 0.9230769230769231,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    225,
+    244,
+    256,
+    274
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    93,
+    0,
+    310,
+    441
+   ],
+   "iou": 0.01,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1398
+  },
+  {
+   "photo": "0057.png",
+   "method": "grabcut",
+   "dice": 0.013622584312239484,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    0,
+    10,
+    364,
+    510
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    181,
+    216,
+    276,
+    295
+   ],
+   "iou": 0.041,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 827
+  },
+  {
+   "photo": "0058.png",
+   "method": "grabcut",
+   "dice": 0.8308076305936887,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    135,
+    246,
+    178,
+    328
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    196,
+    189,
+    358
+   ],
+   "iou": 0.262,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1368
+  },
+  {
+   "photo": "0062.png",
+   "method": "dnn",
+   "dice": 0.9721115537848606,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    118,
+    165,
+    150,
+    214
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    0,
+    0,
+    250,
+    331
+   ],
+   "iou": 0.019,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1325
+  },
+  {
+   "photo": "0068.png",
+   "method": "dnn",
+   "dice": 0.9148099606815203,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    144,
+    222,
+    165,
+    249
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    119,
+    216,
+    169,
+    263
+   ],
+   "iou": 0.24,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1350
+  },
+  {
+   "photo": "0078.png",
+   "method": "dnn",
+   "dice": 0.9389473684210526,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    161,
+    185,
+    216,
+    279
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    148,
+    175,
+    224,
+    298
+   ],
+   "iou": 0.551,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1377
+  },
+  {
+   "photo": "0078.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    146,
+    350,
+    217,
+    455
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    150,
+    175,
+    221,
+    296
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 812
+  },
+  {
+   "photo": "0079.png",
+   "method": "dnn",
+   "dice": 0.2028301886792453,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    177,
+    225,
+    197,
+    252
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    165,
+    201,
+    201,
+    257
+   ],
+   "iou": 0.272,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1316
+  },
+  {
+   "photo": "0082.png",
+   "method": "dnn",
+   "dice": 0.7589413447782547,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    158,
+    247,
+    281,
+    353
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    228,
+    221,
+    292
+   ],
+   "iou": 0.175,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1309
+  },
+  {
+   "photo": "0085.png",
+   "method": "dnn",
+   "dice": 0.7986111111111112,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    152,
+    183,
+    212,
+    209
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    128,
+    169,
+    216,
+    221
+   ],
+   "iou": 0.346,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1281
+  },
+  {
+   "photo": "0085.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    315,
+    316,
+    364,
+    412
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    128,
+    169,
+    216,
+    221
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1240
+  },
+  {
+   "photo": "0089.png",
+   "method": "dnn",
+   "dice": 0.9304278288684527,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    168,
+    183,
+    236,
+    231
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    94,
+    65,
+    255,
+    432
+   ],
+   "iou": 0.055,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1280
+  },
+  {
+   "photo": "0107.png",
+   "method": "dnn",
+   "dice": 0.957002457002457,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    188,
+    233,
+    228,
+    267
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    169,
+    216,
+    237,
+    281
+   ],
+   "iou": 0.312,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1312
+  },
+  {
+   "photo": "0108.png",
+   "method": "dnn",
+   "dice": 0.8618797709923665,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    81,
+    272,
+    269,
+    355
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    204,
+    270,
+    261,
+    353
+   ],
+   "iou": 0.297,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1272
+  },
+  {
+   "photo": "0108.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    225,
+    170,
+    371,
+    254
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    204,
+    270,
+    261,
+    353
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1078
+  },
+  {
+   "photo": "0122.png",
+   "method": "dnn",
+   "dice": 0.9240462023101155,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    165,
+    227,
+    223,
+    262
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    157,
+    221,
+    232,
+    276
+   ],
+   "iou": 0.487,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1307
+  },
+  {
+   "photo": "0124.png",
+   "method": "dnn",
+   "dice": 0.9167497507477568,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    162,
+    222,
+    238,
+    266
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    160,
+    246,
+    272
+   ],
+   "iou": 0.247,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1338
+  },
+  {
+   "photo": "0126.png",
+   "method": "dnn",
+   "dice": 0.8635749662314273,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    204,
+    259,
+    239,
+    305
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    182,
+    250,
+    246,
+    312
+   ],
+   "iou": 0.406,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 782
+  },
+  {
+   "photo": "0126.png",
+   "method": "grabcut",
+   "dice": 0.029260733493360884,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    56,
+    58,
+    292,
+    408
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    182,
+    250,
+    246,
+    311
+   ],
+   "iou": 0.048,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1281
+  },
+  {
+   "photo": "0128.png",
+   "method": "dnn",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    143,
+    200,
+    157,
+    221
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 34,
+    "totalTokens": 411
+   },
+   "model_box": [
+    79,
+    0,
+    387,
+    512
+   ],
+   "iou": 0.002,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1287
+  },
+  {
+   "photo": "0134.png",
+   "method": "dnn",
+   "dice": 0.9361593462717058,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    173,
+    264,
+    222,
+    322
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    135,
+    246,
+    224,
+    333
+   ],
+   "iou": 0.367,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 709
+  },
+  {
+   "photo": "0136.png",
+   "method": "dnn",
+   "dice": 0.9064596976311747,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    135,
+    224,
+    270,
+    306
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 34,
+    "totalTokens": 411
+   },
+   "model_box": [
+    0,
+    0,
+    385,
+    512
+   ],
+   "iou": 0.056,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1293
+  },
+  {
+   "photo": "0143.png",
+   "method": "dnn",
+   "dice": 0.8958594730238394,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    177,
+    245,
+    198,
+    272
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    135,
+    206,
+    287
+   ],
+   "iou": 0.049,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1210
+  },
+  {
+   "photo": "0146.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    104,
+    374,
+    249,
+    450
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    0,
+    0,
+    270,
+    281
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 819
+  },
+  {
+   "photo": "0164.png",
+   "method": "dnn",
+   "dice": 0.7519035532994924,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    116,
+    178,
+    219,
+    320
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    57,
+    35,
+    246,
+    510
+   ],
+   "iou": 0.163,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 687
+  },
+  {
+   "photo": "0177.png",
+   "method": "dnn",
+   "dice": 0.889090909090909,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    150,
+    241,
+    175,
+    270
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    115,
+    204,
+    212,
+    295
+   ],
+   "iou": 0.081,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1317
+  },
+  {
+   "photo": "0177.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    113,
+    361,
+    229,
+    489
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    115,
+    204,
+    216,
+    295
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 742
+  },
+  {
+   "photo": "0180.png",
+   "method": "dnn",
+   "dice": 0.6835799859055673,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    130,
+    150,
+    299,
+    325
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    150,
+    216,
+    321
+   ],
+   "iou": 0.482,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1250
+  },
+  {
+   "photo": "0180.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    249,
+    321,
+    288,
+    345
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    150,
+    207,
+    318
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1255
+  },
+  {
+   "photo": "0190.png",
+   "method": "dnn",
+   "dice": 0.8052075657086711,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    225,
+    195,
+    273,
+    270
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    135,
+    0,
+    384,
+    474
+   ],
+   "iou": 0.03,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1279
+  },
+  {
+   "photo": "0192.png",
+   "method": "dnn",
+   "dice": 0.9353899883585565,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    173,
+    241,
+    233,
+    470
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    163,
+    206,
+    246,
+    470
+   ],
+   "iou": 0.631,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 908
+  },
+  {
+   "photo": "0201.png",
+   "method": "dnn",
+   "dice": 0.8984214138641043,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    106,
+    278,
+    184,
+    346
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    98,
+    0,
+    392,
+    351
+   ],
+   "iou": 0.051,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1128
+  },
+  {
+   "photo": "0203.png",
+   "method": "dnn",
+   "dice": 0.9649784839457134,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    119,
+    8,
+    246,
+    287
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    71,
+    0,
+    242,
+    292
+   ],
+   "iou": 0.674,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1046
+  },
+  {
+   "photo": "0203.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    248,
+    139,
+    312,
+    182
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    76,
+    0,
+    246,
+    292
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 964
+  },
+  {
+   "photo": "0208.png",
+   "method": "dnn",
+   "dice": 0.9486382745384756,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    171,
+    211,
+    246,
+    260
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    94,
+    0,
+    296,
+    290
+   ],
+   "iou": 0.063,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1393
+  },
+  {
+   "photo": "0208.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    121,
+    380,
+    267,
+    474
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    90,
+    0,
+    296,
+    292
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1121
+  },
+  {
+   "photo": "0211.png",
+   "method": "dnn",
+   "dice": 0.8888623041033616,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    114,
+    254,
+    203,
+    357
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    82,
+    97,
+    201,
+    429
+   ],
+   "iou": 0.227,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1112
+  },
+  {
+   "photo": "0213.png",
+   "method": "dnn",
+   "dice": 0.9620090148100451,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    199,
+    254,
+    257,
+    317
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    143,
+    15,
+    295,
+    380
+   ],
+   "iou": 0.066,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1086
+  },
+  {
+   "photo": "0213.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    384,
+    15,
+    433,
+    81
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    143,
+    15,
+    295,
+    380
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1120
+  },
+  {
+   "photo": "0217.png",
+   "method": "dnn",
+   "dice": 0.9373408048904738,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    165,
+    215,
+    212,
+    270
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    191,
+    206,
+    276
+   ],
+   "iou": 0.329,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1091
+  },
+  {
+   "photo": "0233.png",
+   "method": "dnn",
+   "dice": 0.7319587628865979,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    223,
+    244,
+    239,
+    260
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    188,
+    225,
+    259,
+    284
+   ],
+   "iou": 0.062,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1063
+  },
+  {
+   "photo": "0233.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    230,
+    70,
+    288,
+    161
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    188,
+    225,
+    259,
+    281
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 715
+  },
+  {
+   "photo": "0235.png",
+   "method": "dnn",
+   "dice": 0.8672350791717418,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    170,
+    239,
+    208,
+    272
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    216,
+    228,
+    287
+   ],
+   "iou": 0.146,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1329
+  },
+  {
+   "photo": "0245.png",
+   "method": "dnn",
+   "dice": 0.4,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    94,
+    175,
+    106,
+    196
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    71,
+    154,
+    119,
+    225
+   ],
+   "iou": 0.074,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1329
+  },
+  {
+   "photo": "0251.png",
+   "method": "dnn",
+   "dice": 0.84688995215311,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    160,
+    231,
+    180,
+    249
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    150,
+    227,
+    175,
+    257
+   ],
+   "iou": 0.318,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1293
+  },
+  {
+   "photo": "0256.png",
+   "method": "dnn",
+   "dice": 0.9565047021943573,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    165,
+    242,
+    249,
+    284
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    0,
+    276,
+    301
+   ],
+   "iou": 0.08,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1245
+  },
+  {
+   "photo": "0256.png",
+   "method": "grabcut",
+   "dice": 0.008708904855214456,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    175,
+    197,
+    243,
+    244
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    0,
+    270,
+    300
+   ],
+   "iou": 0.076,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1263
+  },
+  {
+   "photo": "0259.png",
+   "method": "dnn",
+   "dice": 0.9188118811881189,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    97,
+    52,
+    271,
+    393
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    95,
+    357,
+    287,
+    408
+   ],
+   "iou": 0.099,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1291
+  },
+  {
+   "photo": "0259.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    173,
+    29,
+    202,
+    106
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    98,
+    357,
+    281,
+    416
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1300
+  },
+  {
+   "photo": "0262.png",
+   "method": "dnn",
+   "dice": 0.9315223542727787,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    179,
+    233,
+    213,
+    275
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    157,
+    209,
+    196,
+    281
+   ],
+   "iou": 0.206,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1284
+  },
+  {
+   "photo": "0262.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    33,
+    354,
+    211,
+    423
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    157,
+    216,
+    196,
+    281
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 894
+  },
+  {
+   "photo": "0276.png",
+   "method": "dnn",
+   "dice": 0.8127259580621836,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    125,
+    207,
+    178,
+    268
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    34,
+    79,
+    189,
+    276
+   ],
+   "iou": 0.105,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1131
+  },
+  {
+   "photo": "0278.png",
+   "method": "dnn",
+   "dice": 0.9606299212598425,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    156,
+    193,
+    182,
+    222
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    115,
+    156,
+    189,
+    261
+   ],
+   "iou": 0.096,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1114
+  },
+  {
+   "photo": "0278.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    88,
+    269,
+    127,
+    349
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    115,
+    157,
+    189,
+    270
+   ],
+   "iou": 0.001,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1078
+  },
+  {
+   "photo": "0284.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    129,
+    359,
+    227,
+    432
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    115,
+    201,
+    196,
+    287
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1085
+  },
+  {
+   "photo": "0289.png",
+   "method": "dnn",
+   "dice": 0.8727117922520221,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    136,
+    240,
+    171,
+    289
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    88,
+    216,
+    196,
+    333
+   ],
+   "iou": 0.136,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1085
+  },
+  {
+   "photo": "0289.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    43,
+    295,
+    128,
+    436
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    88,
+    216,
+    196,
+    333
+   ],
+   "iou": 0.065,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1062
+  },
+  {
+   "photo": "0291.png",
+   "method": "dnn",
+   "dice": 0.8590722254844392,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    110,
+    275,
+    174,
+    324
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    51,
+    216,
+    196,
+    333
+   ],
+   "iou": 0.185,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1085
+  },
+  {
+   "photo": "0300.png",
+   "method": "dnn",
+   "dice": 0.9656368742772179,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    43,
+    178,
+    246,
+    284
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    45,
+    51,
+    281,
+    511
+   ],
+   "iou": 0.196,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 823
+  },
+  {
+   "photo": "0301.png",
+   "method": "dnn",
+   "dice": 0.9221982093238654,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    98,
+    173,
+    230,
+    331
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    45,
+    2,
+    389,
+    429
+   ],
+   "iou": 0.142,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1257
+  },
+  {
+   "photo": "0303.png",
+   "method": "dnn",
+   "dice": 0.9416167664670658,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    100,
+    149,
+    170,
+    259
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    64,
+    106,
+    154,
+    261
+   ],
+   "iou": 0.38,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1274
+  },
+  {
+   "photo": "0322.png",
+   "method": "dnn",
+   "dice": 0.9579524680073126,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    216,
+    266,
+    245,
+    293
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    175,
+    250,
+    246,
+    302
+   ],
+   "iou": 0.211,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1246
+  },
+  {
+   "photo": "0326.png",
+   "method": "dnn",
+   "dice": 0.8812158565625438,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    45,
+    86,
+    146,
+    289
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 34,
+    "totalTokens": 411
+   },
+   "model_box": [
+    0,
+    0,
+    318,
+    512
+   ],
+   "iou": 0.126,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1246
+  },
+  {
+   "photo": "0334.png",
+   "method": "dnn",
+   "dice": 0.8315412186379928,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    304,
+    208,
+    375,
+    274
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    195,
+    41,
+    411,
+    384
+   ],
+   "iou": 0.063,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 732
+  },
+  {
+   "photo": "0334.png",
+   "method": "grabcut",
+   "dice": 0.021604938271604937,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    287,
+    89,
+    361,
+    128
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    195,
+    41,
+    411,
+    384
+   ],
+   "iou": 0.039,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1215
+  },
+  {
+   "photo": "0337.png",
+   "method": "dnn",
+   "dice": 0.5954856708090287,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    165,
+    187,
+    210,
+    277
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    71,
+    2,
+    380,
+    504
+   ],
+   "iou": 0.026,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1240
+  },
+  {
+   "photo": "0337.png",
+   "method": "grabcut",
+   "dice": 0.07752142386288728,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    133,
+    66,
+    291,
+    355
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    71,
+    2,
+    380,
+    504
+   ],
+   "iou": 0.294,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 840
+  },
+  {
+   "photo": "0339.png",
+   "method": "dnn",
+   "dice": 0.9065188300516154,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    100,
+    149,
+    170,
+    259
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    61,
+    106,
+    156,
+    261
+   ],
+   "iou": 0.379,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 753
+  },
+  {
+   "photo": "0339.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    173,
+    146,
+    209,
+    186
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    61,
+    98,
+    156,
+    260
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1103
+  },
+  {
+   "photo": "0341.png",
+   "method": "dnn",
+   "dice": 0.4079207920792079,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    170,
+    147,
+    199,
+    186
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    157,
+    128,
+    196,
+    196
+   ],
+   "iou": 0.368,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1127
+  },
+  {
+   "photo": "0341.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    42,
+    242,
+    181,
+    457
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    157,
+    130,
+    196,
+    196
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1107
+  },
+  {
+   "photo": "0355.png",
+   "method": "dnn",
+   "dice": 0.9643923730760395,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    166,
+    295,
+    214,
+    364
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    158,
+    290,
+    207,
+    371
+   ],
+   "iou": 0.64,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 685
+  },
+  {
+   "photo": "0356.png",
+   "method": "dnn",
+   "dice": 0.9614595545134819,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    138,
+    236,
+    249,
+    316
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    190,
+    261,
+    333
+   ],
+   "iou": 0.403,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1071
+  },
+  {
+   "photo": "0356.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    230,
+    259,
+    368,
+    345
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    1,
+    302,
+    333
+   ],
+   "iou": 0.074,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 975
+  },
+  {
+   "photo": "0363.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    256,
+    92,
+    326,
+    171
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    189,
+    154,
+    387,
+    511
+   ],
+   "iou": 0.016,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 967
+  },
+  {
+   "photo": "0365.png",
+   "method": "dnn",
+   "dice": 0.9641537049440599,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    134,
+    156,
+    271,
+    337
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    0,
+    295,
+    366
+   ],
+   "iou": 0.399,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 880
+  },
+  {
+   "photo": "0369.png",
+   "method": "dnn",
+   "dice": 0.9686349580326903,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    144,
+    277,
+    224,
+    339
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    249,
+    237,
+    342
+   ],
+   "iou": 0.477,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 781
+  },
+  {
+   "photo": "0375.png",
+   "method": "dnn",
+   "dice": 0.9747178974432223,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    168,
+    217,
+    251,
+    274
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    139,
+    0,
+    305,
+    302
+   ],
+   "iou": 0.094,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1085
+  },
+  {
+   "photo": "0375.png",
+   "method": "grabcut",
+   "dice": 0.00017750954113783616,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    147,
+    145,
+    281,
+    268
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    139,
+    0,
+    305,
+    302
+   ],
+   "iou": 0.328,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1011
+  },
+  {
+   "photo": "0376.png",
+   "method": "dnn",
+   "dice": 0.8868534482758621,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    166,
+    223,
+    198,
+    268
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    0,
+    0,
+    385,
+    414
+   ],
+   "iou": 0.009,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 964
+  },
+  {
+   "photo": "0376.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    29,
+    318,
+    181,
+    415
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    0,
+    0,
+    384,
+    414
+   ],
+   "iou": 0.091,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 963
+  },
+  {
+   "photo": "0382.png",
+   "method": "dnn",
+   "dice": 0.8835261477254881,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    119,
+    57,
+    317,
+    311
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    71,
+    45,
+    358,
+    347
+   ],
+   "iou": 0.58,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 770
+  },
+  {
+   "photo": "0390.png",
+   "method": "dnn",
+   "dice": 0.8954635108481263,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    227,
+    107,
+    296,
+    135
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    117,
+    41,
+    406,
+    388
+   ],
+   "iou": 0.019,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 953
+  },
+  {
+   "photo": "0390.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    219,
+    23,
+    257,
+    47
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    117,
+    41,
+    406,
+    388
+   ],
+   "iou": 0.002,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 706
+  },
+  {
+   "photo": "0398.png",
+   "method": "dnn",
+   "dice": 0.9443996776792909,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    159,
+    218,
+    187,
+    254
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    157,
+    189,
+    261
+   ],
+   "iou": 0.163,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 734
+  },
+  {
+   "photo": "0405.png",
+   "method": "dnn",
+   "dice": 0.9281110560237977,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    162,
+    298,
+    193,
+    346
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    139,
+    288,
+    201,
+    358
+   ],
+   "iou": 0.34,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 605
+  },
+  {
+   "photo": "0407.png",
+   "method": "dnn",
+   "dice": 0.943345804382683,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    171,
+    223,
+    224,
+    272
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    154,
+    216,
+    216,
+    284
+   ],
+   "iou": 0.476,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 642
+  },
+  {
+   "photo": "0412.png",
+   "method": "dnn",
+   "dice": 0.439863608183509,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    178,
+    149,
+    366,
+    273
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    65,
+    0,
+    446,
+    333
+   ],
+   "iou": 0.184,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1017
+  },
+  {
+   "photo": "0416.png",
+   "method": "dnn",
+   "dice": 0.9725374807342021,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    175,
+    211,
+    292,
+    297
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    90,
+    0,
+    322,
+    322
+   ],
+   "iou": 0.135,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1011
+  },
+  {
+   "photo": "0417.png",
+   "method": "dnn",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    236,
+    240,
+    263,
+    273
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    137,
+    0,
+    343,
+    403
+   ],
+   "iou": 0.011,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1026
+  },
+  {
+   "photo": "0417.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    310,
+    236,
+    341,
+    265
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    137,
+    0,
+    343,
+    400
+   ],
+   "iou": 0.011,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 718
+  },
+  {
+   "photo": "0429.png",
+   "method": "dnn",
+   "dice": 0.9761729304839106,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    127,
+    167,
+    178,
+    222
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    157,
+    182,
+    230
+   ],
+   "iou": 0.509,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 987
+  },
+  {
+   "photo": "0429.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    6,
+    29,
+    113,
+    406
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    157,
+    182,
+    230
+   ],
+   "iou": 0.01,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 921
+  },
+  {
+   "photo": "0437.png",
+   "method": "dnn",
+   "dice": 0.9501029983978027,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    122,
+    12,
+    302,
+    290
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    90,
+    0,
+    295,
+    287
+   ],
+   "iou": 0.775,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 671
+  },
+  {
+   "photo": "0437.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    86,
+    305,
+    190,
+    344
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    90,
+    0,
+    296,
+    287
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 602
+  },
+  {
+   "photo": "0438.png",
+   "method": "dnn",
+   "dice": 0.9669880222027462,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    154,
+    192,
+    231,
+    342
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    182,
+    216,
+    358
+   ],
+   "iou": 0.535,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 715
+  },
+  {
+   "photo": "0438.png",
+   "method": "grabcut",
+   "dice": 0.7168253433313674,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    131,
+    176,
+    239,
+    364
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    182,
+    221,
+    358
+   ],
+   "iou": 0.771,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 805
+  },
+  {
+   "photo": "0439.png",
+   "method": "dnn",
+   "dice": 0.7045660719685516,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    27,
+    112,
+    230,
+    273
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    79,
+    0,
+    380,
+    487
+   ],
+   "iou": 0.157,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1110
+  },
+  {
+   "photo": "0447.png",
+   "method": "dnn",
+   "dice": 0.9458128078817734,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    221,
+    196,
+    259,
+    232
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    190,
+    169,
+    276,
+    298
+   ],
+   "iou": 0.123,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 800
+  },
+  {
+   "photo": "0447.png",
+   "method": "grabcut",
+   "dice": 0.03819322366351474,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    88,
+    29,
+    336,
+    337
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    190,
+    171,
+    257,
+    292
+   ],
+   "iou": 0.106,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1049
+  },
+  {
+   "photo": "0450.png",
+   "method": "dnn",
+   "dice": 0.9133064516129032,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    195,
+    228,
+    219,
+    252
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    90,
+    146,
+    230,
+    285
+   ],
+   "iou": 0.03,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 796
+  },
+  {
+   "photo": "0451.png",
+   "method": "dnn",
+   "dice": 0.8843074743181013,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    131,
+    225,
+    296,
+    302
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    0,
+    221,
+    290,
+    358
+   ],
+   "iou": 0.303,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1034
+  },
+  {
+   "photo": "0456.png",
+   "method": "dnn",
+   "dice": 0.2550335570469799,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    179,
+    231,
+    200,
+    250
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    101,
+    106,
+    236,
+    270
+   ],
+   "iou": 0.018,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1051
+  },
+  {
+   "photo": "0456.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    124,
+    211,
+    170,
+    297
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    98,
+    106,
+    236,
+    272
+   ],
+   "iou": 0.117,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 626
+  },
+  {
+   "photo": "0466.png",
+   "method": "dnn",
+   "dice": 0.9083280889448291,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    177,
+    263,
+    231,
+    327
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    158,
+    237,
+    237,
+    325
+   ],
+   "iou": 0.476,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1142
+  },
+  {
+   "photo": "0470.png",
+   "method": "dnn",
+   "dice": 0.919209486166008,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    204,
+    307,
+    265,
+    388
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    190,
+    302,
+    257,
+    394
+   ],
+   "iou": 0.624,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1203
+  },
+  {
+   "photo": "0475.png",
+   "method": "dnn",
+   "dice": 0.4969450101832994,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    110,
+    190,
+    129,
+    220
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    76,
+    175,
+    135,
+    246
+   ],
+   "iou": 0.137,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1173
+  },
+  {
+   "photo": "0483.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    173,
+    124,
+    365,
+    376
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    114,
+    198,
+    139,
+    239
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1006
+  },
+  {
+   "photo": "0485.png",
+   "method": "dnn",
+   "dice": 0.8021248339973439,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    182,
+    296,
+    204,
+    326
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    138,
+    270,
+    221,
+    333
+   ],
+   "iou": 0.127,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1036
+  },
+  {
+   "photo": "0485.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    260,
+    114,
+    317,
+    221
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    138,
+    270,
+    216,
+    333
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1005
+  },
+  {
+   "photo": "0494.png",
+   "method": "dnn",
+   "dice": 0.8931928225576758,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    117,
+    193,
+    165,
+    249
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    88,
+    169,
+    175,
+    258
+   ],
+   "iou": 0.351,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 741
+  },
+  {
+   "photo": "0494.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    225,
+    49,
+    251,
+    110
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    88,
+    169,
+    182,
+    261
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 988
+  },
+  {
+   "photo": "0496.png",
+   "method": "dnn",
+   "dice": 0.9738134206219312,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    221,
+    140,
+    262,
+    196
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    65,
+    0,
+    303,
+    428
+   ],
+   "iou": 0.023,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1215
+  },
+  {
+   "photo": "0496.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    6,
+    104,
+    113,
+    248
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    65,
+    0,
+    303,
+    428
+   ],
+   "iou": 0.063,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1153
+  },
+  {
+   "photo": "0503.png",
+   "method": "dnn",
+   "dice": 0.9798945930119071,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    194,
+    224,
+    265,
+    278
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    169,
+    0,
+    292,
+    310
+   ],
+   "iou": 0.101,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 780
+  },
+  {
+   "photo": "0504.png",
+   "method": "dnn",
+   "dice": 0.7780444871179388,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    197,
+    105,
+    260,
+    307
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    182,
+    106,
+    246,
+    312
+   ],
+   "iou": 0.608,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1087
+  },
+  {
+   "photo": "0511.png",
+   "method": "dnn",
+   "dice": 0.9441754767315482,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    172,
+    245,
+    269,
+    314
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    109,
+    0,
+    312,
+    331
+   ],
+   "iou": 0.099,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1132
+  },
+  {
+   "photo": "0516.png",
+   "method": "dnn",
+   "dice": 0.8789378394689197,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    127,
+    59,
+    200,
+    389
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    341,
+    287,
+    404
+   ],
+   "iou": 0.109,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1027
+  },
+  {
+   "photo": "0516.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    149,
+    100,
+    232,
+    175
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    341,
+    287,
+    408
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1006
+  },
+  {
+   "photo": "0517.png",
+   "method": "dnn",
+   "dice": 0.9195726194669485,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    154,
+    97,
+    240,
+    420
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    152,
+    93,
+    237,
+    257
+   ],
+   "iou": 0.467,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 989
+  },
+  {
+   "photo": "0525.png",
+   "method": "dnn",
+   "dice": 0.9636390401884293,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    178,
+    226,
+    260,
+    277
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    139,
+    157,
+    276,
+    292
+   ],
+   "iou": 0.225,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 650
+  },
+  {
+   "photo": "0528.png",
+   "method": "dnn",
+   "dice": 0.9269988412514485,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    169,
+    223,
+    208,
+    240
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    175,
+    225,
+    284
+   ],
+   "iou": 0.064,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1139
+  },
+  {
+   "photo": "0533.png",
+   "method": "dnn",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    114,
+    161,
+    154,
+    220
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    38,
+    0,
+    276,
+    498
+   ],
+   "iou": 0.02,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1114
+  },
+  {
+   "photo": "0541.png",
+   "method": "dnn",
+   "dice": 0.8669288757784332,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    168,
+    259,
+    230,
+    336
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    146,
+    242,
+    216,
+    335
+   ],
+   "iou": 0.481,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 980
+  },
+  {
+   "photo": "0545.png",
+   "method": "dnn",
+   "dice": 0.9582479689155775,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    73,
+    165,
+    289,
+    272
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    65,
+    0,
+    323,
+    481
+   ],
+   "iou": 0.187,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1099
+  },
+  {
+   "photo": "0548.png",
+   "method": "dnn",
+   "dice": 0.557839107457428,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    171,
+    224,
+    221,
+    278
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    154,
+    216,
+    216,
+    290
+   ],
+   "iou": 0.503,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1083
+  },
+  {
+   "photo": "0549.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    99,
+    98,
+    187,
+    204
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    157,
+    216,
+    221,
+    270
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 962
+  },
+  {
+   "photo": "0557.png",
+   "method": "dnn",
+   "dice": 0.9594396481511647,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    195,
+    248,
+    276,
+    302
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    177,
+    0,
+    333,
+    310
+   ],
+   "iou": 0.09,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 905
+  },
+  {
+   "photo": "0557.png",
+   "method": "grabcut",
+   "dice": 0.000281610813855252,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    210,
+    187,
+    305,
+    274
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    175,
+    0,
+    354,
+    310
+   ],
+   "iou": 0.149,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 810
+  },
+  {
+   "photo": "0559.png",
+   "method": "dnn",
+   "dice": 0.9732525864244259,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    121,
+    158,
+    187,
+    255
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    61,
+    51,
+    357,
+    374
+   ],
+   "iou": 0.067,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1806
+  },
+  {
+   "photo": "0565.png",
+   "method": "dnn",
+   "dice": 0.918467895740623,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    88,
+    139,
+    148,
+    278
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    71,
+    130,
+    148,
+    283
+   ],
+   "iou": 0.711,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 828
+  },
+  {
+   "photo": "0566.png",
+   "method": "dnn",
+   "dice": 0.913452188006483,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    170,
+    219,
+    215,
+    270
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    146,
+    201,
+    201,
+    270
+   ],
+   "iou": 0.355,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 786
+  },
+  {
+   "photo": "0571.png",
+   "method": "dnn",
+   "dice": 0.7825295723384895,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    135,
+    190,
+    158,
+    238
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    145,
+    196,
+    233
+   ],
+   "iou": 0.124,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1750
+  },
+  {
+   "photo": "0577.png",
+   "method": "dnn",
+   "dice": 0.9610761305094447,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    176,
+    141,
+    229,
+    226
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    153,
+    139,
+    228,
+    230
+   ],
+   "iou": 0.63,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 726
+  },
+  {
+   "photo": "0577.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    152,
+    197,
+    255,
+    449
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    153,
+    139,
+    228,
+    230
+   ],
+   "iou": 0.082,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1715
+  },
+  {
+   "photo": "0582.png",
+   "method": "dnn",
+   "dice": 0.9706359214555936,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    88,
+    154,
+    226,
+    282
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    31,
+    0,
+    276,
+    437
+   ],
+   "iou": 0.165,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1735
+  },
+  {
+   "photo": "0588.png",
+   "method": "dnn",
+   "dice": 0.6151685393258427,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    177,
+    286,
+    203,
+    314
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    157,
+    276,
+    216,
+    312
+   ],
+   "iou": 0.314,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1732
+  },
+  {
+   "photo": "0588.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    262,
+    62,
+    348,
+    240
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    157,
+    276,
+    216,
+    312
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1066
+  },
+  {
+   "photo": "0591.png",
+   "method": "dnn",
+   "dice": 0.6791018998272884,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    98,
+    309,
+    164,
+    338
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    0,
+    45,
+    281,
+    470
+   ],
+   "iou": 0.016,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1043
+  },
+  {
+   "photo": "0603.png",
+   "method": "dnn",
+   "dice": 0.9156241682193239,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    127,
+    160,
+    318,
+    356
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    157,
+    325,
+    364
+   ],
+   "iou": 0.906,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 648
+  },
+  {
+   "photo": "0604.png",
+   "method": "dnn",
+   "dice": 0.8568510141543849,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    175,
+    249,
+    288,
+    299
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    139,
+    237,
+    305,
+    305
+   ],
+   "iou": 0.499,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 719
+  },
+  {
+   "photo": "0604.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    267,
+    358,
+    310,
+    470
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    137,
+    237,
+    305,
+    307
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1056
+  },
+  {
+   "photo": "0607.png",
+   "method": "dnn",
+   "dice": 0.8221544715447154,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    131,
+    219,
+    227,
+    476
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    0,
+    242,
+    290
+   ],
+   "iou": 0.131,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1004
+  },
+  {
+   "photo": "0607.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    143,
+    3,
+    249,
+    182
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    0,
+    242,
+    290
+   ],
+   "iou": 0.504,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 970
+  },
+  {
+   "photo": "0615.png",
+   "method": "dnn",
+   "dice": 0.9476443950107254,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    96,
+    204,
+    269,
+    263
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    98,
+    196,
+    276,
+    258
+   ],
+   "iou": 0.768,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 828
+  },
+  {
+   "photo": "0616.png",
+   "method": "dnn",
+   "dice": 0.940959409594096,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    144,
+    195,
+    288,
+    355
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    82,
+    0,
+    388,
+    362
+   ],
+   "iou": 0.208,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 827
+  },
+  {
+   "photo": "0616.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    129,
+    333,
+    271,
+    430
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    82,
+    0,
+    388,
+    364
+   ],
+   "iou": 0.036,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 833
+  },
+  {
+   "photo": "0627.png",
+   "method": "dnn",
+   "dice": 0.9811588043632242,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    175,
+    244,
+    258,
+    301
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    118,
+    0,
+    290,
+    326
+   ],
+   "iou": 0.085,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 975
+  },
+  {
+   "photo": "0627.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    40,
+    182,
+    86,
+    284
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    118,
+    0,
+    290,
+    327
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 682
+  },
+  {
+   "photo": "0642.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    146,
+    54,
+    208,
+    95
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    90,
+    79,
+    272,
+    317
+   ],
+   "iou": 0.022,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 815
+  },
+  {
+   "photo": "0644.png",
+   "method": "dnn",
+   "dice": 0.9760295021511985,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    134,
+    173,
+    167,
+    206
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    98,
+    118,
+    189,
+    216
+   ],
+   "iou": 0.122,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1028
+  },
+  {
+   "photo": "0644.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    140,
+    202,
+    302,
+    303
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    98,
+    125,
+    184,
+    216
+   ],
+   "iou": 0.026,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1042
+  },
+  {
+   "photo": "0647.png",
+   "method": "dnn",
+   "dice": 0.9276177090653549,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    176,
+    237,
+    205,
+    271
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    0,
+    216,
+    230,
+    343
+   ],
+   "iou": 0.034,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 895
+  },
+  {
+   "photo": "0651.png",
+   "method": "dnn",
+   "dice": 0.9682191147578875,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    171,
+    125,
+    241,
+    247
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    157,
+    115,
+    246,
+    255
+   ],
+   "iou": 0.685,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 908
+  },
+  {
+   "photo": "0651.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    171,
+    273,
+    208,
+    337
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    158,
+    115,
+    246,
+    255
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 745
+  },
+  {
+   "photo": "0652.png",
+   "method": "dnn",
+   "dice": 0.9504273504273504,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    158,
+    223,
+    178,
+    247
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    139,
+    171,
+    182,
+    257
+   ],
+   "iou": 0.132,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 712
+  },
+  {
+   "photo": "0674.png",
+   "method": "dnn",
+   "dice": 0.9034242547609355,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    100,
+    118,
+    324,
+    336
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    88,
+    1,
+    389,
+    353
+   ],
+   "iou": 0.46,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 851
+  },
+  {
+   "photo": "0679.png",
+   "method": "dnn",
+   "dice": 0.727386150966937,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    180,
+    262,
+    203,
+    295
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    253,
+    196,
+    479
+   ],
+   "iou": 0.026,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1127
+  },
+  {
+   "photo": "0682.png",
+   "method": "dnn",
+   "dice": 0.9683275395905755,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    182,
+    234,
+    237,
+    309
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    139,
+    0,
+    389,
+    511
+   ],
+   "iou": 0.032,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1061
+  },
+  {
+   "photo": "0706.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    79,
+    211,
+    126,
+    253
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    118,
+    246,
+    233
+   ],
+   "iou": 0.002,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 904
+  },
+  {
+   "photo": "0712.png",
+   "method": "dnn",
+   "dice": 0.8158677685950413,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    95,
+    157,
+    222,
+    223
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    80,
+    32,
+    257,
+    422
+   ],
+   "iou": 0.122,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 816
+  },
+  {
+   "photo": "0712.png",
+   "method": "grabcut",
+   "dice": 0.05640220300369379,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    82,
+    36,
+    257,
+    424
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    82,
+    32,
+    250,
+    422
+   ],
+   "iou": 0.943,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 782
+  },
+  {
+   "photo": "0715.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    127,
+    288,
+    285,
+    512
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    157,
+    224,
+    182,
+    259
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 935
+  },
+  {
+   "photo": "0717.png",
+   "method": "dnn",
+   "dice": 0.9216007488883688,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    147,
+    245,
+    206,
+    333
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    237,
+    189,
+    350
+   ],
+   "iou": 0.458,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 931
+  },
+  {
+   "photo": "0721.png",
+   "method": "dnn",
+   "dice": 0.39250744997871434,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    212,
+    122,
+    343,
+    262
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 34,
+    "totalTokens": 411
+   },
+   "model_box": [
+    0,
+    0,
+    512,
+    333
+   ],
+   "iou": 0.108,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 915
+  },
+  {
+   "photo": "0721.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    348,
+    269,
+    404,
+    332
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 34,
+    "totalTokens": 411
+   },
+   "model_box": [
+    0,
+    0,
+    512,
+    339
+   ],
+   "iou": 0.02,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1428
+  },
+  {
+   "photo": "0728.png",
+   "method": "dnn",
+   "dice": 0.8258660508083141,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    211,
+    174,
+    245,
+    233
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    175,
+    157,
+    246,
+    237
+   ],
+   "iou": 0.353,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1561
+  },
+  {
+   "photo": "0729.png",
+   "method": "dnn",
+   "dice": 0.9190968235744356,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    80,
+    120,
+    138,
+    276
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    67,
+    98,
+    145,
+    272
+   ],
+   "iou": 0.637,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1544
+  },
+  {
+   "photo": "0730.png",
+   "method": "dnn",
+   "dice": 0.618421052631579,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    180,
+    244,
+    191,
+    257
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    65,
+    189,
+    288,
+    295
+   ],
+   "iou": 0.006,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1474
+  },
+  {
+   "photo": "0730.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    216,
+    237,
+    281,
+    281
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    65,
+    182,
+    288,
+    295
+   ],
+   "iou": 0.113,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1456
+  },
+  {
+   "photo": "0738.png",
+   "method": "dnn",
+   "dice": 0.8722934158197083,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    204,
+    183,
+    245,
+    222
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    101,
+    80,
+    276,
+    369
+   ],
+   "iou": 0.032,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1411
+  },
+  {
+   "photo": "0738.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    288,
+    384,
+    329,
+    433
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    101,
+    82,
+    276,
+    371
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 601
+  },
+  {
+   "photo": "0745.png",
+   "method": "dnn",
+   "dice": 0.9893768107708913,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    138,
+    157,
+    244,
+    292
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    145,
+    246,
+    290
+   ],
+   "iou": 0.828,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1427
+  },
+  {
+   "photo": "0757.png",
+   "method": "dnn",
+   "dice": 0.9545032497678737,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    160,
+    187,
+    185,
+    217
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    114,
+    125,
+    196,
+    281
+   ],
+   "iou": 0.058,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 843
+  },
+  {
+   "photo": "0757.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    50,
+    186,
+    115,
+    232
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    106,
+    196,
+    281
+   ],
+   "iou": 0.021,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1152
+  },
+  {
+   "photo": "0763.png",
+   "method": "dnn",
+   "dice": 0.9500288587138127,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    141,
+    150,
+    308,
+    287
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    20,
+    0,
+    343,
+    389
+   ],
+   "iou": 0.183,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 826
+  },
+  {
+   "photo": "0763.png",
+   "method": "grabcut",
+   "dice": 0.5948130384581224,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    172,
+    174,
+    287,
+    260
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    22,
+    0,
+    343,
+    389
+   ],
+   "iou": 0.079,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1039
+  },
+  {
+   "photo": "0781.png",
+   "method": "dnn",
+   "dice": 0.8407994486560992,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    246,
+    229,
+    275,
+    257
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    153,
+    188,
+    295,
+    272
+   ],
+   "iou": 0.068,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1054
+  },
+  {
+   "photo": "0796.png",
+   "method": "dnn",
+   "dice": 0.9800060404711568,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    121,
+    246,
+    248,
+    330
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    79,
+    1,
+    257,
+    369
+   ],
+   "iou": 0.163,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 736
+  },
+  {
+   "photo": "0796.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    267,
+    208,
+    309,
+    329
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    79,
+    1,
+    261,
+    369
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1057
+  },
+  {
+   "photo": "0798.png",
+   "method": "dnn",
+   "dice": 0.8640093786635404,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    228,
+    271,
+    266,
+    307
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    189,
+    255,
+    287,
+    321
+   ],
+   "iou": 0.216,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1054
+  },
+  {
+   "photo": "0798.png",
+   "method": "grabcut",
+   "dice": 0.07632296268446283,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    149,
+    102,
+    279,
+    357
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    189,
+    255,
+    287,
+    321
+   ],
+   "iou": 0.173,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1014
+  },
+  {
+   "photo": "0802.png",
+   "method": "dnn",
+   "dice": 0.9665605095541401,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    167,
+    216,
+    246,
+    249
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    139,
+    201,
+    246,
+    258
+   ],
+   "iou": 0.429,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 649
+  },
+  {
+   "photo": "0802.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    244,
+    217,
+    317,
+    289
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    137,
+    201,
+    246,
+    258
+   ],
+   "iou": 0.006,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1081
+  },
+  {
+   "photo": "0806.png",
+   "method": "dnn",
+   "dice": 0.9750536480686696,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    119,
+    141,
+    218,
+    261
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    82,
+    61,
+    307,
+    324
+   ],
+   "iou": 0.201,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 839
+  },
+  {
+   "photo": "0806.png",
+   "method": "grabcut",
+   "dice": 0.002477842371104546,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    156,
+    127,
+    233,
+    269
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    82,
+    61,
+    307,
+    324
+   ],
+   "iou": 0.185,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1010
+  },
+  {
+   "photo": "0809.png",
+   "method": "dnn",
+   "dice": 0.9595454545454546,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    114,
+    323,
+    183,
+    368
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    48,
+    0,
+    215,
+    379
+   ],
+   "iou": 0.049,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 811
+  },
+  {
+   "photo": "0813.png",
+   "method": "dnn",
+   "dice": 0.947463768115942,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    179,
+    243,
+    207,
+    268
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    150,
+    216,
+    216,
+    281
+   ],
+   "iou": 0.164,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 812
+  },
+  {
+   "photo": "0816.png",
+   "method": "dnn",
+   "dice": 0.13937282229965156,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    147,
+    281,
+    170,
+    297
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    255,
+    175,
+    321
+   ],
+   "iou": 0.083,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 976
+  },
+  {
+   "photo": "0820.png",
+   "method": "dnn",
+   "dice": 0.9195421230338466,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    263,
+    122,
+    384,
+    300
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    204,
+    0,
+    511,
+    383
+   ],
+   "iou": 0.183,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 956
+  },
+  {
+   "photo": "0820.png",
+   "method": "grabcut",
+   "dice": 0.19003490191358768,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    285,
+    74,
+    344,
+    180
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    204,
+    0,
+    511,
+    383
+   ],
+   "iou": 0.053,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 668
+  },
+  {
+   "photo": "0824.png",
+   "method": "dnn",
+   "dice": 0.8776978417266187,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    129,
+    325,
+    186,
+    361
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    310,
+    189,
+    357
+   ],
+   "iou": 0.563,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1080
+  },
+  {
+   "photo": "0824.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    53,
+    42,
+    212,
+    318
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    314,
+    189,
+    357
+   ],
+   "iou": 0.005,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1098
+  },
+  {
+   "photo": "0830.png",
+   "method": "dnn",
+   "dice": 0.8490945674044266,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    184,
+    45,
+    207,
+    123
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    169,
+    38,
+    206,
+    130
+   ],
+   "iou": 0.497,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1048
+  },
+  {
+   "photo": "0833.png",
+   "method": "dnn",
+   "dice": 0.9377410468319559,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    168,
+    223,
+    217,
+    277
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    216,
+    221,
+    290
+   ],
+   "iou": 0.375,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1045
+  },
+  {
+   "photo": "0835.png",
+   "method": "dnn",
+   "dice": 0.9152153987167736,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    201,
+    127,
+    261,
+    180
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    175,
+    118,
+    257,
+    189
+   ],
+   "iou": 0.485,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 901
+  },
+  {
+   "photo": "0835.png",
+   "method": "grabcut",
+   "dice": 0.2724932249322493,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    186,
+    127,
+    308,
+    279
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    169,
+    115,
+    313,
+    281
+   ],
+   "iou": 0.78,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 725
+  },
+  {
+   "photo": "0842.png",
+   "method": "dnn",
+   "dice": 0.8711001642036125,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    83,
+    216,
+    123,
+    269
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    48,
+    2,
+    384,
+    402
+   ],
+   "iou": 0.016,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 884
+  },
+  {
+   "photo": "0842.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    46,
+    227,
+    85,
+    312
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    48,
+    2,
+    384,
+    402
+   ],
+   "iou": 0.023,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 878
+  },
+  {
+   "photo": "0847.png",
+   "method": "dnn",
+   "dice": 0.9727967396841569,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    128,
+    147,
+    202,
+    254
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    55,
+    48,
+    364,
+    394
+   ],
+   "iou": 0.074,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1235
+  },
+  {
+   "photo": "0849.png",
+   "method": "dnn",
+   "dice": 0.9294685990338164,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    160,
+    183,
+    192,
+    213
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    146,
+    169,
+    196,
+    225
+   ],
+   "iou": 0.346,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1810
+  },
+  {
+   "photo": "0849.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    119,
+    180,
+    247,
+    489
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    146,
+    169,
+    196,
+    225
+   ],
+   "iou": 0.056,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1172
+  },
+  {
+   "photo": "0865.png",
+   "method": "dnn",
+   "dice": 0.9434752267969295,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    153,
+    237,
+    218,
+    271
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    189,
+    230,
+    281
+   ],
+   "iou": 0.196,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1105
+  },
+  {
+   "photo": "0867.png",
+   "method": "dnn",
+   "dice": 0.7264150943396226,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    180,
+    256,
+    192,
+    270
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    139,
+    135,
+    204,
+    285
+   ],
+   "iou": 0.017,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1754
+  },
+  {
+   "photo": "0869.png",
+   "method": "dnn",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    204,
+    200,
+    236,
+    233
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    72,
+    28,
+    266,
+    463
+   ],
+   "iou": 0.013,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1095
+  },
+  {
+   "photo": "0874.png",
+   "method": "dnn",
+   "dice": 0.9612133782732694,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    197,
+    0,
+    315,
+    256
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    88,
+    0,
+    450,
+    394
+   ],
+   "iou": 0.211,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1759
+  },
+  {
+   "photo": "0874.png",
+   "method": "grabcut",
+   "dice": 0.8913433181055919,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    198,
+    58,
+    315,
+    249
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    88,
+    1,
+    448,
+    394
+   ],
+   "iou": 0.158,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1072
+  },
+  {
+   "photo": "0880.png",
+   "method": "dnn",
+   "dice": 0.9362609251758687,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    216,
+    207,
+    290,
+    326
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    84,
+    315,
+    403
+   ],
+   "iou": 0.145,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1004
+  },
+  {
+   "photo": "0880.png",
+   "method": "grabcut",
+   "dice": 0.16848468918386122,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    229,
+    256,
+    308,
+    351
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    86,
+    315,
+    403
+   ],
+   "iou": 0.124,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 990
+  },
+  {
+   "photo": "0881.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    129,
+    12,
+    285,
+    182
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    146,
+    189,
+    276,
+    298
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 753
+  },
+  {
+   "photo": "0887.png",
+   "method": "dnn",
+   "dice": 0.9730408066121424,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    138,
+    158,
+    246,
+    306
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    137,
+    0,
+    270,
+    429
+   ],
+   "iou": 0.28,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 961
+  },
+  {
+   "photo": "0900.png",
+   "method": "dnn",
+   "dice": 0.790641387656313,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    395,
+    98,
+    462,
+    187
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    261,
+    17,
+    475,
+    386
+   ],
+   "iou": 0.076,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 893
+  },
+  {
+   "photo": "0900.png",
+   "method": "grabcut",
+   "dice": 0.032078559738134206,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    292,
+    209,
+    410,
+    354
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    261,
+    17,
+    475,
+    386
+   ],
+   "iou": 0.217,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 884
+  },
+  {
+   "photo": "0901.png",
+   "method": "dnn",
+   "dice": 0.982764073371284,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    156,
+    200,
+    263,
+    286
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    0,
+    384,
+    303
+   ],
+   "iou": 0.117,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 970
+  },
+  {
+   "photo": "0901.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    23,
+    153,
+    345,
+    374
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    125,
+    0,
+    384,
+    303
+   ],
+   "iou": 0.283,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 641
+  },
+  {
+   "photo": "0904.png",
+   "method": "dnn",
+   "dice": 0.8166666666666667,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    118,
+    277,
+    129,
+    286
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    102,
+    266,
+    139,
+    307
+   ],
+   "iou": 0.066,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 959
+  },
+  {
+   "photo": "0905.png",
+   "method": "dnn",
+   "dice": 0.912639405204461,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    205,
+    265,
+    247,
+    287
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    93,
+    196,
+    270,
+    319
+   ],
+   "iou": 0.042,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 864
+  },
+  {
+   "photo": "0906.png",
+   "method": "dnn",
+   "dice": 0.8767908309455588,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    149,
+    237,
+    163,
+    255
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    128,
+    201,
+    189,
+    287
+   ],
+   "iou": 0.048,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 763
+  },
+  {
+   "photo": "0922.png",
+   "method": "dnn",
+   "dice": 0.9409020217729394,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    139,
+    169,
+    168,
+    203
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    97,
+    106,
+    322,
+    443
+   ],
+   "iou": 0.013,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 846
+  },
+  {
+   "photo": "0937.png",
+   "method": "dnn",
+   "dice": 0.6035788024776325,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    148,
+    153,
+    235,
+    202
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    115,
+    0,
+    242,
+    257
+   ],
+   "iou": 0.13,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 755
+  },
+  {
+   "photo": "0940.png",
+   "method": "dnn",
+   "dice": 0.9451024327784892,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    60,
+    200,
+    280,
+    321
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    57,
+    196,
+    216,
+    295
+   ],
+   "iou": 0.539,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 831
+  },
+  {
+   "photo": "0946.png",
+   "method": "dnn",
+   "dice": 0.8111587982832618,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    123,
+    154,
+    155,
+    276
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    139,
+    165,
+    358
+   ],
+   "iou": 0.305,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1102
+  },
+  {
+   "photo": "0947.png",
+   "method": "dnn",
+   "dice": 0.9387511346806172,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    161,
+    26,
+    349,
+    204
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    0,
+    20,
+    436,
+    225
+   ],
+   "iou": 0.375,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1067
+  },
+  {
+   "photo": "0947.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    401,
+    323,
+    478,
+    338
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    0,
+    23,
+    436,
+    225
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 985
+  },
+  {
+   "photo": "0948.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    237,
+    124,
+    327,
+    168
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    71,
+    255,
+    182,
+    333
+   ],
+   "iou": 0.0,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 999
+  },
+  {
+   "photo": "0949.png",
+   "method": "dnn",
+   "dice": 0.8591682419659735,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    352,
+    243,
+    409,
+    278
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    270,
+    8,
+    443,
+    388
+   ],
+   "iou": 0.03,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 990
+  },
+  {
+   "photo": "0949.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    118,
+    70,
+    276,
+    100
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    270,
+    6,
+    443,
+    388
+   ],
+   "iou": 0.003,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 648
+  },
+  {
+   "photo": "0954.png",
+   "method": "dnn",
+   "dice": 0.9008662175168431,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    147,
+    170,
+    190,
+    217
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    79,
+    157,
+    189,
+    233
+   ],
+   "iou": 0.236,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 925
+  },
+  {
+   "photo": "0955.png",
+   "method": "dnn",
+   "dice": 0.6972477064220184,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    198,
+    191,
+    211,
+    206
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    150,
+    216,
+    230
+   ],
+   "iou": 0.022,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 701
+  },
+  {
+   "photo": "0955.png",
+   "method": "grabcut",
+   "dice": 0.022206013453278224,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    100,
+    134,
+    269,
+    258
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    146,
+    216,
+    230
+   ],
+   "iou": 0.439,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1208
+  },
+  {
+   "photo": "0958.png",
+   "method": "dnn",
+   "dice": 0.8761682242990654,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    146,
+    203,
+    176,
+    246
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    98,
+    158,
+    189,
+    290
+   ],
+   "iou": 0.108,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 1042
+  },
+  {
+   "photo": "0961.png",
+   "method": "dnn",
+   "dice": 0.9023136246786633,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    174,
+    187,
+    209,
+    222
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    48,
+    233,
+    237
+   ],
+   "iou": 0.063,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 982
+  },
+  {
+   "photo": "0964.png",
+   "method": "dnn",
+   "dice": 0.8949139125272115,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    158,
+    228,
+    216,
+    283
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    130,
+    0,
+    389,
+    422
+   ],
+   "iou": 0.029,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 1032
+  },
+  {
+   "photo": "0971.png",
+   "method": "dnn",
+   "dice": 0.9735563950350783,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    84,
+    179,
+    263,
+    284
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    65,
+    26,
+    290,
+    458
+   ],
+   "iou": 0.194,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 653
+  },
+  {
+   "photo": "0973.png",
+   "method": "dnn",
+   "dice": 0.47644444444444445,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    144,
+    196,
+    164,
+    216
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    0,
+    307,
+    470
+   ],
+   "iou": 0.004,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 993
+  },
+  {
+   "photo": "0973.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    133,
+    44,
+    231,
+    182
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    0,
+    307,
+    470
+   ],
+   "iou": 0.143,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 966
+  },
+  {
+   "photo": "0974.png",
+   "method": "dnn",
+   "dice": 0.9617452116277856,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    112,
+    135,
+    321,
+    335
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    130,
+    385,
+    357
+   ],
+   "iou": 0.661,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 844
+  },
+  {
+   "photo": "0974.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    19,
+    343,
+    282,
+    469
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    106,
+    130,
+    385,
+    358
+   ],
+   "iou": 0.028,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 794
+  },
+  {
+   "photo": "0976.png",
+   "method": "dnn",
+   "dice": 0.9186090943828812,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    246,
+    211,
+    288,
+    250
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    188,
+    175,
+    313,
+    261
+   ],
+   "iou": 0.152,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 854
+  },
+  {
+   "photo": "0979.png",
+   "method": "dnn",
+   "dice": 0.7271565495207668,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    128,
+    222,
+    176,
+    264
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    36,
+    72,
+    189,
+    276
+   ],
+   "iou": 0.064,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 729
+  },
+  {
+   "photo": "0985.png",
+   "method": "dnn",
+   "dice": 0.9300711639122508,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    100,
+    128,
+    259,
+    308
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    102,
+    125,
+    381,
+    315
+   ],
+   "iou": 0.528,
+   "verdict": "follows",
+   "issue": "the vision model found the wound where OpenCV outlined it",
+   "ms": 861
+  },
+  {
+   "photo": "1009.png",
+   "method": "dnn",
+   "dice": 0.8547780285929271,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    196,
+    246,
+    275,
+    296
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    175,
+    0,
+    338,
+    389
+   ],
+   "iou": 0.062,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 740
+  },
+  {
+   "photo": "1009.png",
+   "method": "grabcut",
+   "dice": 0.0,
+   "model": "us.amazon.nova-2-lite-v1:0",
+   "outline_box": [
+    302,
+    262,
+    351,
+    334
+   ],
+   "usage": {
+    "inputTokens": 377,
+    "outputTokens": 33,
+    "totalTokens": 410
+   },
+   "model_box": [
+    175,
+    0,
+    335,
+    389
+   ],
+   "iou": 0.038,
+   "verdict": "misses",
+   "issue": "the vision model found the wound somewhere else",
+   "ms": 820
+  }
+ ]
+}

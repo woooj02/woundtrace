@@ -163,10 +163,11 @@ def measure_wound(v: Visit, photo_id: str, method: str) -> dict:
 
 @tool(photo_id=PHOTO)
 def review_outline(v: Visit, photo_id: str) -> dict:
-    """Look at OpenCV's outline yourself: the vision model is shown the photo and the same photo
-    with the outline side by side, and says whether the outline follows the wound's edge
-    (follows / misses / unsure). Call it after measure_wound and before record_measurement.
-    If it says 'misses', the clinic's rules send the outline to the nurse instead of recording it."""
+    """Check OpenCV's outline with your own eyes: the vision model is shown the plain photo (not the
+    outline) and marks where the wound is; code compares that box with OpenCV's outline. verdict
+    'follows' means they agree, 'misses' means the model saw no wound or saw it somewhere else.
+    Call it after measure_wound and before record_measurement. If it says 'misses', the clinic's
+    rules send the outline to the nurse instead of recording it."""
     method = next((k for k, m in v.measures.items() if m.get("found")), None)
     if method is None:
         raise PermissionError("measure_wound has not produced an outline for this photo")
@@ -174,6 +175,16 @@ def review_outline(v: Visit, photo_id: str) -> dict:
     mask = cv2.warpPerspective(raw["_mask"], np.linalg.inv(raw["_M"]), (img.shape[1], img.shape[0]),
                                flags=cv2.INTER_NEAREST)
     v.review = review.review(img, mask)
+    if v.review.get("model_box") and raw.get("found"):  # show both on the annotated photo
+        exclude = [v.calibration["corners_px"]] if v.calibration and v.calibration.get("found") else None
+        ann = vision.annotate(img, raw, extra_quads=exclude)
+        x1, y1, x2, y2 = v.review["model_box"]
+        th = max(2, round(max(img.shape[:2]) / 400))
+        cv2.rectangle(ann, (x1, y1), (x2, y2), (0, 215, 255), th, cv2.LINE_AA)
+        cv2.putText(ann, "vision model", (x1, max(20, y1 - 8)), cv2.FONT_HERSHEY_SIMPLEX, th * 0.4,
+                    (0, 215, 255), th, cv2.LINE_AA)
+        ok, buf = cv2.imencode(".jpg", ann, [cv2.IMWRITE_JPEG_QUALITY, 85])
+        store.put(f"annotated/{photo_id}-{method}.jpg", buf.tobytes(), "image/jpeg")
     first = v.primary()
     second = next((m for m in v.measures.values() if m is not first), None)
     v.decision = policy.decide(v.check, first, second, review=v.review)

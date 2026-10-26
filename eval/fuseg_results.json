@@ -10,11 +10,27 @@
   },
   "grabcut": {
    "n": 200,
-   "dice": 0.032925360708630974,
-   "iou": 0.02633146970596032,
+   "dice": 0.03292458772303611,
+   "iou": 0.02636551451126231,
    "dice_ge_07": 0.025,
    "missed": 97,
    "area_ratio_median": 1.8329262335124572
+  },
+  "dnn-raw": {
+   "n": 200,
+   "dice": 0.8240081460038072,
+   "iou": 0.7399809425595094,
+   "dice_ge_07": 0.855,
+   "missed": 1,
+   "area_ratio_median": 1.0394630126187505
+  },
+  "dnn": {
+   "n": 200,
+   "dice": 0.8428896491942705,
+   "iou": 0.7652794180379184,
+   "dice_ge_07": 0.88,
+   "missed": 2,
+   "area_ratio_median": 1.0581723167110186
   }
  },
  "rows": [
@@ -2133,18 +2149,18 @@
   {
    "photo": "0334.png",
    "method": "grabcut",
-   "dice": 0.021684414327202323,
-   "iou": 0.01096104912898806,
+   "dice": 0.021156025689459765,
+   "iou": 0.010691103474608629,
    "found": true,
-   "area_ratio": 0.6386421319796954
+   "area_ratio": 0.6795685279187818
   },
   {
    "photo": "0337.png",
    "method": "grabcut",
-   "dice": 0.0762670644314018,
-   "iou": 0.03964534942520986,
+   "dice": 0.0778498609823911,
+   "iou": 0.040501446480231434,
    "found": true,
-   "area_ratio": 25.223639455782312
+   "area_ratio": 24.69047619047619
   },
   {
    "photo": "0339.png",
@@ -2152,7 +2168,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.41504065040650406
+   "area_ratio": 0.4170731707317073
   },
   {
    "photo": "0341.png",
@@ -2160,7 +2176,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 77.61792452830188
+   "area_ratio": 77.64622641509433
   },
   {
    "photo": "0349.png",
@@ -2280,7 +2296,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.07631842218093468
+   "area_ratio": 0.13119908532228097
   },
   {
    "photo": "0417.png",
@@ -2296,7 +2312,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 14.124324324324323
+   "area_ratio": 15.231941031941032
   },
   {
    "photo": "0437.png",
@@ -2304,15 +2320,15 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.22283455133580926
+   "area_ratio": 0.22271474781358572
   },
   {
    "photo": "0438.png",
    "method": "grabcut",
-   "dice": 0.7156495773226227,
-   "iou": 0.5572074137140611,
+   "dice": 0.7174600497533414,
+   "iou": 0.5594056150963246,
    "found": true,
-   "area_ratio": 1.7946638457921955
+   "area_ratio": 1.7876116596144804
   },
   {
    "photo": "0439.png",
@@ -2325,10 +2341,10 @@
   {
    "photo": "0447.png",
    "method": "grabcut",
-   "dice": 0.03805871072429562,
-   "iou": 0.019398496240601505,
+   "dice": 0.037941176470588235,
+   "iou": 0.019337430670064458,
    "found": true,
-   "area_ratio": 51.55038759689923
+   "area_ratio": 51.713178294573645
   },
   {
    "photo": "0450.png",
@@ -2400,7 +2416,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.6399491094147582
+   "area_ratio": 0.49745547073791346
   },
   {
    "photo": "0496.png",
@@ -2408,7 +2424,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 9.023255813953488
+   "area_ratio": 9.602990033222591
   },
   {
    "photo": "0503.png",
@@ -2440,7 +2456,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.9978331527627302
+   "area_ratio": 1.0153846153846153
   },
   {
    "photo": "0517.png",
@@ -2520,7 +2536,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 1.3700814111261872
+   "area_ratio": 1.042740841248304
   },
   {
    "photo": "0559.png",
@@ -2560,7 +2576,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 4.554125219426565
+   "area_ratio": 4.184318314803979
   },
   {
    "photo": "0580.png",
@@ -2584,7 +2600,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 6.828828828828829
+   "area_ratio": 32.01801801801802
   },
   {
    "photo": "0591.png",
@@ -2608,7 +2624,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.8591295390162246
+   "area_ratio": 1.1359773371104815
   },
   {
    "photo": "0607.png",
@@ -2616,7 +2632,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 2.386621315192744
+   "area_ratio": 2.3531746031746033
   },
   {
    "photo": "0612.png",
@@ -2640,7 +2656,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.6606794483686512
+   "area_ratio": 0.6606121762529431
   },
   {
    "photo": "0627.png",
@@ -2648,7 +2664,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.9419134396355353
+   "area_ratio": 1.0290432801822325
   },
   {
    "photo": "0638.png",
@@ -2680,7 +2696,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 9.167794316644114
+   "area_ratio": 9.15426251691475
   },
   {
    "photo": "0651.png",
@@ -2688,7 +2704,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.2914923291492329
+   "area_ratio": 0.3103207810320781
   },
   {
    "photo": "0652.png",
@@ -2784,7 +2800,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.2529127593066212
+   "area_ratio": 0.3685706166524581
   },
   {
    "photo": "0730.png",
@@ -2792,7 +2808,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 38.191489361702125
+   "area_ratio": 38.12765957446808
   },
   {
    "photo": "0738.png",
@@ -2800,7 +2816,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 1.024029574861368
+   "area_ratio": 0.9898336414048059
   },
   {
    "photo": "0745.png",
@@ -2816,15 +2832,15 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 3.190388170055453
+   "area_ratio": 3.2033271719038816
   },
   {
    "photo": "0763.png",
    "method": "grabcut",
-   "dice": 0.6010875812370131,
-   "iou": 0.4296820681372859,
+   "dice": 0.5935013557363203,
+   "iou": 0.42197079830604894,
    "found": true,
-   "area_ratio": 0.4296820681372859
+   "area_ratio": 0.42197079830604894
   },
   {
    "photo": "0781.png",
@@ -2840,15 +2856,15 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.30197231410020825
+   "area_ratio": 0.30099228224917307
   },
   {
    "photo": "0798.png",
    "method": "grabcut",
-   "dice": 0.07734806629834254,
-   "iou": 0.040229885057471264,
+   "dice": 0.07641993317961508,
+   "iou": 0.03972797103576496,
    "found": true,
-   "area_ratio": 24.857142857142858
+   "area_ratio": 25.17118226600985
   },
   {
    "photo": "0802.png",
@@ -2856,7 +2872,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 1.8611404435058079
+   "area_ratio": 1.9007391763463568
   },
   {
    "photo": "0806.png",
@@ -2901,10 +2917,10 @@
   {
    "photo": "0824.png",
    "method": "grabcut",
-   "dice": 0.0,
-   "iou": 0.0,
+   "dice": 0.00011575078855224701,
+   "iou": 5.787874403125452e-05,
    "found": true,
-   "area_ratio": 24.263237518910742
+   "area_ratio": 25.139939485627835
   },
   {
    "photo": "0830.png",
@@ -2920,7 +2936,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 0.5697674418604651
+   "area_ratio": 0.5658914728682171
   },
   {
    "photo": "0834.png",
@@ -2933,10 +2949,10 @@
   {
    "photo": "0835.png",
    "method": "grabcut",
-   "dice": 0.2742584384589158,
-   "iou": 0.15892207997471156,
+   "dice": 0.27437069377174433,
+   "iou": 0.15899746995572422,
    "found": true,
-   "area_ratio": 6.288767395626243
+   "area_ratio": 6.285785288270378
   },
   {
    "photo": "0842.png",
@@ -2944,7 +2960,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 1.7119309262166404
+   "area_ratio": 1.7135007849293564
   },
   {
    "photo": "0847.png",
@@ -2960,7 +2976,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 52.85321100917431
+   "area_ratio": 52.39449541284404
   },
   {
    "photo": "0865.png",
@@ -2989,18 +3005,18 @@
   {
    "photo": "0874.png",
    "method": "grabcut",
-   "dice": 0.8913690906462339,
-   "iou": 0.8040269156538522,
+   "dice": 0.899971322053341,
+   "iou": 0.8181344178528599,
    "found": true,
-   "area_ratio": 0.8344560547392987
+   "area_ratio": 0.8495730122526919
   },
   {
    "photo": "0880.png",
    "method": "grabcut",
-   "dice": 0.14844835572024084,
-   "iou": 0.08017510944340213,
+   "dice": 0.14364145658263305,
+   "iou": 0.07737807822308064,
    "found": true,
-   "area_ratio": 2.748263888888889
+   "area_ratio": 2.8736979166666665
   },
   {
    "photo": "0881.png",
@@ -3008,7 +3024,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 10.089494163424124
+   "area_ratio": 10.120622568093385
   },
   {
    "photo": "0887.png",
@@ -3021,10 +3037,10 @@
   {
    "photo": "0900.png",
    "method": "grabcut",
-   "dice": 0.0321539891726363,
-   "iou": 0.01633968765631079,
+   "dice": 0.03198085499836832,
+   "iou": 0.016250276365244308,
    "found": true,
-   "area_ratio": 2.0657166806370495
+   "area_ratio": 2.0823134953897737
   },
   {
    "photo": "0901.png",
@@ -3032,7 +3048,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 3.409105431309904
+   "area_ratio": 3.1400958466453672
   },
   {
    "photo": "0904.png",
@@ -3048,7 +3064,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 8.408906882591094
+   "area_ratio": 8.396761133603238
   },
   {
    "photo": "0906.png",
@@ -3112,7 +3128,7 @@
    "dice": 0.0,
    "iou": 0.0,
    "found": true,
-   "area_ratio": 4.385945945945946
+   "area_ratio": 4.07027027027027
   },
   {
    "photo": "0954.png",
@@ -3149,10 +3165,10 @@
   {
    "photo": "0964.png",
    "method": "grabcut",
-   "dice": 0.0674338889830177,
-   "iou": 0.034893444834097655,
+   "dice": 0.06919610019659503,
+   "iou": 0.035837974122406004,
    "found": true,
-   "area_ratio": 27.136046938027135
+   "area_ratio": 26.419508617528418
   },
   {
    "photo": "0971.png",
@@ -3217,6 +3233,3206 @@
    "iou": 0.0,
    "found": true,
    "area_ratio": 0.8261202604366144
+  },
+  {
+   "photo": "0001.png",
+   "method": "dnn-raw",
+   "dice": 0.8910478834142956,
+   "iou": 0.8035043804755945,
+   "found": true,
+   "area_ratio": 1.1067251461988303
+  },
+  {
+   "photo": "0002.png",
+   "method": "dnn-raw",
+   "dice": 0.8834782608695653,
+   "iou": 0.7912772585669782,
+   "found": true,
+   "area_ratio": 0.9102990033222591
+  },
+  {
+   "photo": "0003.png",
+   "method": "dnn-raw",
+   "dice": 0.9452676141517992,
+   "iou": 0.8962155963302753,
+   "found": true,
+   "area_ratio": 0.9913689281413087
+  },
+  {
+   "photo": "0004.png",
+   "method": "dnn-raw",
+   "dice": 0.8690095846645367,
+   "iou": 0.768361581920904,
+   "found": true,
+   "area_ratio": 1.215929203539823
+  },
+  {
+   "photo": "0005.png",
+   "method": "dnn-raw",
+   "dice": 0.8926404642574518,
+   "iou": 0.8060981419723678,
+   "found": true,
+   "area_ratio": 1.161345496009122
+  },
+  {
+   "photo": "0006.png",
+   "method": "dnn-raw",
+   "dice": 0.9309978768577495,
+   "iou": 0.8709036742800397,
+   "found": true,
+   "area_ratio": 0.9625
+  },
+  {
+   "photo": "0007.png",
+   "method": "dnn-raw",
+   "dice": 0.6016448511525542,
+   "iou": 0.4302518223989397,
+   "found": true,
+   "area_ratio": 2.2122790697674417
+  },
+  {
+   "photo": "0008.png",
+   "method": "dnn-raw",
+   "dice": 0.904572564612326,
+   "iou": 0.8257713248638838,
+   "found": true,
+   "area_ratio": 1.1793760831889082
+  },
+  {
+   "photo": "0009.png",
+   "method": "dnn-raw",
+   "dice": 0.9262486716259298,
+   "iou": 0.8626286619160728,
+   "found": true,
+   "area_ratio": 1.1396089131423375
+  },
+  {
+   "photo": "0010.png",
+   "method": "dnn-raw",
+   "dice": 0.9404445991212425,
+   "iou": 0.8875841681721136,
+   "found": true,
+   "area_ratio": 1.0376739650740183
+  },
+  {
+   "photo": "0025.png",
+   "method": "dnn-raw",
+   "dice": 0.8988666085440279,
+   "iou": 0.8163103721298496,
+   "found": true,
+   "area_ratio": 1.1600753295668549
+  },
+  {
+   "photo": "0030.png",
+   "method": "dnn-raw",
+   "dice": 0.9588691678180465,
+   "iou": 0.9209881584320131,
+   "found": true,
+   "area_ratio": 1.002340923600766
+  },
+  {
+   "photo": "0033.png",
+   "method": "dnn-raw",
+   "dice": 0.9236326109391125,
+   "iou": 0.8581016299137104,
+   "found": true,
+   "area_ratio": 1.0617021276595744
+  },
+  {
+   "photo": "0046.png",
+   "method": "dnn-raw",
+   "dice": 0.8595127008812856,
+   "iou": 0.7536363636363637,
+   "found": true,
+   "area_ratio": 1.024134312696747
+  },
+  {
+   "photo": "0047.png",
+   "method": "dnn-raw",
+   "dice": 0.9169960474308301,
+   "iou": 0.8467153284671532,
+   "found": true,
+   "area_ratio": 1.056910569105691
+  },
+  {
+   "photo": "0057.png",
+   "method": "dnn-raw",
+   "dice": 0.925789860396767,
+   "iou": 0.8618331053351573,
+   "found": true,
+   "area_ratio": 0.8929068150208623
+  },
+  {
+   "photo": "0058.png",
+   "method": "dnn-raw",
+   "dice": 0.9081496325985304,
+   "iou": 0.831752829611502,
+   "found": true,
+   "area_ratio": 0.8753523332289384
+  },
+  {
+   "photo": "0062.png",
+   "method": "dnn-raw",
+   "dice": 0.9452503509592888,
+   "iou": 0.8961845607808341,
+   "found": true,
+   "area_ratio": 0.9114490161001789
+  },
+  {
+   "photo": "0068.png",
+   "method": "dnn-raw",
+   "dice": 0.8674698795180723,
+   "iou": 0.7659574468085106,
+   "found": true,
+   "area_ratio": 0.8675
+  },
+  {
+   "photo": "0078.png",
+   "method": "dnn-raw",
+   "dice": 0.9026351049575704,
+   "iou": 0.8225478225478225,
+   "found": true,
+   "area_ratio": 1.1801363193768257
+  },
+  {
+   "photo": "0079.png",
+   "method": "dnn-raw",
+   "dice": 0.19724770642201836,
+   "iou": 0.10941475826972011,
+   "found": true,
+   "area_ratio": 9.13953488372093
+  },
+  {
+   "photo": "0082.png",
+   "method": "dnn-raw",
+   "dice": 0.8050359712230216,
+   "iou": 0.6736905478627333,
+   "found": true,
+   "area_ratio": 1.20110847189232
+  },
+  {
+   "photo": "0085.png",
+   "method": "dnn-raw",
+   "dice": 0.8022440392706872,
+   "iou": 0.6697892271662763,
+   "found": true,
+   "area_ratio": 1.022695035460993
+  },
+  {
+   "photo": "0089.png",
+   "method": "dnn-raw",
+   "dice": 0.9032258064516129,
+   "iou": 0.8235294117647058,
+   "found": true,
+   "area_ratio": 0.9848661233993015
+  },
+  {
+   "photo": "0096.png",
+   "method": "dnn-raw",
+   "dice": 0.8521739130434782,
+   "iou": 0.7424242424242424,
+   "found": true,
+   "area_ratio": 1.1332209106239461
+  },
+  {
+   "photo": "0107.png",
+   "method": "dnn-raw",
+   "dice": 0.9147188881869868,
+   "iou": 0.8428405122235157,
+   "found": true,
+   "area_ratio": 0.9447174447174447
+  },
+  {
+   "photo": "0108.png",
+   "method": "dnn-raw",
+   "dice": 0.9164653528289892,
+   "iou": 0.8458108425252289,
+   "found": true,
+   "area_ratio": 0.921104054714216
+  },
+  {
+   "photo": "0122.png",
+   "method": "dnn-raw",
+   "dice": 0.9416803953871499,
+   "iou": 0.8897882938978829,
+   "found": true,
+   "area_ratio": 0.9901639344262295
+  },
+  {
+   "photo": "0124.png",
+   "method": "dnn-raw",
+   "dice": 0.9168597168597169,
+   "iou": 0.8464828897338403,
+   "found": true,
+   "area_ratio": 0.9660931174089069
+  },
+  {
+   "photo": "0126.png",
+   "method": "dnn-raw",
+   "dice": 0.8593121929432782,
+   "iou": 0.7533281127642913,
+   "found": true,
+   "area_ratio": 1.3250259605399792
+  },
+  {
+   "photo": "0128.png",
+   "method": "dnn-raw",
+   "dice": 0.0,
+   "iou": 0.0,
+   "found": true,
+   "area_ratio": null
+  },
+  {
+   "photo": "0133.png",
+   "method": "dnn-raw",
+   "dice": 0.9483670295489891,
+   "iou": 0.9018041999408459,
+   "found": true,
+   "area_ratio": 1.0815797992877954
+  },
+  {
+   "photo": "0134.png",
+   "method": "dnn-raw",
+   "dice": 0.8781127129750983,
+   "iou": 0.7827102803738317,
+   "found": true,
+   "area_ratio": 0.9151606425702812
+  },
+  {
+   "photo": "0136.png",
+   "method": "dnn-raw",
+   "dice": 0.870982694684796,
+   "iou": 0.7714520322977967,
+   "found": true,
+   "area_ratio": 1.1659973226238287
+  },
+  {
+   "photo": "0143.png",
+   "method": "dnn-raw",
+   "dice": 0.907563025210084,
+   "iou": 0.8307692307692308,
+   "found": true,
+   "area_ratio": 0.9833333333333333
+  },
+  {
+   "photo": "0146.png",
+   "method": "dnn-raw",
+   "dice": 0.9078947368421053,
+   "iou": 0.8313253012048193,
+   "found": true,
+   "area_ratio": 1.0
+  },
+  {
+   "photo": "0164.png",
+   "method": "dnn-raw",
+   "dice": 0.6746607762701168,
+   "iou": 0.5090476190476191,
+   "found": true,
+   "area_ratio": 1.008238276299113
+  },
+  {
+   "photo": "0177.png",
+   "method": "dnn-raw",
+   "dice": 0.8884826325411335,
+   "iou": 0.7993421052631579,
+   "found": true,
+   "area_ratio": 1.0917782026768643
+  },
+  {
+   "photo": "0180.png",
+   "method": "dnn-raw",
+   "dice": 0.701977144930165,
+   "iou": 0.5408049189491336,
+   "found": true,
+   "area_ratio": 1.7710480020105555
+  },
+  {
+   "photo": "0190.png",
+   "method": "dnn-raw",
+   "dice": 0.817785051827605,
+   "iou": 0.6917397323488694,
+   "found": true,
+   "area_ratio": 1.17825311942959
+  },
+  {
+   "photo": "0192.png",
+   "method": "dnn-raw",
+   "dice": 0.865008603159706,
+   "iou": 0.7621278941565601,
+   "found": true,
+   "area_ratio": 0.8802941176470588
+  },
+  {
+   "photo": "0201.png",
+   "method": "dnn-raw",
+   "dice": 0.9365727002967359,
+   "iou": 0.8807115451691664,
+   "found": true,
+   "area_ratio": 1.0416508898144643
+  },
+  {
+   "photo": "0203.png",
+   "method": "dnn-raw",
+   "dice": 0.9535384401694562,
+   "iou": 0.9112025484470401,
+   "found": true,
+   "area_ratio": 0.9598475568259154
+  },
+  {
+   "photo": "0208.png",
+   "method": "dnn-raw",
+   "dice": 0.9422649888971133,
+   "iou": 0.8908327501749476,
+   "found": true,
+   "area_ratio": 0.9608127721335269
+  },
+  {
+   "photo": "0211.png",
+   "method": "dnn-raw",
+   "dice": 0.9145484045429962,
+   "iou": 0.8425510712506228,
+   "found": true,
+   "area_ratio": 0.8915601023017903
+  },
+  {
+   "photo": "0213.png",
+   "method": "dnn-raw",
+   "dice": 0.9555224515854437,
+   "iou": 0.9148329258353708,
+   "found": true,
+   "area_ratio": 1.0709563684442485
+  },
+  {
+   "photo": "0217.png",
+   "method": "dnn-raw",
+   "dice": 0.9372920399283338,
+   "iou": 0.8819845857418112,
+   "found": true,
+   "area_ratio": 0.8984450923226434
+  },
+  {
+   "photo": "0233.png",
+   "method": "dnn-raw",
+   "dice": 0.8056426332288401,
+   "iou": 0.6745406824146981,
+   "found": true,
+   "area_ratio": 0.7289972899728997
+  },
+  {
+   "photo": "0235.png",
+   "method": "dnn-raw",
+   "dice": 0.8924539512774807,
+   "iou": 0.805793991416309,
+   "found": true,
+   "area_ratio": 0.8741648106904232
+  },
+  {
+   "photo": "0245.png",
+   "method": "dnn-raw",
+   "dice": 0.3448275862068966,
+   "iou": 0.20833333333333334,
+   "found": true,
+   "area_ratio": 4.094594594594595
+  },
+  {
+   "photo": "0251.png",
+   "method": "dnn-raw",
+   "dice": 0.88,
+   "iou": 0.7857142857142857,
+   "found": true,
+   "area_ratio": 1.0833333333333333
+  },
+  {
+   "photo": "0256.png",
+   "method": "dnn-raw",
+   "dice": 0.9526085225009956,
+   "iou": 0.9095057034220533,
+   "found": true,
+   "area_ratio": 1.010408326661329
+  },
+  {
+   "photo": "0259.png",
+   "method": "dnn-raw",
+   "dice": 0.8038891187422424,
+   "iou": 0.6720857834659287,
+   "found": true,
+   "area_ratio": 0.7457565908270134
+  },
+  {
+   "photo": "0262.png",
+   "method": "dnn-raw",
+   "dice": 0.8686046511627907,
+   "iou": 0.7677286742034943,
+   "found": true,
+   "area_ratio": 1.0164126611957796
+  },
+  {
+   "photo": "0276.png",
+   "method": "dnn-raw",
+   "dice": 0.8283803863298663,
+   "iou": 0.7070386810399493,
+   "found": true,
+   "area_ratio": 1.3490401396160558
+  },
+  {
+   "photo": "0278.png",
+   "method": "dnn-raw",
+   "dice": 0.9333333333333333,
+   "iou": 0.875,
+   "found": true,
+   "area_ratio": 0.9623655913978495
+  },
+  {
+   "photo": "0284.png",
+   "method": "dnn-raw",
+   "dice": 0.9102384291725105,
+   "iou": 0.8352638352638353,
+   "found": true,
+   "area_ratio": 0.9401360544217687
+  },
+  {
+   "photo": "0289.png",
+   "method": "dnn-raw",
+   "dice": 0.9264705882352942,
+   "iou": 0.863013698630137,
+   "found": true,
+   "area_ratio": 1.1229268292682928
+  },
+  {
+   "photo": "0291.png",
+   "method": "dnn-raw",
+   "dice": 0.8622167789344765,
+   "iou": 0.7578040904198062,
+   "found": true,
+   "area_ratio": 1.081580624601657
+  },
+  {
+   "photo": "0300.png",
+   "method": "dnn-raw",
+   "dice": 0.9576035357669013,
+   "iou": 0.9186557788944724,
+   "found": true,
+   "area_ratio": 1.0683934315219232
+  },
+  {
+   "photo": "0301.png",
+   "method": "dnn-raw",
+   "dice": 0.9377406931964056,
+   "iou": 0.8827794561933535,
+   "found": true,
+   "area_ratio": 1.071119973413094
+  },
+  {
+   "photo": "0303.png",
+   "method": "dnn-raw",
+   "dice": 0.9311565696302124,
+   "iou": 0.8711814501288185,
+   "found": true,
+   "area_ratio": 0.9789801479174777
+  },
+  {
+   "photo": "0322.png",
+   "method": "dnn-raw",
+   "dice": 0.9036144578313253,
+   "iou": 0.8241758241758241,
+   "found": true,
+   "area_ratio": 0.8342541436464088
+  },
+  {
+   "photo": "0326.png",
+   "method": "dnn-raw",
+   "dice": 0.8759350741002118,
+   "iou": 0.7792566549472627,
+   "found": true,
+   "area_ratio": 0.7871106066338757
+  },
+  {
+   "photo": "0334.png",
+   "method": "dnn-raw",
+   "dice": 0.840589417280643,
+   "iou": 0.7250144425187752,
+   "found": true,
+   "area_ratio": 0.8946700507614214
+  },
+  {
+   "photo": "0337.png",
+   "method": "dnn-raw",
+   "dice": 0.6183206106870229,
+   "iou": 0.44751381215469616,
+   "found": true,
+   "area_ratio": 2.119047619047619
+  },
+  {
+   "photo": "0339.png",
+   "method": "dnn-raw",
+   "dice": 0.8960804020100502,
+   "iou": 0.8117261471230881,
+   "found": true,
+   "area_ratio": 1.0223577235772359
+  },
+  {
+   "photo": "0341.png",
+   "method": "dnn-raw",
+   "dice": 0.4019900497512438,
+   "iou": 0.25155666251556663,
+   "found": true,
+   "area_ratio": 3.740566037735849
+  },
+  {
+   "photo": "0349.png",
+   "method": "dnn-raw",
+   "dice": 0.21956087824351297,
+   "iou": 0.12331838565022421,
+   "found": true,
+   "area_ratio": 0.17951736315479694
+  },
+  {
+   "photo": "0355.png",
+   "method": "dnn-raw",
+   "dice": 0.9493441881501583,
+   "iou": 0.9035729659922515,
+   "found": true,
+   "area_ratio": 1.076056338028169
+  },
+  {
+   "photo": "0356.png",
+   "method": "dnn-raw",
+   "dice": 0.9696649562330214,
+   "iou": 0.941116156437674,
+   "found": true,
+   "area_ratio": 1.012452543659833
+  },
+  {
+   "photo": "0363.png",
+   "method": "dnn-raw",
+   "dice": 0.9206381883685023,
+   "iou": 0.852946786191112,
+   "found": true,
+   "area_ratio": 1.0155601659751037
+  },
+  {
+   "photo": "0365.png",
+   "method": "dnn-raw",
+   "dice": 0.9694884608623591,
+   "iou": 0.9407837021152159,
+   "found": true,
+   "area_ratio": 0.9748561793294981
+  },
+  {
+   "photo": "0369.png",
+   "method": "dnn-raw",
+   "dice": 0.9515783459505784,
+   "iou": 0.9076294277929156,
+   "found": true,
+   "area_ratio": 1.0973636908328341
+  },
+  {
+   "photo": "0375.png",
+   "method": "dnn-raw",
+   "dice": 0.9685751183814033,
+   "iou": 0.9390651085141903,
+   "found": true,
+   "area_ratio": 1.040105386416862
+  },
+  {
+   "photo": "0376.png",
+   "method": "dnn-raw",
+   "dice": 0.8352762290927521,
+   "iou": 0.7171453437771975,
+   "found": true,
+   "area_ratio": 1.3742478941034897
+  },
+  {
+   "photo": "0382.png",
+   "method": "dnn-raw",
+   "dice": 0.8554437558025745,
+   "iou": 0.7474021133862411,
+   "found": true,
+   "area_ratio": 1.3163615228131358
+  },
+  {
+   "photo": "0390.png",
+   "method": "dnn-raw",
+   "dice": 0.8536312849162011,
+   "iou": 0.7446393762183235,
+   "found": true,
+   "area_ratio": 1.3246753246753247
+  },
+  {
+   "photo": "0398.png",
+   "method": "dnn-raw",
+   "dice": 0.9232081911262798,
+   "iou": 0.8573692551505546,
+   "found": true,
+   "area_ratio": 0.9500831946755408
+  },
+  {
+   "photo": "0405.png",
+   "method": "dnn-raw",
+   "dice": 0.9233850776164246,
+   "iou": 0.8576744186046512,
+   "found": true,
+   "area_ratio": 1.065149948293692
+  },
+  {
+   "photo": "0407.png",
+   "method": "dnn-raw",
+   "dice": 0.804923076923077,
+   "iou": 0.6735324407826982,
+   "found": true,
+   "area_ratio": 0.7024620220010477
+  },
+  {
+   "photo": "0412.png",
+   "method": "dnn-raw",
+   "dice": 0.4022186437645375,
+   "iou": 0.25173572228443447,
+   "found": true,
+   "area_ratio": 2.804628999319265
+  },
+  {
+   "photo": "0416.png",
+   "method": "dnn-raw",
+   "dice": 0.9709702604869047,
+   "iou": 0.9435784246102911,
+   "found": true,
+   "area_ratio": 1.0135772473917393
+  },
+  {
+   "photo": "0417.png",
+   "method": "dnn-raw",
+   "dice": 0.0,
+   "iou": 0.0,
+   "found": true,
+   "area_ratio": null
+  },
+  {
+   "photo": "0429.png",
+   "method": "dnn-raw",
+   "dice": 0.9578211617257171,
+   "iou": 0.9190564292321924,
+   "found": true,
+   "area_ratio": 1.038820638820639
+  },
+  {
+   "photo": "0437.png",
+   "method": "dnn-raw",
+   "dice": 0.9296285110238599,
+   "iou": 0.868510158013544,
+   "found": true,
+   "area_ratio": 0.983347310410926
+  },
+  {
+   "photo": "0438.png",
+   "method": "dnn-raw",
+   "dice": 0.9456174809722563,
+   "iou": 0.8968448014902782,
+   "found": true,
+   "area_ratio": 0.9149036201222379
+  },
+  {
+   "photo": "0439.png",
+   "method": "dnn-raw",
+   "dice": 0.6838008518137759,
+   "iou": 0.5195268913189021,
+   "found": true,
+   "area_ratio": 1.9185597942563224
+  },
+  {
+   "photo": "0447.png",
+   "method": "dnn-raw",
+   "dice": 0.9241706161137441,
+   "iou": 0.8590308370044053,
+   "found": true,
+   "area_ratio": 1.0445736434108528
+  },
+  {
+   "photo": "0450.png",
+   "method": "dnn-raw",
+   "dice": 0.9048938134810711,
+   "iou": 0.8263069139966274,
+   "found": true,
+   "area_ratio": 1.0357142857142858
+  },
+  {
+   "photo": "0451.png",
+   "method": "dnn-raw",
+   "dice": 0.8625746876697447,
+   "iou": 0.7583572110792741,
+   "found": true,
+   "area_ratio": 1.3084639498432602
+  },
+  {
+   "photo": "0456.png",
+   "method": "dnn-raw",
+   "dice": 0.23030303030303031,
+   "iou": 0.13013698630136986,
+   "found": true,
+   "area_ratio": 7.684210526315789
+  },
+  {
+   "photo": "0466.png",
+   "method": "dnn-raw",
+   "dice": 0.9182652210175146,
+   "iou": 0.848882035466461,
+   "found": true,
+   "area_ratio": 1.1603603603603603
+  },
+  {
+   "photo": "0470.png",
+   "method": "dnn-raw",
+   "dice": 0.9217806041335453,
+   "iou": 0.8549100560306694,
+   "found": true,
+   "area_ratio": 1.1600274725274726
+  },
+  {
+   "photo": "0475.png",
+   "method": "dnn-raw",
+   "dice": 0.41567291311754684,
+   "iou": 0.2623655913978495,
+   "found": true,
+   "area_ratio": 3.8114754098360657
+  },
+  {
+   "photo": "0483.png",
+   "method": "dnn-raw",
+   "dice": 0.0,
+   "iou": 0.0,
+   "found": true,
+   "area_ratio": null
+  },
+  {
+   "photo": "0485.png",
+   "method": "dnn-raw",
+   "dice": 0.7238095238095238,
+   "iou": 0.5671641791044776,
+   "found": true,
+   "area_ratio": 1.0416666666666667
+  },
+  {
+   "photo": "0494.png",
+   "method": "dnn-raw",
+   "dice": 0.9161747343565525,
+   "iou": 0.8453159041394336,
+   "found": true,
+   "area_ratio": 1.1552162849872774
+  },
+  {
+   "photo": "0496.png",
+   "method": "dnn-raw",
+   "dice": 0.9419767907162865,
+   "iou": 0.8903177004538578,
+   "found": true,
+   "area_ratio": 1.0755813953488371
+  },
+  {
+   "photo": "0503.png",
+   "method": "dnn-raw",
+   "dice": 0.9601990049751243,
+   "iou": 0.9234449760765551,
+   "found": true,
+   "area_ratio": 1.0454011741682974
+  },
+  {
+   "photo": "0504.png",
+   "method": "dnn-raw",
+   "dice": 0.8252624449712157,
+   "iou": 0.702507927356587,
+   "found": true,
+   "area_ratio": 1.3978887535525781
+  },
+  {
+   "photo": "0511.png",
+   "method": "dnn-raw",
+   "dice": 0.9479665071770335,
+   "iou": 0.9010801591813531,
+   "found": true,
+   "area_ratio": 1.051114291555919
+  },
+  {
+   "photo": "0516.png",
+   "method": "dnn-raw",
+   "dice": 0.8015513897866839,
+   "iou": 0.668824163969795,
+   "found": true,
+   "area_ratio": 0.676056338028169
+  },
+  {
+   "photo": "0517.png",
+   "method": "dnn-raw",
+   "dice": 0.9185697808535179,
+   "iou": 0.8494027303754266,
+   "found": true,
+   "area_ratio": 1.144977733795151
+  },
+  {
+   "photo": "0525.png",
+   "method": "dnn-raw",
+   "dice": 0.9588356365774772,
+   "iou": 0.9209262920079073,
+   "found": true,
+   "area_ratio": 1.0118308192842353
+  },
+  {
+   "photo": "0528.png",
+   "method": "dnn-raw",
+   "dice": 0.8656387665198237,
+   "iou": 0.7631067961165049,
+   "found": true,
+   "area_ratio": 1.1722488038277512
+  },
+  {
+   "photo": "0533.png",
+   "method": "dnn-raw",
+   "dice": 0.0,
+   "iou": 0.0,
+   "found": true,
+   "area_ratio": null
+  },
+  {
+   "photo": "0541.png",
+   "method": "dnn-raw",
+   "dice": 0.8672566371681416,
+   "iou": 0.765625,
+   "found": true,
+   "area_ratio": 1.3061224489795917
+  },
+  {
+   "photo": "0543.png",
+   "method": "dnn-raw",
+   "dice": 0.9429489754921655,
+   "iou": 0.8920562523755227,
+   "found": true,
+   "area_ratio": 1.0638474295190714
+  },
+  {
+   "photo": "0545.png",
+   "method": "dnn-raw",
+   "dice": 0.9541995490417137,
+   "iou": 0.9124107263172079,
+   "found": true,
+   "area_ratio": 1.0757642240748866
+  },
+  {
+   "photo": "0548.png",
+   "method": "dnn-raw",
+   "dice": 0.5631011366948412,
+   "iou": 0.39188640973630834,
+   "found": true,
+   "area_ratio": 0.40874563744610964
+  },
+  {
+   "photo": "0549.png",
+   "method": "dnn-raw",
+   "dice": 0.7314360484134773,
+   "iou": 0.5765858690046416,
+   "found": true,
+   "area_ratio": 0.5963446475195823
+  },
+  {
+   "photo": "0557.png",
+   "method": "dnn-raw",
+   "dice": 0.9354149548069022,
+   "iou": 0.8786662550169806,
+   "found": true,
+   "area_ratio": 1.064111261872456
+  },
+  {
+   "photo": "0559.png",
+   "method": "dnn-raw",
+   "dice": 0.9696435319309736,
+   "iou": 0.9410757946210269,
+   "found": true,
+   "area_ratio": 1.0372081088016423
+  },
+  {
+   "photo": "0565.png",
+   "method": "dnn-raw",
+   "dice": 0.9260347978072615,
+   "iou": 0.8622577304334961,
+   "found": true,
+   "area_ratio": 0.9019341190692052
+  },
+  {
+   "photo": "0566.png",
+   "method": "dnn-raw",
+   "dice": 0.9267352185089974,
+   "iou": 0.8634730538922155,
+   "found": true,
+   "area_ratio": 0.8872043662825955
+  },
+  {
+   "photo": "0571.png",
+   "method": "dnn-raw",
+   "dice": 0.8160804020100503,
+   "iou": 0.6893039049235993,
+   "found": true,
+   "area_ratio": 1.2716894977168949
+  },
+  {
+   "photo": "0577.png",
+   "method": "dnn-raw",
+   "dice": 0.9129145322189269,
+   "iou": 0.839781746031746,
+   "found": true,
+   "area_ratio": 1.1702750146284377
+  },
+  {
+   "photo": "0580.png",
+   "method": "dnn-raw",
+   "dice": 0.0,
+   "iou": 0.0,
+   "found": false,
+   "area_ratio": 0.0
+  },
+  {
+   "photo": "0582.png",
+   "method": "dnn-raw",
+   "dice": 0.9515619515619516,
+   "iou": 0.9075995982591228,
+   "found": true,
+   "area_ratio": 1.0248756218905473
+  },
+  {
+   "photo": "0588.png",
+   "method": "dnn-raw",
+   "dice": 0.6597014925373135,
+   "iou": 0.4922048997772829,
+   "found": true,
+   "area_ratio": 2.018018018018018
+  },
+  {
+   "photo": "0591.png",
+   "method": "dnn-raw",
+   "dice": 0.5873192436040044,
+   "iou": 0.415748031496063,
+   "found": true,
+   "area_ratio": 0.7512987012987012
+  },
+  {
+   "photo": "0603.png",
+   "method": "dnn-raw",
+   "dice": 0.9033401028388713,
+   "iou": 0.8237194641449961,
+   "found": true,
+   "area_ratio": 1.130442787443616
+  },
+  {
+   "photo": "0604.png",
+   "method": "dnn-raw",
+   "dice": 0.863932107496464,
+   "iou": 0.7604581673306773,
+   "found": true,
+   "area_ratio": 0.8207571465361834
+  },
+  {
+   "photo": "0607.png",
+   "method": "dnn-raw",
+   "dice": 0.8542414427033179,
+   "iou": 0.7455684596577017,
+   "found": true,
+   "area_ratio": 1.15854119425548
+  },
+  {
+   "photo": "0612.png",
+   "method": "dnn-raw",
+   "dice": 0.6705882352941176,
+   "iou": 0.504424778761062,
+   "found": true,
+   "area_ratio": 1.1935483870967742
+  },
+  {
+   "photo": "0615.png",
+   "method": "dnn-raw",
+   "dice": 0.9475725018175943,
+   "iou": 0.9003684372121584,
+   "found": true,
+   "area_ratio": 1.0063209076175041
+  },
+  {
+   "photo": "0616.png",
+   "method": "dnn-raw",
+   "dice": 0.9636113626454708,
+   "iou": 0.929778007895929,
+   "found": true,
+   "area_ratio": 1.0058526740665994
+  },
+  {
+   "photo": "0627.png",
+   "method": "dnn-raw",
+   "dice": 0.966915995397008,
+   "iou": 0.9359509885825675,
+   "found": true,
+   "area_ratio": 0.979498861047836
+  },
+  {
+   "photo": "0638.png",
+   "method": "dnn-raw",
+   "dice": 0.8436268068331143,
+   "iou": 0.7295454545454545,
+   "found": true,
+   "area_ratio": 1.2514792899408285
+  },
+  {
+   "photo": "0642.png",
+   "method": "dnn-raw",
+   "dice": 0.9734155463459011,
+   "iou": 0.948207955888145,
+   "found": true,
+   "area_ratio": 0.971109782825264
+  },
+  {
+   "photo": "0644.png",
+   "method": "dnn-raw",
+   "dice": 0.9388783868935098,
+   "iou": 0.8847980997624703,
+   "found": true,
+   "area_ratio": 0.9738805970149254
+  },
+  {
+   "photo": "0647.png",
+   "method": "dnn-raw",
+   "dice": 0.8754605747973471,
+   "iou": 0.7785058977719528,
+   "found": true,
+   "area_ratio": 0.8362652232746955
+  },
+  {
+   "photo": "0651.png",
+   "method": "dnn-raw",
+   "dice": 0.954083987078911,
+   "iou": 0.9121994264284139,
+   "found": true,
+   "area_ratio": 1.0148768014876801
+  },
+  {
+   "photo": "0652.png",
+   "method": "dnn-raw",
+   "dice": 0.9222797927461139,
+   "iou": 0.8557692307692307,
+   "found": true,
+   "area_ratio": 1.0104166666666667
+  },
+  {
+   "photo": "0657.png",
+   "method": "dnn-raw",
+   "dice": 0.9798754625033842,
+   "iou": 0.9605449398443029,
+   "found": true,
+   "area_ratio": 0.9990979613927476
+  },
+  {
+   "photo": "0674.png",
+   "method": "dnn-raw",
+   "dice": 0.9029827865621305,
+   "iou": 0.8231254491735207,
+   "found": true,
+   "area_ratio": 1.1397375820056233
+  },
+  {
+   "photo": "0679.png",
+   "method": "dnn-raw",
+   "dice": 0.7714631197097944,
+   "iou": 0.6279527559055118,
+   "found": true,
+   "area_ratio": 0.6392467789890981
+  },
+  {
+   "photo": "0682.png",
+   "method": "dnn-raw",
+   "dice": 0.9275142314990512,
+   "iou": 0.86482661004954,
+   "found": true,
+   "area_ratio": 1.092100039698293
+  },
+  {
+   "photo": "0706.png",
+   "method": "dnn-raw",
+   "dice": 0.9077465845969074,
+   "iou": 0.8310769019311387,
+   "found": true,
+   "area_ratio": 1.0848200312989045
+  },
+  {
+   "photo": "0712.png",
+   "method": "dnn-raw",
+   "dice": 0.8762923351158646,
+   "iou": 0.7798223350253807,
+   "found": true,
+   "area_ratio": 1.2
+  },
+  {
+   "photo": "0715.png",
+   "method": "dnn-raw",
+   "dice": 0.8454935622317596,
+   "iou": 0.7323420074349443,
+   "found": true,
+   "area_ratio": 1.229665071770335
+  },
+  {
+   "photo": "0717.png",
+   "method": "dnn-raw",
+   "dice": 0.9072552242310401,
+   "iou": 0.8302535453373442,
+   "found": true,
+   "area_ratio": 0.9176046825754165
+  },
+  {
+   "photo": "0721.png",
+   "method": "dnn-raw",
+   "dice": 0.4008226691042048,
+   "iou": 0.25064304086881967,
+   "found": true,
+   "area_ratio": 3.354228855721393
+  },
+  {
+   "photo": "0728.png",
+   "method": "dnn-raw",
+   "dice": 0.7630662020905923,
+   "iou": 0.6169014084507042,
+   "found": true,
+   "area_ratio": 1.5175438596491229
+  },
+  {
+   "photo": "0729.png",
+   "method": "dnn-raw",
+   "dice": 0.8918089542843655,
+   "iou": 0.8047429707469469,
+   "found": true,
+   "area_ratio": 0.8057686842853083
+  },
+  {
+   "photo": "0730.png",
+   "method": "dnn-raw",
+   "dice": 0.49162011173184356,
+   "iou": 0.32592592592592595,
+   "found": true,
+   "area_ratio": 2.8085106382978724
+  },
+  {
+   "photo": "0738.png",
+   "method": "dnn-raw",
+   "dice": 0.8798468166586884,
+   "iou": 0.7854700854700855,
+   "found": true,
+   "area_ratio": 0.9306839186691312
+  },
+  {
+   "photo": "0745.png",
+   "method": "dnn-raw",
+   "dice": 0.98296587477924,
+   "iou": 0.9665023526775711,
+   "found": true,
+   "area_ratio": 1.0039958899417742
+  },
+  {
+   "photo": "0757.png",
+   "method": "dnn-raw",
+   "dice": 0.883399209486166,
+   "iou": 0.7911504424778761,
+   "found": true,
+   "area_ratio": 0.8706099815157117
+  },
+  {
+   "photo": "0763.png",
+   "method": "dnn-raw",
+   "dice": 0.9397431280758612,
+   "iou": 0.8863353334088079,
+   "found": true,
+   "area_ratio": 1.1063143922634473
+  },
+  {
+   "photo": "0781.png",
+   "method": "dnn-raw",
+   "dice": 0.797645327446652,
+   "iou": 0.6634026927784578,
+   "found": true,
+   "area_ratio": 0.6736453201970444
+  },
+  {
+   "photo": "0796.png",
+   "method": "dnn-raw",
+   "dice": 0.9759408520695716,
+   "iou": 0.9530121907918097,
+   "found": true,
+   "area_ratio": 1.0214381967413941
+  },
+  {
+   "photo": "0798.png",
+   "method": "dnn-raw",
+   "dice": 0.8313253012048193,
+   "iou": 0.711340206185567,
+   "found": true,
+   "area_ratio": 1.0443349753694582
+  },
+  {
+   "photo": "0802.png",
+   "method": "dnn-raw",
+   "dice": 0.9476938933264623,
+   "iou": 0.9005876591576886,
+   "found": true,
+   "area_ratio": 1.049102428722281
+  },
+  {
+   "photo": "0806.png",
+   "method": "dnn-raw",
+   "dice": 0.9792463134898962,
+   "iou": 0.9593365436062066,
+   "found": true,
+   "area_ratio": 1.0043787629994527
+  },
+  {
+   "photo": "0809.png",
+   "method": "dnn-raw",
+   "dice": 0.9276068186849679,
+   "iou": 0.8649876135425268,
+   "found": true,
+   "area_ratio": 1.0921723019916627
+  },
+  {
+   "photo": "0813.png",
+   "method": "dnn-raw",
+   "dice": 0.9306197964847364,
+   "iou": 0.870242214532872,
+   "found": true,
+   "area_ratio": 0.8964912280701754
+  },
+  {
+   "photo": "0816.png",
+   "method": "dnn-raw",
+   "dice": 0.11049723756906077,
+   "iou": 0.05847953216374269,
+   "found": true,
+   "area_ratio": 17.1
+  },
+  {
+   "photo": "0820.png",
+   "method": "dnn-raw",
+   "dice": 0.8916748119501934,
+   "iou": 0.8045245398773007,
+   "found": true,
+   "area_ratio": 0.8180483659120761
+  },
+  {
+   "photo": "0824.png",
+   "method": "dnn-raw",
+   "dice": 0.8796194657885108,
+   "iou": 0.7851077726975833,
+   "found": true,
+   "area_ratio": 1.06732223903177
+  },
+  {
+   "photo": "0830.png",
+   "method": "dnn-raw",
+   "dice": 0.7872954764196343,
+   "iou": 0.6492063492063492,
+   "found": true,
+   "area_ratio": 1.4447058823529413
+  },
+  {
+   "photo": "0833.png",
+   "method": "dnn-raw",
+   "dice": 0.9478620689655173,
+   "iou": 0.9008914525432616,
+   "found": true,
+   "area_ratio": 1.0071982281284606
+  },
+  {
+   "photo": "0834.png",
+   "method": "dnn-raw",
+   "dice": 0.8410725964682799,
+   "iou": 0.7257336343115124,
+   "found": true,
+   "area_ratio": 1.0091984231274638
+  },
+  {
+   "photo": "0835.png",
+   "method": "dnn-raw",
+   "dice": 0.896551724137931,
+   "iou": 0.8125,
+   "found": true,
+   "area_ratio": 0.9169980119284294
+  },
+  {
+   "photo": "0842.png",
+   "method": "dnn-raw",
+   "dice": 0.8504490433424443,
+   "iou": 0.7398097826086957,
+   "found": true,
+   "area_ratio": 1.010204081632653
+  },
+  {
+   "photo": "0847.png",
+   "method": "dnn-raw",
+   "dice": 0.9671199512888167,
+   "iou": 0.9363332678325801,
+   "found": true,
+   "area_ratio": 1.0401656314699792
+  },
+  {
+   "photo": "0849.png",
+   "method": "dnn-raw",
+   "dice": 0.9527410207939508,
+   "iou": 0.9097472924187726,
+   "found": true,
+   "area_ratio": 0.9412844036697248
+  },
+  {
+   "photo": "0865.png",
+   "method": "dnn-raw",
+   "dice": 0.9325762952448545,
+   "iou": 0.8736702127659575,
+   "found": true,
+   "area_ratio": 0.9623955431754875
+  },
+  {
+   "photo": "0867.png",
+   "method": "dnn-raw",
+   "dice": 0.5633802816901409,
+   "iou": 0.39215686274509803,
+   "found": true,
+   "area_ratio": 2.55
+  },
+  {
+   "photo": "0869.png",
+   "method": "dnn-raw",
+   "dice": 0.0,
+   "iou": 0.0,
+   "found": true,
+   "area_ratio": null
+  },
+  {
+   "photo": "0874.png",
+   "method": "dnn-raw",
+   "dice": 0.9492624751543048,
+   "iou": 0.9034249303066507,
+   "found": true,
+   "area_ratio": 1.0281122367792923
+  },
+  {
+   "photo": "0880.png",
+   "method": "dnn-raw",
+   "dice": 0.9337690631808279,
+   "iou": 0.8757662443808746,
+   "found": true,
+   "area_ratio": 0.9921875
+  },
+  {
+   "photo": "0881.png",
+   "method": "dnn-raw",
+   "dice": 0.8342911877394636,
+   "iou": 0.7156943303204601,
+   "found": true,
+   "area_ratio": 1.0311284046692606
+  },
+  {
+   "photo": "0887.png",
+   "method": "dnn-raw",
+   "dice": 0.9732965802394694,
+   "iou": 0.9479822132729255,
+   "found": true,
+   "area_ratio": 0.9711350708888701
+  },
+  {
+   "photo": "0900.png",
+   "method": "dnn-raw",
+   "dice": 0.7720414656676589,
+   "iou": 0.6287194918087596,
+   "found": true,
+   "area_ratio": 0.6333612740989103
+  },
+  {
+   "photo": "0901.png",
+   "method": "dnn-raw",
+   "dice": 0.9768544118808753,
+   "iou": 0.9547560222359481,
+   "found": true,
+   "area_ratio": 1.0222044728434505
+  },
+  {
+   "photo": "0904.png",
+   "method": "dnn-raw",
+   "dice": 0.6233766233766234,
+   "iou": 0.4528301886792453,
+   "found": true,
+   "area_ratio": 2.08
+  },
+  {
+   "photo": "0905.png",
+   "method": "dnn-raw",
+   "dice": 0.8571428571428571,
+   "iou": 0.75,
+   "found": true,
+   "area_ratio": 1.1821862348178138
+  },
+  {
+   "photo": "0906.png",
+   "method": "dnn-raw",
+   "dice": 0.8475452196382429,
+   "iou": 0.7354260089686099,
+   "found": true,
+   "area_ratio": 1.25
+  },
+  {
+   "photo": "0922.png",
+   "method": "dnn-raw",
+   "dice": 0.9334415584415584,
+   "iou": 0.8751902587519026,
+   "found": true,
+   "area_ratio": 0.9967585089141004
+  },
+  {
+   "photo": "0937.png",
+   "method": "dnn-raw",
+   "dice": 0.5737051792828686,
+   "iou": 0.4022346368715084,
+   "found": true,
+   "area_ratio": 1.1560486757337152
+  },
+  {
+   "photo": "0940.png",
+   "method": "dnn-raw",
+   "dice": 0.9430193693875085,
+   "iou": 0.8921822615056385,
+   "found": true,
+   "area_ratio": 0.9153875819514077
+  },
+  {
+   "photo": "0946.png",
+   "method": "dnn-raw",
+   "dice": 0.7814321398834305,
+   "iou": 0.641270925862658,
+   "found": true,
+   "area_ratio": 1.5350923482849603
+  },
+  {
+   "photo": "0947.png",
+   "method": "dnn-raw",
+   "dice": 0.9429752263551446,
+   "iou": 0.8921032409709352,
+   "found": true,
+   "area_ratio": 1.1146249052791108
+  },
+  {
+   "photo": "0948.png",
+   "method": "dnn-raw",
+   "dice": 0.8848553601815088,
+   "iou": 0.7934893184130214,
+   "found": true,
+   "area_ratio": 1.098809523809524
+  },
+  {
+   "photo": "0949.png",
+   "method": "dnn-raw",
+   "dice": 0.8423022929340197,
+   "iou": 0.7275666936135813,
+   "found": true,
+   "area_ratio": 1.3102702702702702
+  },
+  {
+   "photo": "0954.png",
+   "method": "dnn-raw",
+   "dice": 0.8909833490417844,
+   "iou": 0.803399433427762,
+   "found": true,
+   "area_ratio": 1.1550440081245767
+  },
+  {
+   "photo": "0955.png",
+   "method": "dnn-raw",
+   "dice": 0.6581196581196581,
+   "iou": 0.49044585987261147,
+   "found": true,
+   "area_ratio": 0.708029197080292
+  },
+  {
+   "photo": "0958.png",
+   "method": "dnn-raw",
+   "dice": 0.8387824126268321,
+   "iou": 0.7223300970873786,
+   "found": true,
+   "area_ratio": 1.3219895287958114
+  },
+  {
+   "photo": "0961.png",
+   "method": "dnn-raw",
+   "dice": 0.8373177842565598,
+   "iou": 0.720160481444333,
+   "found": true,
+   "area_ratio": 1.3333333333333333
+  },
+  {
+   "photo": "0964.png",
+   "method": "dnn-raw",
+   "dice": 0.8784313725490196,
+   "iou": 0.7832167832167832,
+   "found": true,
+   "area_ratio": 0.8701870187018702
+  },
+  {
+   "photo": "0971.png",
+   "method": "dnn-raw",
+   "dice": 0.950414310140734,
+   "iou": 0.9055137844611529,
+   "found": true,
+   "area_ratio": 1.0944903581267218
+  },
+  {
+   "photo": "0973.png",
+   "method": "dnn-raw",
+   "dice": 0.484526967285588,
+   "iou": 0.31971995332555425,
+   "found": true,
+   "area_ratio": 0.31971995332555425
+  },
+  {
+   "photo": "0974.png",
+   "method": "dnn-raw",
+   "dice": 0.9388243506007877,
+   "iou": 0.884702123660966,
+   "found": true,
+   "area_ratio": 1.0508179959100203
+  },
+  {
+   "photo": "0976.png",
+   "method": "dnn-raw",
+   "dice": 0.8984711877695022,
+   "iou": 0.8156583629893238,
+   "found": true,
+   "area_ratio": 0.8566229985443959
+  },
+  {
+   "photo": "0979.png",
+   "method": "dnn-raw",
+   "dice": 0.7199488491048593,
+   "iou": 0.5624375624375625,
+   "found": true,
+   "area_ratio": 1.743859649122807
+  },
+  {
+   "photo": "0985.png",
+   "method": "dnn-raw",
+   "dice": 0.9125594340716688,
+   "iou": 0.8391809747253919,
+   "found": true,
+   "area_ratio": 1.0993304930006087
+  },
+  {
+   "photo": "1003.png",
+   "method": "dnn-raw",
+   "dice": 0.9202387411828541,
+   "iou": 0.8522613065326633,
+   "found": true,
+   "area_ratio": 0.894141829393628
+  },
+  {
+   "photo": "1009.png",
+   "method": "dnn-raw",
+   "dice": 0.8724112426035503,
+   "iou": 0.7736962938668416,
+   "found": true,
+   "area_ratio": 1.071237073918039
+  },
+  {
+   "photo": "0001.png",
+   "method": "dnn",
+   "dice": 0.8820586132952108,
+   "iou": 0.789002557544757,
+   "found": true,
+   "area_ratio": 1.0453216374269005
+  },
+  {
+   "photo": "0002.png",
+   "method": "dnn",
+   "dice": 0.9330963154492566,
+   "iou": 0.8745834595577098,
+   "found": true,
+   "area_ratio": 1.0558139534883721
+  },
+  {
+   "photo": "0003.png",
+   "method": "dnn",
+   "dice": 0.9473684210526315,
+   "iou": 0.9,
+   "found": true,
+   "area_ratio": 0.948815736651947
+  },
+  {
+   "photo": "0004.png",
+   "method": "dnn",
+   "dice": 0.842443729903537,
+   "iou": 0.7277777777777777,
+   "found": true,
+   "area_ratio": 1.2017699115044247
+  },
+  {
+   "photo": "0005.png",
+   "method": "dnn",
+   "dice": 0.8569284642321161,
+   "iou": 0.749671772428884,
+   "found": true,
+   "area_ratio": 1.2793614595210947
+  },
+  {
+   "photo": "0006.png",
+   "method": "dnn",
+   "dice": 0.9221183800623053,
+   "iou": 0.8554913294797688,
+   "found": true,
+   "area_ratio": 1.00625
+  },
+  {
+   "photo": "0007.png",
+   "method": "dnn",
+   "dice": 0.6136417276374794,
+   "iou": 0.44262853251617296,
+   "found": true,
+   "area_ratio": 2.1531162790697675
+  },
+  {
+   "photo": "0008.png",
+   "method": "dnn",
+   "dice": 0.9190267251695253,
+   "iou": 0.8501845018450185,
+   "found": true,
+   "area_ratio": 1.1724436741767765
+  },
+  {
+   "photo": "0009.png",
+   "method": "dnn",
+   "dice": 0.9526149526149527,
+   "iou": 0.9095174262734584,
+   "found": true,
+   "area_ratio": 1.0729422464756708
+  },
+  {
+   "photo": "0010.png",
+   "method": "dnn",
+   "dice": 0.9190104489323917,
+   "iou": 0.8501566439978605,
+   "found": true,
+   "area_ratio": 1.146352273734598
+  },
+  {
+   "photo": "0025.png",
+   "method": "dnn",
+   "dice": 0.8956485002112379,
+   "iou": 0.811017597551645,
+   "found": true,
+   "area_ratio": 1.228813559322034
+  },
+  {
+   "photo": "0030.png",
+   "method": "dnn",
+   "dice": 0.948953805721217,
+   "iou": 0.9028659357568763,
+   "found": true,
+   "area_ratio": 1.1053415620344753
+  },
+  {
+   "photo": "0033.png",
+   "method": "dnn",
+   "dice": 0.915625,
+   "iou": 0.8443804034582133,
+   "found": true,
+   "area_ratio": 1.0425531914893618
+  },
+  {
+   "photo": "0046.png",
+   "method": "dnn",
+   "dice": 0.8607343698312934,
+   "iou": 0.7555168408826946,
+   "found": true,
+   "area_ratio": 1.1147254284714936
+  },
+  {
+   "photo": "0047.png",
+   "method": "dnn",
+   "dice": 0.9143593045717965,
+   "iou": 0.8422301304863582,
+   "found": true,
+   "area_ratio": 1.1043360433604337
+  },
+  {
+   "photo": "0057.png",
+   "method": "dnn",
+   "dice": 0.9230769230769231,
+   "iou": 0.8571428571428571,
+   "found": true,
+   "area_ratio": 1.043115438108484
+  },
+  {
+   "photo": "0058.png",
+   "method": "dnn",
+   "dice": 0.9283611383709519,
+   "iou": 0.8663003663003663,
+   "found": true,
+   "area_ratio": 0.9148136548700282
+  },
+  {
+   "photo": "0062.png",
+   "method": "dnn",
+   "dice": 0.9721115537848606,
+   "iou": 0.9457364341085271,
+   "found": true,
+   "area_ratio": 1.020572450805009
+  },
+  {
+   "photo": "0068.png",
+   "method": "dnn",
+   "dice": 0.9088541666666666,
+   "iou": 0.8329355608591885,
+   "found": true,
+   "area_ratio": 0.92
+  },
+  {
+   "photo": "0078.png",
+   "method": "dnn",
+   "dice": 0.9389473684210526,
+   "iou": 0.8849206349206349,
+   "found": true,
+   "area_ratio": 1.081304771178189
+  },
+  {
+   "photo": "0079.png",
+   "method": "dnn",
+   "dice": 0.2028301886792453,
+   "iou": 0.11286089238845144,
+   "found": true,
+   "area_ratio": 8.86046511627907
+  },
+  {
+   "photo": "0082.png",
+   "method": "dnn",
+   "dice": 0.7608850820842256,
+   "iou": 0.6140552995391705,
+   "found": true,
+   "area_ratio": 1.2185273159144894
+  },
+  {
+   "photo": "0085.png",
+   "method": "dnn",
+   "dice": 0.7980569049271339,
+   "iou": 0.663972286374134,
+   "found": true,
+   "area_ratio": 1.0439716312056737
+  },
+  {
+   "photo": "0089.png",
+   "method": "dnn",
+   "dice": 0.9302418548870678,
+   "iou": 0.8695814648729447,
+   "found": true,
+   "area_ratio": 0.9414047341870392
+  },
+  {
+   "photo": "0096.png",
+   "method": "dnn",
+   "dice": 0.8354632587859425,
+   "iou": 0.7174211248285323,
+   "found": true,
+   "area_ratio": 1.1112984822934233
+  },
+  {
+   "photo": "0107.png",
+   "method": "dnn",
+   "dice": 0.9611829944547134,
+   "iou": 0.9252669039145908,
+   "found": true,
+   "area_ratio": 0.9938574938574939
+  },
+  {
+   "photo": "0108.png",
+   "method": "dnn",
+   "dice": 0.8682372439919498,
+   "iou": 0.7671548117154812,
+   "found": true,
+   "area_ratio": 1.0632633121641426
+  },
+  {
+   "photo": "0122.png",
+   "method": "dnn",
+   "dice": 0.9228611500701263,
+   "iou": 0.8567708333333334,
+   "found": true,
+   "area_ratio": 0.8701639344262295
+  },
+  {
+   "photo": "0124.png",
+   "method": "dnn",
+   "dice": 0.9167497507477568,
+   "iou": 0.8462954440865164,
+   "found": true,
+   "area_ratio": 1.0303643724696356
+  },
+  {
+   "photo": "0126.png",
+   "method": "dnn",
+   "dice": 0.8635749662314273,
+   "iou": 0.7599049128367671,
+   "found": true,
+   "area_ratio": 1.3063343717549325
+  },
+  {
+   "photo": "0128.png",
+   "method": "dnn",
+   "dice": 0.0,
+   "iou": 0.0,
+   "found": true,
+   "area_ratio": null
+  },
+  {
+   "photo": "0133.png",
+   "method": "dnn",
+   "dice": 0.9473684210526315,
+   "iou": 0.9,
+   "found": true,
+   "area_ratio": 1.0666882486241502
+  },
+  {
+   "photo": "0134.png",
+   "method": "dnn",
+   "dice": 0.9361593462717058,
+   "iou": 0.8799807969275084,
+   "found": true,
+   "area_ratio": 0.9658634538152611
+  },
+  {
+   "photo": "0136.png",
+   "method": "dnn",
+   "dice": 0.9065329883570504,
+   "iou": 0.829044661342798,
+   "found": true,
+   "area_ratio": 1.069611780455154
+  },
+  {
+   "photo": "0143.png",
+   "method": "dnn",
+   "dice": 0.8958594730238394,
+   "iou": 0.8113636363636364,
+   "found": true,
+   "area_ratio": 1.2138888888888888
+  },
+  {
+   "photo": "0146.png",
+   "method": "dnn",
+   "dice": 0.9204152249134948,
+   "iou": 0.8525641025641025,
+   "found": true,
+   "area_ratio": 0.9013157894736842
+  },
+  {
+   "photo": "0164.png",
+   "method": "dnn",
+   "dice": 0.7519035532994924,
+   "iou": 0.6024402643619725,
+   "found": true,
+   "area_ratio": 0.9974651457541192
+  },
+  {
+   "photo": "0177.png",
+   "method": "dnn",
+   "dice": 0.889090909090909,
+   "iou": 0.8003273322422259,
+   "found": true,
+   "area_ratio": 1.1032504780114722
+  },
+  {
+   "photo": "0180.png",
+   "method": "dnn",
+   "dice": 0.6820971418551639,
+   "iou": 0.5175625332623736,
+   "found": true,
+   "area_ratio": 1.866549384267404
+  },
+  {
+   "photo": "0190.png",
+   "method": "dnn",
+   "dice": 0.8050098231827112,
+   "iou": 0.6736539251952323,
+   "found": true,
+   "area_ratio": 1.4194890077243019
+  },
+  {
+   "photo": "0192.png",
+   "method": "dnn",
+   "dice": 0.9352538920413211,
+   "iou": 0.8783820716042635,
+   "found": true,
+   "area_ratio": 1.0214705882352941
+  },
+  {
+   "photo": "0201.png",
+   "method": "dnn",
+   "dice": 0.8981132075471698,
+   "iou": 0.815068493150685,
+   "found": true,
+   "area_ratio": 1.2074971601666036
+  },
+  {
+   "photo": "0203.png",
+   "method": "dnn",
+   "dice": 0.9636893718526371,
+   "iou": 0.929923273657289,
+   "found": true,
+   "area_ratio": 1.054171770790799
+  },
+  {
+   "photo": "0208.png",
+   "method": "dnn",
+   "dice": 0.9486382745384756,
+   "iou": 0.9022948539638387,
+   "found": true,
+   "area_ratio": 0.9851233671988389
+  },
+  {
+   "photo": "0211.png",
+   "method": "dnn",
+   "dice": 0.888755980861244,
+   "iou": 0.7997847147470398,
+   "found": true,
+   "area_ratio": 1.1381074168797953
+  },
+  {
+   "photo": "0213.png",
+   "method": "dnn",
+   "dice": 0.9630584192439863,
+   "iou": 0.9287489643744822,
+   "found": true,
+   "area_ratio": 1.0520052886734244
+  },
+  {
+   "photo": "0217.png",
+   "method": "dnn",
+   "dice": 0.9367991845056065,
+   "iou": 0.8811121764141898,
+   "found": true,
+   "area_ratio": 0.9067055393586005
+  },
+  {
+   "photo": "0233.png",
+   "method": "dnn",
+   "dice": 0.7341337907375644,
+   "iou": 0.5799457994579946,
+   "found": true,
+   "area_ratio": 0.5799457994579946
+  },
+  {
+   "photo": "0235.png",
+   "method": "dnn",
+   "dice": 0.8670731707317073,
+   "iou": 0.7653390742734123,
+   "found": true,
+   "area_ratio": 0.8262806236080178
+  },
+  {
+   "photo": "0245.png",
+   "method": "dnn",
+   "dice": 0.4,
+   "iou": 0.25,
+   "found": true,
+   "area_ratio": 2.6486486486486487
+  },
+  {
+   "photo": "0251.png",
+   "method": "dnn",
+   "dice": 0.8408551068883611,
+   "iou": 0.7254098360655737,
+   "found": true,
+   "area_ratio": 1.1927083333333333
+  },
+  {
+   "photo": "0256.png",
+   "method": "dnn",
+   "dice": 0.9561300430865648,
+   "iou": 0.9159474671669794,
+   "found": true,
+   "area_ratio": 1.044035228182546
+  },
+  {
+   "photo": "0259.png",
+   "method": "dnn",
+   "dice": 0.9179736794663782,
+   "iou": 0.8483838720426524,
+   "found": true,
+   "area_ratio": 1.0032502708559046
+  },
+  {
+   "photo": "0262.png",
+   "method": "dnn",
+   "dice": 0.9315223542727787,
+   "iou": 0.871822033898305,
+   "found": true,
+   "area_ratio": 1.071512309495897
+  },
+  {
+   "photo": "0276.png",
+   "method": "dnn",
+   "dice": 0.8127259580621836,
+   "iou": 0.6845310596833131,
+   "found": true,
+   "area_ratio": 1.4136125654450262
+  },
+  {
+   "photo": "0278.png",
+   "method": "dnn",
+   "dice": 0.9606299212598425,
+   "iou": 0.9242424242424242,
+   "found": true,
+   "area_ratio": 1.0483870967741935
+  },
+  {
+   "photo": "0284.png",
+   "method": "dnn",
+   "dice": 0.9331602855288773,
+   "iou": 0.8746958637469586,
+   "found": true,
+   "area_ratio": 1.0965986394557823
+  },
+  {
+   "photo": "0289.png",
+   "method": "dnn",
+   "dice": 0.8727117922520221,
+   "iou": 0.7741691842900302,
+   "found": true,
+   "area_ratio": 1.2917073170731708
+  },
+  {
+   "photo": "0291.png",
+   "method": "dnn",
+   "dice": 0.8590722254844392,
+   "iou": 0.7529593412249099,
+   "found": true,
+   "area_ratio": 1.1708094327597196
+  },
+  {
+   "photo": "0300.png",
+   "method": "dnn",
+   "dice": 0.9654773703336637,
+   "iou": 0.933258821650966,
+   "found": true,
+   "area_ratio": 1.0497714575926866
+  },
+  {
+   "photo": "0301.png",
+   "method": "dnn",
+   "dice": 0.9232902033271719,
+   "iou": 0.8575107296137339,
+   "found": true,
+   "area_ratio": 1.1575274177467598
+  },
+  {
+   "photo": "0303.png",
+   "method": "dnn",
+   "dice": 0.9412644968200524,
+   "iou": 0.8890459363957597,
+   "found": true,
+   "area_ratio": 1.080965356169716
+  },
+  {
+   "photo": "0322.png",
+   "method": "dnn",
+   "dice": 0.9569990850869168,
+   "iou": 0.9175438596491228,
+   "found": true,
+   "area_ratio": 1.0128913443830572
+  },
+  {
+   "photo": "0326.png",
+   "method": "dnn",
+   "dice": 0.8812158565625438,
+   "iou": 0.787654939276324,
+   "found": true,
+   "area_ratio": 0.8007314919914239
+  },
+  {
+   "photo": "0334.png",
+   "method": "dnn",
+   "dice": 0.8315412186379928,
+   "iou": 0.7116564417177914,
+   "found": true,
+   "area_ratio": 1.0358502538071066
+  },
+  {
+   "photo": "0337.png",
+   "method": "dnn",
+   "dice": 0.5954856708090287,
+   "iou": 0.42397977609245213,
+   "found": true,
+   "area_ratio": 2.352891156462585
+  },
+  {
+   "photo": "0339.png",
+   "method": "dnn",
+   "dice": 0.9061723676667304,
+   "iou": 0.8284416491963662,
+   "found": true,
+   "area_ratio": 1.1272357723577235
+  },
+  {
+   "photo": "0341.png",
+   "method": "dnn",
+   "dice": 0.4079207920792079,
+   "iou": 0.2562189054726368,
+   "found": true,
+   "area_ratio": 3.7641509433962264
+  },
+  {
+   "photo": "0349.png",
+   "method": "dnn",
+   "dice": 0.21354166666666666,
+   "iou": 0.119533527696793,
+   "found": true,
+   "area_ratio": 0.13007651559741024
+  },
+  {
+   "photo": "0355.png",
+   "method": "dnn",
+   "dice": 0.9648194987353415,
+   "iou": 0.9320302087960907,
+   "found": true,
+   "area_ratio": 1.0417840375586855
+  },
+  {
+   "photo": "0356.png",
+   "method": "dnn",
+   "dice": 0.9616709417368999,
+   "iou": 0.926171654432524,
+   "found": true,
+   "area_ratio": 1.0721336370539103
+  },
+  {
+   "photo": "0363.png",
+   "method": "dnn",
+   "dice": 0.9129038731687739,
+   "iou": 0.8397637068488093,
+   "found": true,
+   "area_ratio": 1.0676348547717842
+  },
+  {
+   "photo": "0365.png",
+   "method": "dnn",
+   "dice": 0.9641537049440599,
+   "iou": 0.9307883896924993,
+   "found": true,
+   "area_ratio": 0.999156913310851
+  },
+  {
+   "photo": "0369.png",
+   "method": "dnn",
+   "dice": 0.9681227863046045,
+   "iou": 0.9382151029748284,
+   "found": true,
+   "area_ratio": 1.029958058717795
+  },
+  {
+   "photo": "0375.png",
+   "method": "dnn",
+   "dice": 0.9745932058235798,
+   "iou": 0.950445434298441,
+   "found": true,
+   "area_ratio": 1.050936768149883
+  },
+  {
+   "photo": "0376.png",
+   "method": "dnn",
+   "dice": 0.8863758750673129,
+   "iou": 0.7959381044487428,
+   "found": true,
+   "area_ratio": 1.2346570397111913
+  },
+  {
+   "photo": "0382.png",
+   "method": "dnn",
+   "dice": 0.8835261477254881,
+   "iou": 0.7913540885221305,
+   "found": true,
+   "area_ratio": 1.220633536762569
+  },
+  {
+   "photo": "0390.png",
+   "method": "dnn",
+   "dice": 0.8951104100946372,
+   "iou": 0.8101356174161314,
+   "found": true,
+   "area_ratio": 1.1956709956709957
+  },
+  {
+   "photo": "0398.png",
+   "method": "dnn",
+   "dice": 0.9467741935483871,
+   "iou": 0.8989280245022971,
+   "found": true,
+   "area_ratio": 1.0632279534109816
+  },
+  {
+   "photo": "0405.png",
+   "method": "dnn",
+   "dice": 0.9281110560237977,
+   "iou": 0.8658649398704903,
+   "found": true,
+   "area_ratio": 1.0858324715615304
+  },
+  {
+   "photo": "0407.png",
+   "method": "dnn",
+   "dice": 0.943345804382683,
+   "iou": 0.892766818411735,
+   "found": true,
+   "area_ratio": 0.9601885804085909
+  },
+  {
+   "photo": "0412.png",
+   "method": "dnn",
+   "dice": 0.439863608183509,
+   "iou": 0.2819392012716074,
+   "found": true,
+   "area_ratio": 3.3921034717494893
+  },
+  {
+   "photo": "0416.png",
+   "method": "dnn",
+   "dice": 0.9715885234429671,
+   "iou": 0.9447468698965705,
+   "found": true,
+   "area_ratio": 1.0423038445047879
+  },
+  {
+   "photo": "0417.png",
+   "method": "dnn",
+   "dice": 0.0,
+   "iou": 0.0,
+   "found": true,
+   "area_ratio": null
+  },
+  {
+   "photo": "0429.png",
+   "method": "dnn",
+   "dice": 0.9759095378564405,
+   "iou": 0.9529524723955833,
+   "found": true,
+   "area_ratio": 0.999017199017199
+  },
+  {
+   "photo": "0437.png",
+   "method": "dnn",
+   "dice": 0.9495053468290731,
+   "iou": 0.9038649972781709,
+   "found": true,
+   "area_ratio": 1.095004193123278
+  },
+  {
+   "photo": "0438.png",
+   "method": "dnn",
+   "dice": 0.9671010343014083,
+   "iou": 0.9362978049332428,
+   "found": true,
+   "area_ratio": 1.0114010343206394
+  },
+  {
+   "photo": "0439.png",
+   "method": "dnn",
+   "dice": 0.7039274924471299,
+   "iou": 0.5431235431235432,
+   "found": true,
+   "area_ratio": 1.8375482211744536
+  },
+  {
+   "photo": "0447.png",
+   "method": "dnn",
+   "dice": 0.9458128078817734,
+   "iou": 0.897196261682243,
+   "found": true,
+   "area_ratio": 0.9670542635658915
+  },
+  {
+   "photo": "0450.png",
+   "method": "dnn",
+   "dice": 0.9133064516129032,
+   "iou": 0.8404452690166976,
+   "found": true,
+   "area_ratio": 0.8646616541353384
+  },
+  {
+   "photo": "0451.png",
+   "method": "dnn",
+   "dice": 0.8837044892188052,
+   "iou": 0.7916402786573781,
+   "found": true,
+   "area_ratio": 1.2170846394984327
+  },
+  {
+   "photo": "0456.png",
+   "method": "dnn",
+   "dice": 0.2550335570469799,
+   "iou": 0.14615384615384616,
+   "found": true,
+   "area_ratio": 6.842105263157895
+  },
+  {
+   "photo": "0466.png",
+   "method": "dnn",
+   "dice": 0.9087093389296957,
+   "iou": 0.8326923076923077,
+   "found": true,
+   "area_ratio": 1.1463963963963963
+  },
+  {
+   "photo": "0470.png",
+   "method": "dnn",
+   "dice": 0.919209486166008,
+   "iou": 0.8504973668812171,
+   "found": true,
+   "area_ratio": 1.1720467032967032
+  },
+  {
+   "photo": "0475.png",
+   "method": "dnn",
+   "dice": 0.4969450101832994,
+   "iou": 0.33062330623306235,
+   "found": true,
+   "area_ratio": 3.0245901639344264
+  },
+  {
+   "photo": "0483.png",
+   "method": "dnn",
+   "dice": 1.0,
+   "iou": 1.0,
+   "found": false,
+   "area_ratio": null
+  },
+  {
+   "photo": "0485.png",
+   "method": "dnn",
+   "dice": 0.8021248339973439,
+   "iou": 0.6696230598669624,
+   "found": true,
+   "area_ratio": 1.0916666666666666
+  },
+  {
+   "photo": "0494.png",
+   "method": "dnn",
+   "dice": 0.8931928225576758,
+   "iou": 0.8069994853319609,
+   "found": true,
+   "area_ratio": 1.2334605597964376
+  },
+  {
+   "photo": "0496.png",
+   "method": "dnn",
+   "dice": 0.9738775510204082,
+   "iou": 0.949085123309467,
+   "found": true,
+   "area_ratio": 1.0348837209302326
+  },
+  {
+   "photo": "0503.png",
+   "method": "dnn",
+   "dice": 0.9800859039437719,
+   "iou": 0.9609494640122511,
+   "found": true,
+   "area_ratio": 1.004696673189824
+  },
+  {
+   "photo": "0504.png",
+   "method": "dnn",
+   "dice": 0.778169014084507,
+   "iou": 0.6368876080691642,
+   "found": true,
+   "area_ratio": 1.536743808363784
+  },
+  {
+   "photo": "0511.png",
+   "method": "dnn",
+   "dice": 0.9111470113085622,
+   "iou": 0.8367952522255193,
+   "found": true,
+   "area_ratio": 1.151502760171744
+  },
+  {
+   "photo": "0516.png",
+   "method": "dnn",
+   "dice": 0.8778542950344328,
+   "iou": 0.7822997416020672,
+   "found": true,
+   "area_ratio": 0.7934994582881907
+  },
+  {
+   "photo": "0517.png",
+   "method": "dnn",
+   "dice": 0.9203498268474497,
+   "iou": 0.8524518864847233,
+   "found": true,
+   "area_ratio": 1.1074962889658584
+  },
+  {
+   "photo": "0525.png",
+   "method": "dnn",
+   "dice": 0.964685108887581,
+   "iou": 0.9317794201250711,
+   "found": true,
+   "area_ratio": 1.0100561963916002
+  },
+  {
+   "photo": "0528.png",
+   "method": "dnn",
+   "dice": 0.9269988412514485,
+   "iou": 0.8639308855291576,
+   "found": true,
+   "area_ratio": 1.0645933014354068
+  },
+  {
+   "photo": "0533.png",
+   "method": "dnn",
+   "dice": 0.0,
+   "iou": 0.0,
+   "found": true,
+   "area_ratio": null
+  },
+  {
+   "photo": "0541.png",
+   "method": "dnn",
+   "dice": 0.8669288757784332,
+   "iou": 0.7651142609198727,
+   "found": true,
+   "area_ratio": 1.3061224489795917
+  },
+  {
+   "photo": "0543.png",
+   "method": "dnn",
+   "dice": 0.9505030181086519,
+   "iou": 0.9056748466257669,
+   "found": true,
+   "area_ratio": 1.060530679933665
+  },
+  {
+   "photo": "0545.png",
+   "method": "dnn",
+   "dice": 0.9581125944762309,
+   "iou": 0.919593220338983,
+   "found": true,
+   "area_ratio": 1.0706450197455024
+  },
+  {
+   "photo": "0548.png",
+   "method": "dnn",
+   "dice": 0.5563556208670095,
+   "iou": 0.38538273615635177,
+   "found": true,
+   "area_ratio": 0.39704372818723055
+  },
+  {
+   "photo": "0549.png",
+   "method": "dnn",
+   "dice": 0.736669937847563,
+   "iou": 0.583117555670637,
+   "found": true,
+   "area_ratio": 0.5963446475195823
+  },
+  {
+   "photo": "0557.png",
+   "method": "dnn",
+   "dice": 0.9594396481511647,
+   "iou": 0.922041327489042,
+   "found": true,
+   "area_ratio": 1.082428765264586
+  },
+  {
+   "photo": "0559.png",
+   "method": "dnn",
+   "dice": 0.9732525864244259,
+   "iou": 0.9478987466207913,
+   "found": true,
+   "area_ratio": 1.0338722093918398
+  },
+  {
+   "photo": "0565.png",
+   "method": "dnn",
+   "dice": 0.918467895740623,
+   "iou": 0.8492285084496694,
+   "found": true,
+   "area_ratio": 0.9014808099123602
+  },
+  {
+   "photo": "0566.png",
+   "method": "dnn",
+   "dice": 0.9127473240350308,
+   "iou": 0.8394988066825776,
+   "found": true,
+   "area_ratio": 0.8696179502728927
+  },
+  {
+   "photo": "0571.png",
+   "method": "dnn",
+   "dice": 0.7825295723384895,
+   "iou": 0.6427503736920778,
+   "found": true,
+   "area_ratio": 1.5091324200913243
+  },
+  {
+   "photo": "0577.png",
+   "method": "dnn",
+   "dice": 0.9610761305094447,
+   "iou": 0.925068870523416,
+   "found": true,
+   "area_ratio": 1.0444704505558806
+  },
+  {
+   "photo": "0580.png",
+   "method": "dnn",
+   "dice": 0.0,
+   "iou": 0.0,
+   "found": false,
+   "area_ratio": 0.0
+  },
+  {
+   "photo": "0582.png",
+   "method": "dnn",
+   "dice": 0.9708002883922134,
+   "iou": 0.9432574430823117,
+   "found": true,
+   "area_ratio": 0.9715707178393745
+  },
+  {
+   "photo": "0588.png",
+   "method": "dnn",
+   "dice": 0.6151685393258427,
+   "iou": 0.44421906693711966,
+   "found": true,
+   "area_ratio": 2.2072072072072073
+  },
+  {
+   "photo": "0591.png",
+   "method": "dnn",
+   "dice": 0.6788674033149171,
+   "iou": 0.5138525875588081,
+   "found": true,
+   "area_ratio": 0.8805194805194805
+  },
+  {
+   "photo": "0603.png",
+   "method": "dnn",
+   "dice": 0.9157876074816063,
+   "iou": 0.844657019049955,
+   "found": true,
+   "area_ratio": 1.076958482923686
+  },
+  {
+   "photo": "0604.png",
+   "method": "dnn",
+   "dice": 0.8564760793465578,
+   "iou": 0.7489795918367347,
+   "found": true,
+   "area_ratio": 0.7656451197527685
+  },
+  {
+   "photo": "0607.png",
+   "method": "dnn",
+   "dice": 0.8208513159008208,
+   "iou": 0.6961389407205397,
+   "found": true,
+   "area_ratio": 1.2329931972789117
+  },
+  {
+   "photo": "0612.png",
+   "method": "dnn",
+   "dice": 0.8224852071005917,
+   "iou": 0.6984924623115578,
+   "found": true,
+   "area_ratio": 1.1806451612903226
+  },
+  {
+   "photo": "0615.png",
+   "method": "dnn",
+   "dice": 0.9476443950107254,
+   "iou": 0.9004982636267552,
+   "found": true,
+   "area_ratio": 1.040032414910859
+  },
+  {
+   "photo": "0616.png",
+   "method": "dnn",
+   "dice": 0.9414774751433106,
+   "iou": 0.8894260188471423,
+   "found": true,
+   "area_ratio": 1.0771611167171207
+  },
+  {
+   "photo": "0627.png",
+   "method": "dnn",
+   "dice": 0.9812659665058189,
+   "iou": 0.9632209529116745,
+   "found": true,
+   "area_ratio": 1.00626423690205
+  },
+  {
+   "photo": "0638.png",
+   "method": "dnn",
+   "dice": 0.8252788104089219,
+   "iou": 0.7025316455696202,
+   "found": true,
+   "area_ratio": 1.3875739644970415
+  },
+  {
+   "photo": "0642.png",
+   "method": "dnn",
+   "dice": 0.9806170886075949,
+   "iou": 0.9619712844392705,
+   "found": true,
+   "area_ratio": 1.0147439729029688
+  },
+  {
+   "photo": "0644.png",
+   "method": "dnn",
+   "dice": 0.9747692307692307,
+   "iou": 0.9507803121248499,
+   "found": true,
+   "area_ratio": 1.021144278606965
+  },
+  {
+   "photo": "0647.png",
+   "method": "dnn",
+   "dice": 0.9276177090653549,
+   "iou": 0.8650065530799476,
+   "found": true,
+   "area_ratio": 0.925575101488498
+  },
+  {
+   "photo": "0651.png",
+   "method": "dnn",
+   "dice": 0.9680998613037448,
+   "iou": 0.9381720430107527,
+   "found": true,
+   "area_ratio": 1.0111576011157601
+  },
+  {
+   "photo": "0652.png",
+   "method": "dnn",
+   "dice": 0.9423728813559322,
+   "iou": 0.8910256410256411,
+   "found": true,
+   "area_ratio": 1.0486111111111112
+  },
+  {
+   "photo": "0657.png",
+   "method": "dnn",
+   "dice": 0.9773649562629633,
+   "iou": 0.9557319223985891,
+   "found": true,
+   "area_ratio": 1.0005412231643513
+  },
+  {
+   "photo": "0674.png",
+   "method": "dnn",
+   "dice": 0.9024445348154173,
+   "iou": 0.822231370934541,
+   "found": true,
+   "area_ratio": 1.074133083411434
+  },
+  {
+   "photo": "0679.png",
+   "method": "dnn",
+   "dice": 0.727386150966937,
+   "iou": 0.5715686274509804,
+   "found": true,
+   "area_ratio": 0.5887016848364718
+  },
+  {
+   "photo": "0682.png",
+   "method": "dnn",
+   "dice": 0.9700135422712324,
+   "iou": 0.9417731029301277,
+   "found": true,
+   "area_ratio": 1.0520047637951568
+  },
+  {
+   "photo": "0706.png",
+   "method": "dnn",
+   "dice": 0.8985357957471857,
+   "iou": 0.8157648630594523,
+   "found": true,
+   "area_ratio": 1.1269170579029735
+  },
+  {
+   "photo": "0712.png",
+   "method": "dnn",
+   "dice": 0.8158677685950413,
+   "iou": 0.689000558347292,
+   "found": true,
+   "area_ratio": 1.3725490196078431
+  },
+  {
+   "photo": "0715.png",
+   "method": "dnn",
+   "dice": 0.8376753507014028,
+   "iou": 0.7206896551724138,
+   "found": true,
+   "area_ratio": 1.38755980861244
+  },
+  {
+   "photo": "0717.png",
+   "method": "dnn",
+   "dice": 0.9222846441947565,
+   "iou": 0.8557775847089487,
+   "found": true,
+   "area_ratio": 0.9234579018460153
+  },
+  {
+   "photo": "0721.png",
+   "method": "dnn",
+   "dice": 0.3992281303602058,
+   "iou": 0.24939726761317974,
+   "found": true,
+   "area_ratio": 3.6407960199004976
+  },
+  {
+   "photo": "0728.png",
+   "method": "dnn",
+   "dice": 0.8258660508083141,
+   "iou": 0.7033831628638867,
+   "found": true,
+   "area_ratio": 1.3739035087719298
+  },
+  {
+   "photo": "0729.png",
+   "method": "dnn",
+   "dice": 0.9190968235744356,
+   "iou": 0.8503044894490865,
+   "found": true,
+   "area_ratio": 0.8563512361466326
+  },
+  {
+   "photo": "0730.png",
+   "method": "dnn",
+   "dice": 0.618421052631579,
+   "iou": 0.44761904761904764,
+   "found": true,
+   "area_ratio": 2.234042553191489
+  },
+  {
+   "photo": "0738.png",
+   "method": "dnn",
+   "dice": 0.8722934158197083,
+   "iou": 0.7735109717868338,
+   "found": true,
+   "area_ratio": 1.0914972273567467
+  },
+  {
+   "photo": "0745.png",
+   "method": "dnn",
+   "dice": 0.9893768107708913,
+   "iou": 0.9789769533445756,
+   "found": true,
+   "area_ratio": 1.0097043041443088
+  },
+  {
+   "photo": "0757.png",
+   "method": "dnn",
+   "dice": 0.9444967074317968,
+   "iou": 0.8948306595365418,
+   "found": true,
+   "area_ratio": 0.9648798521256932
+  },
+  {
+   "photo": "0763.png",
+   "method": "dnn",
+   "dice": 0.9500896139007868,
+   "iou": 0.9049244835368324,
+   "found": true,
+   "area_ratio": 1.0807155047089312
+  },
+  {
+   "photo": "0781.png",
+   "method": "dnn",
+   "dice": 0.8407994486560992,
+   "iou": 0.7253269916765755,
+   "found": true,
+   "area_ratio": 0.7869458128078818
+  },
+  {
+   "photo": "0796.png",
+   "method": "dnn",
+   "dice": 0.9813717188823031,
+   "iou": 0.9634247714048213,
+   "found": true,
+   "area_ratio": 1.025480828126914
+  },
+  {
+   "photo": "0798.png",
+   "method": "dnn",
+   "dice": 0.8640093786635404,
+   "iou": 0.760577915376677,
+   "found": true,
+   "area_ratio": 1.1009852216748768
+  },
+  {
+   "photo": "0802.png",
+   "method": "dnn",
+   "dice": 0.9657915672235481,
+   "iou": 0.9338461538461539,
+   "found": true,
+   "area_ratio": 0.9910242872228089
+  },
+  {
+   "photo": "0806.png",
+   "method": "dnn",
+   "dice": 0.9751190396351687,
+   "iou": 0.9514461457924356,
+   "found": true,
+   "area_ratio": 1.0403667214012042
+  },
+  {
+   "photo": "0809.png",
+   "method": "dnn",
+   "dice": 0.9595454545454546,
+   "iou": 0.9222367846221057,
+   "found": true,
+   "area_ratio": 1.0379805465493284
+  },
+  {
+   "photo": "0813.png",
+   "method": "dnn",
+   "dice": 0.947463768115942,
+   "iou": 0.9001721170395869,
+   "found": true,
+   "area_ratio": 0.9368421052631579
+  },
+  {
+   "photo": "0816.png",
+   "method": "dnn",
+   "dice": 0.13937282229965156,
+   "iou": 0.0749063670411985,
+   "found": true,
+   "area_ratio": 13.35
+  },
+  {
+   "photo": "0820.png",
+   "method": "dnn",
+   "dice": 0.9194976322833025,
+   "iou": 0.8509908536585366,
+   "found": true,
+   "area_ratio": 0.8763037935563626
+  },
+  {
+   "photo": "0824.png",
+   "method": "dnn",
+   "dice": 0.878715408267851,
+   "iou": 0.7836684948202316,
+   "found": true,
+   "area_ratio": 1.214069591527988
+  },
+  {
+   "photo": "0830.png",
+   "method": "dnn",
+   "dice": 0.8484848484848485,
+   "iou": 0.7368421052631579,
+   "found": true,
+   "area_ratio": 1.3294117647058823
+  },
+  {
+   "photo": "0833.png",
+   "method": "dnn",
+   "dice": 0.9377410468319559,
+   "iou": 0.8827800829875518,
+   "found": true,
+   "area_ratio": 1.0099667774086378
+  },
+  {
+   "photo": "0834.png",
+   "method": "dnn",
+   "dice": 0.8696236559139785,
+   "iou": 0.7693222354340071,
+   "found": true,
+   "area_ratio": 0.9553219448094612
+  },
+  {
+   "photo": "0835.png",
+   "method": "dnn",
+   "dice": 0.9156350298028427,
+   "iou": 0.8443974630021142,
+   "found": true,
+   "area_ratio": 1.1679920477137178
+  },
+  {
+   "photo": "0842.png",
+   "method": "dnn",
+   "dice": 0.8711001642036125,
+   "iou": 0.7716363636363637,
+   "found": true,
+   "area_ratio": 0.9120879120879121
+  },
+  {
+   "photo": "0847.png",
+   "method": "dnn",
+   "dice": 0.9727967396841569,
+   "iou": 0.9470343185875818,
+   "found": true,
+   "area_ratio": 1.0320910973084887
+  },
+  {
+   "photo": "0849.png",
+   "method": "dnn",
+   "dice": 0.9294685990338164,
+   "iou": 0.868231046931408,
+   "found": true,
+   "area_ratio": 0.8990825688073395
+  },
+  {
+   "photo": "0865.png",
+   "method": "dnn",
+   "dice": 0.9434752267969295,
+   "iou": 0.892998678996037,
+   "found": true,
+   "area_ratio": 0.9958217270194986
+  },
+  {
+   "photo": "0867.png",
+   "method": "dnn",
+   "dice": 0.7264150943396226,
+   "iou": 0.5703703703703704,
+   "found": true,
+   "area_ratio": 1.65
+  },
+  {
+   "photo": "0869.png",
+   "method": "dnn",
+   "dice": 0.0,
+   "iou": 0.0,
+   "found": true,
+   "area_ratio": null
+  },
+  {
+   "photo": "0874.png",
+   "method": "dnn",
+   "dice": 0.9611595104750051,
+   "iou": 0.925223381420656,
+   "found": true,
+   "area_ratio": 1.0457221662334908
+  },
+  {
+   "photo": "0880.png",
+   "method": "dnn",
+   "dice": 0.9362609251758687,
+   "iou": 0.8801603206412826,
+   "found": true,
+   "area_ratio": 1.0360243055555556
+  },
+  {
+   "photo": "0881.png",
+   "method": "dnn",
+   "dice": 0.874240299205236,
+   "iou": 0.776578073089701,
+   "found": true,
+   "area_ratio": 1.0807392996108949
+  },
+  {
+   "photo": "0887.png",
+   "method": "dnn",
+   "dice": 0.9730408066121424,
+   "iou": 0.9474970503960897,
+   "found": true,
+   "area_ratio": 0.9618813142032431
+  },
+  {
+   "photo": "0900.png",
+   "method": "dnn",
+   "dice": 0.790641387656313,
+   "iou": 0.6537691794529686,
+   "found": true,
+   "area_ratio": 0.6623637887678122
+  },
+  {
+   "photo": "0901.png",
+   "method": "dnn",
+   "dice": 0.9828336365793845,
+   "iou": 0.9662466946648002,
+   "found": true,
+   "area_ratio": 1.019329073482428
+  },
+  {
+   "photo": "0904.png",
+   "method": "dnn",
+   "dice": 0.8305084745762712,
+   "iou": 0.7101449275362319,
+   "found": true,
+   "area_ratio": 1.36
+  },
+  {
+   "photo": "0905.png",
+   "method": "dnn",
+   "dice": 0.912639405204461,
+   "iou": 0.8393162393162393,
+   "found": true,
+   "area_ratio": 1.1781376518218623
+  },
+  {
+   "photo": "0906.png",
+   "method": "dnn",
+   "dice": 0.8767908309455588,
+   "iou": 0.7806122448979592,
+   "found": true,
+   "area_ratio": 1.0290697674418605
+  },
+  {
+   "photo": "0922.png",
+   "method": "dnn",
+   "dice": 0.9401709401709402,
+   "iou": 0.8870967741935484,
+   "found": true,
+   "area_ratio": 1.0858995137763372
+  },
+  {
+   "photo": "0937.png",
+   "method": "dnn",
+   "dice": 0.6050362193859952,
+   "iou": 0.43372898120672604,
+   "found": true,
+   "area_ratio": 1.0751610594130279
+  },
+  {
+   "photo": "0940.png",
+   "method": "dnn",
+   "dice": 0.945674366467833,
+   "iou": 0.8969471445929527,
+   "found": true,
+   "area_ratio": 0.9266486694947936
+  },
+  {
+   "photo": "0946.png",
+   "method": "dnn",
+   "dice": 0.8115070845856591,
+   "iou": 0.6828034682080925,
+   "found": true,
+   "area_ratio": 1.458047493403694
+  },
+  {
+   "photo": "0947.png",
+   "method": "dnn",
+   "dice": 0.9386048733874821,
+   "iou": 0.8843124015304974,
+   "found": true,
+   "area_ratio": 1.114675423086638
+  },
+  {
+   "photo": "0948.png",
+   "method": "dnn",
+   "dice": 0.8300946686596911,
+   "iou": 0.7095400340715503,
+   "found": true,
+   "area_ratio": 1.3892857142857142
+  },
+  {
+   "photo": "0949.png",
+   "method": "dnn",
+   "dice": 0.8591682419659735,
+   "iou": 0.7531068765534383,
+   "found": true,
+   "area_ratio": 1.2875675675675675
+  },
+  {
+   "photo": "0954.png",
+   "method": "dnn",
+   "dice": 0.9005134788189987,
+   "iou": 0.8190309398715704,
+   "found": true,
+   "area_ratio": 1.1096817874069058
+  },
+  {
+   "photo": "0955.png",
+   "method": "dnn",
+   "dice": 0.6972477064220184,
+   "iou": 0.5352112676056338,
+   "found": true,
+   "area_ratio": 0.5912408759124088
+  },
+  {
+   "photo": "0958.png",
+   "method": "dnn",
+   "dice": 0.8792497069167644,
+   "iou": 0.7845188284518828,
+   "found": true,
+   "area_ratio": 1.2329842931937174
+  },
+  {
+   "photo": "0961.png",
+   "method": "dnn",
+   "dice": 0.9023136246786633,
+   "iou": 0.8220140515222483,
+   "found": true,
+   "area_ratio": 1.1170068027210884
+  },
+  {
+   "photo": "0964.png",
+   "method": "dnn",
+   "dice": 0.8949139125272115,
+   "iou": 0.8098137535816619,
+   "found": true,
+   "area_ratio": 0.8529519618628529
+  },
+  {
+   "photo": "0971.png",
+   "method": "dnn",
+   "dice": 0.9734537124376769,
+   "iou": 0.9482803885534261,
+   "found": true,
+   "area_ratio": 1.0443526170798898
+  },
+  {
+   "photo": "0973.png",
+   "method": "dnn",
+   "dice": 0.47644444444444445,
+   "iou": 0.31271878646441076,
+   "found": true,
+   "area_ratio": 0.31271878646441076
+  },
+  {
+   "photo": "0974.png",
+   "method": "dnn",
+   "dice": 0.9602373269490996,
+   "iou": 0.9235158674541997,
+   "found": true,
+   "area_ratio": 0.9646216768916155
+  },
+  {
+   "photo": "0976.png",
+   "method": "dnn",
+   "dice": 0.9186090943828812,
+   "iou": 0.8494699646643109,
+   "found": true,
+   "area_ratio": 0.9046579330422125
+  },
+  {
+   "photo": "0979.png",
+   "method": "dnn",
+   "dice": 0.7279693486590039,
+   "iou": 0.572289156626506,
+   "found": true,
+   "area_ratio": 1.7473684210526317
+  },
+  {
+   "photo": "0985.png",
+   "method": "dnn",
+   "dice": 0.9300711639122508,
+   "iou": 0.8692832014072119,
+   "found": true,
+   "area_ratio": 1.069750456482045
+  },
+  {
+   "photo": "1003.png",
+   "method": "dnn",
+   "dice": 0.9578947368421052,
+   "iou": 0.9191919191919192,
+   "found": true,
+   "area_ratio": 0.9527235354573484
+  },
+  {
+   "photo": "1009.png",
+   "method": "dnn",
+   "dice": 0.866793893129771,
+   "iou": 0.7649040080835298,
+   "found": true,
+   "area_ratio": 1.006893910379165
   }
  ]
 }

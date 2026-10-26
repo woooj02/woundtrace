@@ -5,16 +5,17 @@
   0.0
  ],
  "fit": {
-  "n": 372,
-  "within_1sd": 0.6370967741935484,
-  "within_2sd": 0.9704301075268817,
-  "median_sd": 0.012807750900485425
+  "n": 374,
+  "within_1sd": 0.8663101604278075,
+  "within_2sd": 0.9866310160427807,
+  "median_sd": 0.012784800525897849
  },
  "check": {
   "n": 389,
-  "within_1sd": 0.6632390745501285,
-  "within_2sd": 0.9665809768637532,
-  "median_sd": 0.011521689513647246
+  "within_1sd": 0.8586118251928021,
+  "within_2sd": 0.9820051413881749,
+  "median_sd": 0.011451640588166478
  },
- "bias_check": 0.011367567417132478
+ "bias_check": 0.006411926381993294,
+ "note": "k fitted on seed 2026 with the classical segmenter and kept for the learned one (dnn + GrabCut snap): with it the held-out seed 11 coverage of +-2 sd is 98.2%. A refit on the dnn outlines (k=0.002, 0.1343, 0) covered only 91.5% on seed 11, so it was not adopted."
 }

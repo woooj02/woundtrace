@@ -8,6 +8,8 @@ numbers and the plain-code quality gates in GATES.
 from __future__ import annotations
 
 import math
+import os
+import threading
 from pathlib import Path
 
 import cv2
@@ -54,27 +56,67 @@ DNN_SIZE = 512
 _MEAN = np.array([0.485, 0.456, 0.406], np.float32).reshape(1, 3, 1, 1)
 _STD = np.array([0.229, 0.224, 0.225], np.float32).reshape(1, 3, 1, 1)
 _NET = None
+_NET_LOCK = threading.Lock()  # one cv2.dnn Net is not safe to run from two threads at once
 
 
-def dnn_prob(img: np.ndarray) -> np.ndarray:
-    """Per-pixel wound probability for the photo, from the ONNX model via cv2.dnn."""
+def _dnn_once(img: np.ndarray) -> np.ndarray:
     global _NET
-    if _NET is None:
-        _NET = cv2.dnn.readNetFromONNX(str(MODEL_PATH))
+    with _NET_LOCK:
+        if _NET is None:
+            _NET = cv2.dnn.readNetFromONNX(str(MODEL_PATH))
     h, w = img.shape[:2]
     k = DNN_SIZE / max(h, w)
     sh, sw = round(h * k), round(w * k)
     box = np.zeros((DNN_SIZE, DNN_SIZE, 3), np.uint8)  # letterbox, as in training
     box[:sh, :sw] = cv2.resize(img, (sw, sh), interpolation=cv2.INTER_AREA)
     blob = (cv2.dnn.blobFromImage(box, 1 / 255.0, swapRB=True) - _MEAN) / _STD
-    _NET.setInput(blob)
-    logit = _NET.forward()[0, 0, :sh, :sw]
+    with _NET_LOCK:
+        _NET.setInput(blob)
+        logit = np.clip(_NET.forward()[0, 0, :sh, :sw], -30, 30)
     return cv2.resize(1 / (1 + np.exp(-logit)), (w, h), interpolation=cv2.INTER_LINEAR)
 
 
-def dnn_mask(img: np.ndarray, thr: float = 0.5) -> np.ndarray:
-    """All wound regions in a photo without a card (used for the FUSeg evaluation)."""
-    m = (dnn_prob(img) > thr).astype(np.uint8) * 255
+def dnn_prob(img: np.ndarray) -> np.ndarray:
+    """Per-pixel wound probability for the photo, from the ONNX model via cv2.dnn. The whole photo is
+    scored at once: cropping closer around the wound was tried and lost the context the model uses
+    (FUSeg validation Dice fell from 0.82 to 0.65)."""
+    return _dnn_once(img)
+
+
+def grabcut_refine(img: np.ndarray, prob: np.ndarray, px_per_mm: float) -> np.ndarray:
+    """Snap the model's outline to the colour edge at full resolution: GrabCut seeded by the probability
+    map (sure wound > 0.9, likely > 0.5, likely skin > 0.1, skin beyond 8 mm)."""
+    blob = (prob > 0.5).astype(np.uint8)
+    if not blob.any():
+        return blob * 255
+    x, y, w, h = cv2.boundingRect(blob)
+    pad = round(10 * px_per_mm)
+    x0, y0 = max(0, x - pad), max(0, y - pad)
+    x1, y1 = min(img.shape[1], x + w + pad), min(img.shape[0], y + h + pad)
+    p = prob[y0:y1, x0:x1]
+    gc = np.full(p.shape, cv2.GC_PR_BGD, np.uint8)
+    gc[p > 0.5] = cv2.GC_PR_FGD
+    gc[cv2.erode((p > 0.9).astype(np.uint8), np.ones((3, 3), np.uint8)) > 0] = cv2.GC_FGD
+    far = cv2.dilate(blob[y0:y1, x0:x1], np.ones((round(8 * px_per_mm) | 1,) * 2, np.uint8)) == 0
+    gc[far] = cv2.GC_BGD
+    bgd, fgd = np.zeros((1, 65), np.float64), np.zeros((1, 65), np.float64)
+    try:
+        cv2.grabCut(np.ascontiguousarray(img[y0:y1, x0:x1]), gc, None, bgd, fgd, 3, cv2.GC_INIT_WITH_MASK)
+    except cv2.error:
+        return blob * 255
+    out = np.zeros(prob.shape, np.uint8)
+    out[y0:y1, x0:x1] = np.isin(gc, (cv2.GC_FGD, cv2.GC_PR_FGD)).astype(np.uint8) * 255
+    return out
+
+
+DNN_REFINE = os.environ.get("DNN_REFINE", "1") == "1"  # 0 = the model's outline as is (for comparison)
+
+
+def dnn_mask(img: np.ndarray, refine: bool = DNN_REFINE) -> np.ndarray:
+    """All wound regions in a photo without a card (used for the FUSeg evaluation). FUSeg photos have
+    no scale; 2 px/mm is a rough guess for a foot filling a 512 px frame."""
+    prob = dnn_prob(img)
+    m = grabcut_refine(img, prob, 2.0) if refine else (prob > 0.5).astype(np.uint8) * 255
     n, cc, st, _ = cv2.connectedComponentsWithStats(m)
     keep = [i for i in range(1, n) if st[i, cv2.CC_STAT_AREA] >= 0.0002 * m.size]
     return _fill_holes(np.isin(cc, keep).astype(np.uint8) * 255)
@@ -343,12 +385,14 @@ def segment_dnn(img: np.ndarray, flat: np.ndarray, valid: np.ndarray, M: np.ndar
 
     The model scores every pixel of the original photo; the probability map is warped onto the skin
     plane with the same homography as the photo, then the same plain-code rules apply: not on the
-    card, not cut off by the frame, at least 0.3 cm², one wound (the most confident one)."""
+    card, not cut off by the frame, at least 0.3 cm², one wound (the most confident one). The outline is
+    snapped to the colour edge at full resolution by GrabCut seeded from the probabilities."""
     s = RECT_PX_PER_MM
     prob = cv2.warpPerspective(dnn_prob(img).astype(np.float32), M, (flat.shape[1], flat.shape[0]),
                                flags=cv2.INTER_LINEAR)
     region = (valid > 0) & (_card_mask(flat.shape) == 0)
-    mask = ((prob > 0.5) & region).astype(np.uint8) * 255
+    prob = np.where(region, prob, 0)
+    mask = grabcut_refine(flat, prob, s) if DNN_REFINE else (prob > 0.5).astype(np.uint8) * 255
     k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (round(1.5 * s) | 1,) * 2)
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, k)
     edge = (valid == 0).astype(np.uint8)

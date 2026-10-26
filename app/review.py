@@ -1,10 +1,11 @@
-"""A second pair of eyes on OpenCV's outline: the vision-language model checks the overlay.
+"""A second pair of eyes on OpenCV's outline: the vision-language model finds the wound on its own.
 
 OpenCV measures; it cannot tell when it outlined the wrong thing with a confident, sharp edge (a fold,
-a shadow, printed text). The agent's model can look at the picture. This module shows it two crops side
-by side, the photo and the same photo with OpenCV's outline, and asks one narrow question. The answer is
-structured, and plain code decides what it means (policy.decide): an outline the model disputes is never
-recorded; it goes to the nurse.
+a shadow, printed text). The agent's model can look at the picture. It is NOT shown OpenCV's outline:
+shown the overlay and asked "does this follow the wound?", it said yes to every outline, good or bad
+(eval/review_summary.md, first run). Instead it is shown the plain photo and asked where the wound is.
+Plain code compares its box with the outline's box; little or no overlap means the two disagree, and
+policy.decide sends the outline to the nurse instead of recording it.
 """
 
 from __future__ import annotations
@@ -19,55 +20,61 @@ import numpy as np
 
 MODEL = os.environ.get("BEDROCK_MODEL", "us.amazon.nova-2-lite-v1:0")
 REGION = os.environ.get("AWS_REGION", "us-east-1")
+MIN_BOX_IOU = 0.1  # chosen on 40 FUSeg outlines (20 good, 20 bad); scored on the other 261 in eval/review_eval.py
+MAX_SIDE = 1024
 
-PROMPT = """You are checking a computer-vision measurement of a skin wound.
-Left: a region of a photo. Right: the same region with a green outline that an algorithm drew around what
-it thinks is the wound (the open or scabbed lesion).
-Does the green outline follow the edge of the wound?
-- "follows": it traces the wound's border reasonably closely.
-- "misses": it traces something that is not the wound, leaves out a large part of the wound, or takes in a
-  lot of healthy skin.
-- "unsure": you cannot tell from the picture.
-Reply with JSON only: {"verdict": "follows" | "misses" | "unsure", "issue": "at most 12 words"}"""
+PROMPT = """This is a photo that may show a skin wound (an ulcer, open sore or scab), possibly next to a
+printed card with black squares and a plastic card. Ignore the cards.
+Find the wound. Reply with JSON only:
+{"wound_visible": true or false, "box": [x1, y1, x2, y2]}
+where box is the tight bounding box of the whole wound, in coordinates scaled 0-1000 across the image width and height."""
 
 
-def overlay_pair(img: np.ndarray, mask: np.ndarray, size: int = 448) -> bytes:
-    """The photo crop and the same crop with the outline, side by side, as JPEG bytes."""
-    x, y, w, h = cv2.boundingRect(mask)
-    pad = int(max(w, h) * 0.6) + 20
-    x0, y0 = max(0, x - pad), max(0, y - pad)
-    x1, y1 = min(img.shape[1], x + w + pad), min(img.shape[0], y + h + pad)
-    crop, m = img[y0:y1, x0:x1], mask[y0:y1, x0:x1]
-    k = size / max(crop.shape[:2])
-    crop = cv2.resize(crop, None, fx=k, fy=k, interpolation=cv2.INTER_AREA)
-    m = cv2.resize(m, (crop.shape[1], crop.shape[0]), interpolation=cv2.INTER_NEAREST)
-    drawn = crop.copy()
-    contours, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    cv2.drawContours(drawn, contours, -1, (0, 255, 0), 2, cv2.LINE_AA)
-    gap = np.full((crop.shape[0], 12, 3), 255, np.uint8)
-    ok, buf = cv2.imencode(".jpg", np.hstack([crop, gap, drawn]), [cv2.IMWRITE_JPEG_QUALITY, 90])
-    return buf.tobytes()
+def box_iou(a, b) -> float:
+    """Intersection over union of two boxes (x1, y1, x2, y2)."""
+    ix = max(0.0, min(a[2], b[2]) - max(a[0], b[0]))
+    iy = max(0.0, min(a[3], b[3]) - max(a[1], b[1]))
+    inter = ix * iy
+    union = (a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter
+    return inter / union if union > 0 else 0.0
 
 
 def review(img: np.ndarray, mask: np.ndarray, client=None) -> dict:
-    """Ask the model whether the outline follows the wound. Never raises: errors come back as 'error'."""
+    """Ask the model where the wound is and compare with OpenCV's outline (a mask on the photo).
+    Never raises: errors come back as verdict 'error'."""
     t = time.perf_counter()
+    h, w = img.shape[:2]
+    x, y, bw, bh = cv2.boundingRect(mask)
+    outline_box = [x, y, x + bw, y + bh]
     try:
         if client is None:
             import boto3
             client = boto3.client("bedrock-runtime", region_name=REGION)
+        k = min(1.0, MAX_SIDE / max(h, w))
+        small = cv2.resize(img, None, fx=k, fy=k, interpolation=cv2.INTER_AREA) if k < 1 else img
+        ok, buf = cv2.imencode(".jpg", small, [cv2.IMWRITE_JPEG_QUALITY, 90])
         r = client.converse(
             modelId=MODEL,
             messages=[{"role": "user", "content": [
-                {"image": {"format": "jpeg", "source": {"bytes": overlay_pair(img, mask)}}},
+                {"image": {"format": "jpeg", "source": {"bytes": buf.tobytes()}}},
                 {"text": PROMPT}]}],
-            inferenceConfig={"maxTokens": 80, "temperature": 0})
+            inferenceConfig={"maxTokens": 120, "temperature": 0})
         text = "".join(b.get("text", "") for b in r["output"]["message"]["content"])
         m = re.search(r"\{.*\}", text, re.S)
         ans = json.loads(m.group(0)) if m else {}
-        verdict = ans.get("verdict") if ans.get("verdict") in ("follows", "misses", "unsure") else "unsure"
-        return {"verdict": verdict, "issue": str(ans.get("issue", ""))[:120], "model": MODEL,
-                "ms": round((time.perf_counter() - t) * 1000), "usage": r.get("usage")}
+        out = {"model": MODEL, "outline_box": outline_box, "usage": r.get("usage")}
+        box = ans.get("box")
+        if not ans.get("wound_visible") or not (isinstance(box, list) and len(box) == 4):
+            out.update(verdict="misses", iou=0.0, model_box=None, issue="the vision model saw no wound")
+        else:
+            mb = [box[0] * w / 1000, box[1] * h / 1000, box[2] * w / 1000, box[3] * h / 1000]
+            iou = box_iou(mb, outline_box)
+            out.update(model_box=[round(v) for v in mb], iou=round(iou, 3),
+                       verdict="follows" if iou >= MIN_BOX_IOU else "misses",
+                       issue=("the vision model found the wound where OpenCV outlined it" if iou >= MIN_BOX_IOU
+                              else "the vision model found the wound somewhere else"))
+        out["ms"] = round((time.perf_counter() - t) * 1000)
+        return out
     except Exception as exc:  # the check is extra caution; its failure must not lose the visit
         return {"verdict": "error", "issue": f"{type(exc).__name__}: {str(exc)[:100]}", "model": MODEL,
-                "ms": round((time.perf_counter() - t) * 1000)}
+                "outline_box": outline_box, "ms": round((time.perf_counter() - t) * 1000)}
