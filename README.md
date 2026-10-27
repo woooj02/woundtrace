@@ -7,6 +7,7 @@ Built for the OpenCV AI Competition 2026 (powered by AWS). OpenCV 5 does the mea
 Amazon Bedrock decides the next step; plain code gates every action.
 
 - **Live demo:** https://asme326si3qdbv4raxgm4fbbge0fohve.lambda-url.us-east-1.on.aws/
+- **Code:** https://github.com/woooj02/woundtrace
 - **Technical report:** [REPORT.md](REPORT.md) (method, evaluation, failure cases, limitations)
 - **Video:** _link added on submission_
 

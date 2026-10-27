@@ -9,7 +9,7 @@ An agent that measures a wound from a phone photo with OpenCV 5 on AWS, checks i
 
 ==================== TRY IT OUT LINKS ====================
 https://asme326si3qdbv4raxgm4fbbge0fohve.lambda-url.us-east-1.on.aws/
-[GitHub repo URL]
+https://github.com/woooj02/woundtrace
 
 ==================== VIDEO DEMO LINK ====================
 [YouTube URL]
@@ -89,7 +89,7 @@ Real wound photos come only from three public, de-identified research datasets, 
 ==================== IF THE FORM ASKS ====================
 Prizes / special awards: Overall, and the Agentic Vision Award. (Not Best Use of COOL.)
 Team: solo (aryan-neopane).
-Technical report: REPORT.md in the repo ([GitHub repo URL]/blob/main/REPORT.md).
+Technical report: REPORT.md in the repo (https://github.com/woooj02/woundtrace/blob/main/REPORT.md).
 AWS services: Lambda (arm64 Graviton, Function URL), Amazon Bedrock (Nova 2 Lite, Converse tool use), S3, CloudWatch Logs and dashboard, IAM.
 How OpenCV 5 is used: every measurement is OpenCV 5 (opencv-contrib-python-headless 5.0.0.93): aruco, solvePnP, findHomography, warpPerspective, dnn (ONNX segmenter), grabCut, contours, Canny. See README "How it works".
 Where the agent acts on vision results: the photo checks decide retake vs measure; the measurement and the outline check decide record vs nurse; the history decides the nurse note. Trace and evaluation: the app's trace panel and eval/agent_summary.md.
