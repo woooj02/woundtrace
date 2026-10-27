@@ -176,10 +176,9 @@ The agent run used the card printed at 92.5%: measured scale 0.921, recorded are
 
 A measurement aid, never a diagnosis, outcome prediction or treatment recommendation. Every nurse note is
 a draft until a human approves it; the patient-facing text is checked by code. Real wound photos come only
-from public, de-identified research datasets [6-8]; none is redistributed here, and only the CC BY 4.0 set
-appears in a figure. The model weights are for non-commercial use (part of the training data is CC BY-NC).
-The author's own test photos are kept out of the repository. The S3 bucket is private, the Lambda
-role has least privilege, logs are kept 14 days, and Bedrock use is capped per day.
+from public, de-identified research datasets [6-8], not redistributed; only the CC BY 4.0 set appears
+(a figure, one app sample). The weights are for non-commercial use (part of the training data is CC BY-NC).
+The author's own photos stay out of the repo. Private S3, least-privilege role, 14-day logs, daily cap.
 
 ## 9. References
 
