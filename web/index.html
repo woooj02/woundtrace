@@ -338,7 +338,10 @@ async function runVisit(blob, name) {
 }
 
 function renderRun(run) {
-  const o = run.outcome || { kind: "none" };
+  const o0 = run.outcome || { kind: "none" };
+  // The model may draft the nurse note before or after saving; the headline follows what happened.
+  const saved = run.steps.some(s => s.tool === "record_measurement" && s.output?.saved);
+  const o = { ...o0, recorded: o0.recorded || saved };
   const meas = [...run.steps].reverse().find(s => s.tool === "measure_wound" && s.output && s.output.found)?.output;
   const heal = run.steps.find(s => s.tool === "assess_healing" && s.output)?.output;
   const cal = run.steps.find(s => s.tool === "calibrate_card" && s.output)?.output;

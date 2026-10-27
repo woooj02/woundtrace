@@ -263,6 +263,8 @@ def record_measurement(v: Visit, patient_id: str, photo_id: str) -> dict:
                               "photo with a plastic card, or ask the patient for one")
     m = v.primary()
     entry = patients.add_measurement(patient_id, photo_id, m)
+    if v.outcome and v.outcome.get("kind") == "nurse_review":
+        v.outcome["recorded"] = True  # the note was drafted first; the measurement is saved too
     v.outcome = v.outcome or {"kind": "recorded", "entry": entry}
     return {"saved": entry}
 
