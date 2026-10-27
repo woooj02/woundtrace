@@ -44,6 +44,8 @@ The patient takes one photo of the wound next to a printed card. An agent on Ama
 - **The agent** is Bedrock Converse tool use with Nova 2 Lite and 9 tools. The model picks the tools and writes the messages; plain code enforces the clinic's rules (no measuring a failed photo, no recording before the card and outline checks, no nurse note without approval). A message guard checks every reply before a patient sees it, and a rules engine takes over if Bedrock is down.
 - **AWS:** Lambda on arm64 Graviton behind a Function URL (OpenCV and the ONNX model, no PyTorch at runtime), a private S3 bucket with expiry, CloudWatch logs (one JSON line per visit) and a dashboard, a least-privilege IAM role, a per-visitor rate limit, and one deploy script.
 
+**Why an agent, not a script?** Across the 60 evaluation visits the model took 9 different tool paths, each chosen by what OpenCV found: 18 stopped at the photo check, 7 at the card check, 6 after measuring found glare, and 2 measured a second time. It adds what plain code can't: eyes (it finds the wound itself to check OpenCV's outline) and words (the patient's one specific fix, the nurse's note). It does not make clinical calls: plain code gates every record and alert, and matching the clinic's rules in 60 of 60 visits shows that handing it the wheel never broke one.
+
 ## How I know it works
 
 - **Real wounds from three clinics** (outline vs the annotators' masks, photos never used in training): Dice **0.82** on 200 US foot ulcers (FUSeg 2021), **0.77** on 122 smartphone photos from Colombia (CO2Wounds-V2), **0.39** on 2,686 photos from a clinic it never trained on, and **no** false outline on 1,378 healthy feet.

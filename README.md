@@ -78,6 +78,7 @@ result, not only the best. FUSeg and CO2Wounds appear as numbers only: their lic
   photo, recording without a "record" decision or an unchecked card, retaking a measurable photo, and
   sending any nurse note without human approval. A message guard checks every reply before the patient
   sees it. If Bedrock fails or the daily cap is reached, a rules engine runs the same tools.
+  *Why an agent, not a script:* Across the 60 evaluation visits the model took 9 different tool paths, each chosen by what OpenCV found: 18 stopped at the photo check, 7 at the card check, 6 after measuring found glare, and 2 measured a second time. It adds what plain code can't: eyes (it finds the wound itself to check OpenCV's outline) and words (the patient's one specific fix, the nurse's note). It does not make clinical calls: plain code gates every record and alert, and matching the clinic's rules in 60 of 60 visits shows that handing it the wheel never broke one.
 - **AWS**: Lambda (arm64 Graviton, Python 3.12, 2 GB) behind a Function URL, a private S3 bucket (photos
   expire after 30 days), Bedrock (Nova 2 Lite), CloudWatch Logs with one JSON line per visit and a
   dashboard, a least-privilege IAM role, and a per-visitor rate limit (30 visits an hour, hashed IP).
