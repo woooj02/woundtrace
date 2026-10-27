@@ -17,6 +17,9 @@ https://github.com/woooj02/woundtrace
 ==================== BUILT WITH (tags, one at a time) ====================
 opencv, python, fastapi, amazon-web-services, aws-lambda, amazon-bedrock, amazon-nova, amazon-s3, amazon-cloudwatch, graviton, onnx, numpy, pytorch, claude-code
 
+==================== THUMBNAIL (3:2) ====================
+submission/gallery/0-thumbnail.png
+
 ==================== IMAGE GALLERY (upload, in this order, with these captions) ====================
 submission/gallery/1-app.png       The live app: the agent's trace, the measurement with its uncertainty, the outline check.
 submission/gallery/2-pipeline.png  Inside OpenCV 5: ArUco + solvePnP, homography to true millimetres, DNN segmenter, GrabCut snap, plastic-card check.
