@@ -99,3 +99,28 @@ Technical report: REPORT.md in the repo (https://github.com/woooj02/woundtrace/b
 AWS services: Lambda (arm64 Graviton, Function URL), Amazon Bedrock (Nova 2 Lite, Converse tool use), S3, CloudWatch Logs and dashboard, IAM.
 How OpenCV 5 is used: every measurement is OpenCV 5 (opencv-contrib-python-headless 5.0.0.93): aruco, solvePnP, findHomography, warpPerspective, dnn (ONNX segmenter), grabCut, contours, Canny. See README "How it works".
 Where the agent acts on vision results: the photo checks decide retake vs measure; the measurement and the outline check decide record vs nurse; the history decides the nurse note. Trace and evaluation: the app's trace panel and eval/agent_summary.md.
+
+==================== SPECIAL AWARD CONSIDERATION ====================
+Agentic Vision Award (only; not Best Use of COOL).
+
+==================== REPOSITORY URL ====================
+https://github.com/woooj02/woundtrace
+
+==================== UPLOAD A FILE ====================
+submission/WoundTrace-report.pdf
+
+==================== TESTING INSTRUCTIONS ====================
+No login, no install, no printer needed.
+
+1. Open the live app (AWS Lambda + Amazon Bedrock): https://asme326si3qdbv4raxgm4fbbge0fohve.lambda-url.us-east-1.on.aws/
+2. Patient tab: click a sample photo and watch "What the agent did" (each OpenCV tool call, the vision model's outline check, the decision):
+   - "Patient A · tilted" or "flash glare": the agent refuses to measure and asks for one specific fix.
+   - "Patient A · good photo": measured with its uncertainty (about 7.1 ± 0.2 cm²), outline checked by the vision model, healing stalled after 4 weeks, so a nurse note is drafted and waits for approval.
+   - "Patient C · card not checked", then "Patient C · with a bank card": the agent asks for a one-time card check, then finds the plastic card and corrects for the misprinted card (printed at about 92%).
+   - "Real wound · no card": a real photo from a public CC BY dataset; OpenCV still outlines the wound and the vision model checks it, but with no card there is no scale, so it gives no size.
+3. Nurse tab: approve or dismiss the drafted note; see each patient's trend with ± error bars.
+4. How it works · evidence tab: the architecture and every evaluation number, generated from the repo's eval files.
+
+Notes: demo patients and samples are synthetic or printed test targets (labelled in the app). A visit takes about 5-10 s on Bedrock. If the daily Bedrock cap is reached, a rules engine runs the same tools and the app says so.
+
+Run locally (Python 3.12, Linux/macOS): ./run.sh setup && ./run.sh test (19 offline tests) && ./run.sh  -> http://127.0.0.1:8100 (rules engine, no AWS needed). Deploy: ./deploy/aws.sh seed. Reproducing the evaluations: see README "Reproduce the evaluation".
