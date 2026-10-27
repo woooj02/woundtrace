@@ -7,12 +7,12 @@
 | Same outcome as the rules (record / retake / nurse request) | 100% |
 | Visits where a guard refused a tool call | 0 (0 still ended correctly) |
 | Patient messages whose numbers all come from tool outputs | 100% |
-| Model replies replaced by the message guard (leaked internals, opinion, length) | 1 |
+| Model replies replaced by the message guard (leaked internals, opinion, length) | 2 |
 | Median tool calls per visit | 3.0 |
-| Latency per visit, median / p95 | 4781 / 7736 ms |
-| Tokens per visit, input / output | 16169 / 236 |
+| Latency per visit, median / p95 | 5292 / 8905 ms |
+| Tokens per visit, input / output | 16363 / 241 |
 
-Calibration (card printed at 92.5%): measured scale 0.921, recorded area error 0.8% mean abs (uncorrected it would be about +17%).
+Calibration (card printed at 92.5%): measured scale 0.921, recorded area error 1.3% mean abs (uncorrected it would be about +17%).
 
 | Scenario | Agreement |
 |---|---|

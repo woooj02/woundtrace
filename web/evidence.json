@@ -1,12 +1,23 @@
 {
- "generated": "2026-10-26 08:00 UTC",
+ "generated": "2026-10-27 02:23 UTC",
  "fuseg": {
   "photos": 200,
-  "dice": 0.8428896491942705,
-  "dice_ge_07": 0.88,
-  "missed": 2,
-  "classical_dice": 0.03292458772303611,
+  "dice": 0.8193467876133768,
+  "dice_ge_07": 0.85,
+  "missed": 5,
+  "classical_dice": 0.032933536149994946,
   "classical_missed": 97
+ },
+ "clinics": {
+  "co2_photos": 122,
+  "co2_dice": 0.7666928165215509,
+  "co2_dice_ge_07": 0.7868852459016393,
+  "ll_photos": 2686,
+  "ll_dice": 0.3891638047488177,
+  "ll_precision": 0.8260087512215708,
+  "ll_recall": 0.37092569435429595,
+  "healthy_photos": 1378,
+  "healthy_false": 0
  },
  "review": {
   "outlines": 261,
@@ -18,24 +29,24 @@
  },
  "synthetic": {
   "cases": 750,
-  "recorded_mape": 0.011522440498872912,
-  "bad_accepts": 1,
-  "forced_mape": 0.08008616337109062,
-  "ruler": 0.42885198471783803
+  "recorded_mape": 0.014671522601083283,
+  "bad_accepts": 3,
+  "forced_mape": 0.05811923640348745,
+  "ruler": 0.43324177442246947
  },
  "uncertainty": {
-  "within_2sd": 0.9820051413881749,
-  "median_sd": 0.011451640588166478
+  "within_2sd": 0.9562982005141388,
+  "median_sd": 0.011491862235425634
  },
  "real": {
   "photos": 26,
   "card_found": 26,
-  "recorded": 6,
+  "recorded": 2,
   "bad_accepts": 0,
-  "mape": 0.06269848083319653,
+  "mape": 0.05527432442492375,
   "inside_2sd": [
    1,
-   6
+   2
   ]
  },
  "agent": {
@@ -43,14 +54,15 @@
   "model": "us.amazon.nova-2-lite-v1:0",
   "agreement": 1.0,
   "refusals": 0,
-  "replaced": 1,
-  "median_ms": 4781.0
+  "replaced": 2,
+  "median_ms": 5292.5
  },
  "limits": [
-  "Not tested on patients' own photos: the real-wound test (FUSeg) has outlines only, from clinic photos of foot ulcers without a reference card, so area accuracy on real wounds is untested.",
+  "Not tested on patients' own photos: the real-wound tests (three clinics' datasets) have outlines only, without a reference card, so area accuracy on real wounds is untested.",
+  "On a clinic the model never trained on (lower-limb set), mean Dice is 0.39: its outlines sit on the wound (precision 0.83) but cover less than that dataset marks (recall 0.37), and it misses 428 of 2686 wounds.",
   "The vision model's outline check also sends 28% of good outlines to the nurse; its first design (judging the overlay) passed every bad outline and was replaced.",
   "Synthetic skin is flat, smooth and evenly lit; curved limbs, hair and real tissue are not modelled.",
-  "On real photos the stated uncertainty is too narrow: 1 of 6 recorded measurements fell inside their \u00b1 2 sd.",
+  "On real photos the stated uncertainty is too narrow: 1 of 2 recorded measurements fell inside their \u00b1 2 sd.",
   "Real test targets: colour sheets from a faulty printer, a black-ink sheet and a coin (3 mm thick, so it reads about 4-5% large).",
   "A card printed at the wrong size biases every area: the app requires a one-time card check (plastic card or ruler) before it records anything.",
   "The healing flag follows a guideline threshold for diabetic foot ulcers and only prompts a clinician review: it does not diagnose, predict an outcome or recommend treatment."

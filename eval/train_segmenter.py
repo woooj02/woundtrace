@@ -61,6 +61,31 @@ def synthetic_set(n, seed=99):
     return out
 
 
+CO2 = ROOT / "data" / "co2wounds" / "x" / "CO2Wounds-V2 Extended Chronic Wounds Dataset From Leprosy Patients"
+HEALTHY = ROOT / "data" / "lowerlimb" / "x" / "Nomal"
+
+
+def healthy_split():
+    """Healthy feet: every other photo (sorted by name) for training, the rest held out for the false-alarm test."""
+    names = sorted(os.listdir(HEALTHY))
+    return names[::2], names[1::2]
+
+
+def co2(split):
+    """CO2Wounds-V2's own train or val split (val is never used for training)."""
+    out = []
+    for n in sorted(os.listdir(CO2 / "split" / split)):
+        img = cv2.imread(str(CO2 / "imgs" / n))
+        m = cv2.imread(str(CO2 / "masks" / (n.rsplit(".", 1)[0] + ".png")), cv2.IMREAD_GRAYSCALE)
+        if img is not None and m is not None:
+            out.append((letterbox(img), letterbox((m > 0).astype(np.uint8) * 255, interp=cv2.INTER_NEAREST)))
+    return out
+
+
+def healthy(names):
+    return [(letterbox(img), np.zeros((SIZE, SIZE), np.uint8)) for img in (cv2.imread(str(HEALTHY / n)) for n in names)]
+
+
 def fuseg(split, names=None):
     names = names or sorted(os.listdir(FUSEG / split / "images"))
     return [(cv2.imread(str(FUSEG / split / "images" / n)),
@@ -133,6 +158,9 @@ def main():
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--epochs", type=int, default=40)
     ap.add_argument("--synthetic", type=int, default=500)
+    ap.add_argument("--more-data", action="store_true",
+                    help="also CO2Wounds-V2 train split and half the healthy-feet photos (as no-wound examples)")
+    ap.add_argument("--out", type=Path, default=OUT)
     a = ap.parse_args()
     if a.check:
         export(Net(pretrained=False), ROOT / "data" / "check.onnx")
@@ -144,8 +172,13 @@ def main():
     hold = names[:len(names) // 10]
     train_items = fuseg("train", names[len(hold):]) + synthetic_set(a.synthetic)
     hold_items = fuseg("train", hold)
-    print(f"train {len(train_items)} (FUSeg {len(names) - len(hold)} + synthetic {a.synthetic}), "
-          f"held back {len(hold_items)}, device {dev}")
+    if a.more_data:
+        c, h = co2("train"), healthy(healthy_split()[0])
+        random.shuffle(c); random.shuffle(h)
+        train_items += c[len(c) // 10:] + h[len(h) // 10:]
+        hold_items += c[:len(c) // 10] + h[:len(h) // 10]
+    print(f"train {len(train_items)} (FUSeg {len(names) - len(hold)} + synthetic {a.synthetic}"
+          + (f" + CO2Wounds and healthy feet" if a.more_data else "") + f"), held back {len(hold_items)}, device {dev}")
     dl = DataLoader(Aug(train_items), batch_size=8, shuffle=True, num_workers=6, drop_last=True)
     hl = DataLoader(Aug(hold_items, train=False), batch_size=8, num_workers=4)
     model = Net().to(dev)
@@ -172,7 +205,7 @@ def main():
             best, best_state = d, {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
     model.load_state_dict(best_state)
     print(f"best held-back Dice {best:.3f}")
-    export(model, OUT)
+    export(model, a.out)
 
 
 if __name__ == "__main__":

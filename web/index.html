@@ -480,6 +480,10 @@ function renderEvidence(e) {
       ${tile(pct(e.fuseg.dice_ge_07), "photos with Dice ≥ 0.7")}
       ${tile(e.fuseg.missed, "wounds missed")}
       ${tile(fmt(e.fuseg.classical_dice), "my first, colour-based method (missed " + e.fuseg.classical_missed + ")")}</div>
+    <h3>Other clinics · photos the model never saw</h3>
+    <div class="stats">${tile(fmt(e.clinics.co2_dice), "Dice, CO2Wounds (Colombia, smartphone, " + e.clinics.co2_photos + " held-out photos)")}
+      ${tile(fmt(e.clinics.ll_dice), "Dice, lower-limb set (" + e.clinics.ll_photos + " photos, never trained on; its masks include surrounding skin)")}
+      ${tile(e.clinics.healthy_false + " / " + e.clinics.healthy_photos, "healthy feet given an outline (false alarms)")}</div>
     <h3>The vision model's outline check · ${e.review.outlines} real-wound outlines</h3>
     <div class="stats">${tile(pct(e.review.bad_flagged), "bad outlines sent to the nurse")}
       ${tile(pct(e.review.good_flagged), "good outlines also sent (false alarms)")}

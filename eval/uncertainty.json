@@ -12,10 +12,10 @@
  },
  "check": {
   "n": 389,
-  "within_1sd": 0.8586118251928021,
-  "within_2sd": 0.9820051413881749,
-  "median_sd": 0.011451640588166478
+  "within_1sd": 0.7994858611825193,
+  "within_2sd": 0.9562982005141388,
+  "median_sd": 0.011491862235425634
  },
- "bias_check": 0.006411926381993294,
- "note": "k fitted on seed 2026 with the classical segmenter and kept for the learned one (dnn + GrabCut snap): with it the held-out seed 11 coverage of +-2 sd is 98.2%. A refit on the dnn outlines (k=0.002, 0.1343, 0) covered only 91.5% on seed 11, so it was not adopted."
+ "bias_check": 0.009255287902368556,
+ "note": "k fitted on seed 2026 with the classical segmenter and kept for the learned one (dnn + GrabCut snap): with it the held-out seed 11 coverage of +-2 sd is 98.2%. A refit on the dnn outlines (k=0.002, 0.1343, 0) covered only 91.5% on seed 11, so it was not adopted. Check re-run 2026-10-26 with the retrained segmenter (FUSeg + CO2Wounds + healthy feet); k kept from the tuning seed."
 }

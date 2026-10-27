@@ -2,182 +2,180 @@
  "summary": {
   "photos": 26,
   "card_found": 26,
-  "recorded": 6,
+  "recorded": 2,
   "bad_accepts": 0,
-  "mape": 0.06269848083319653,
+  "mape": 0.05527432442492375,
   "inside_2sd": [
    1,
-   6
+   2
   ]
  },
  "rows": [
   {
    "photo": "a-01.jpg",
    "true": 7.07,
-   "area": null,
-   "sd": null,
-   "err": null,
-   "action": "retake",
+   "area": 6.61,
+   "sd": 0.35,
+   "err": -0.06506364922206509,
+   "action": "nurse_outline",
    "reasons": [
-    "wound_not_found"
+    "uncertain_edge"
    ],
    "tilt": 22.9,
    "px_per_mm": 4.32,
-   "contrast": null
+   "contrast": 6.0
   },
   {
    "photo": "a-02.jpg",
    "true": 7.07,
-   "area": null,
-   "sd": null,
-   "err": null,
-   "action": "retake",
+   "area": 6.53,
+   "sd": 0.34,
+   "err": -0.07637906647807635,
+   "action": "nurse_outline",
    "reasons": [
-    "wound_not_found"
+    "uncertain_edge"
    ],
    "tilt": 28.3,
    "px_per_mm": 4.05,
-   "contrast": null
+   "contrast": 6.5
   },
   {
    "photo": "a-03.jpg",
    "true": 7.07,
-   "area": null,
-   "sd": null,
-   "err": null,
-   "action": "retake",
+   "area": 6.54,
+   "sd": 0.23,
+   "err": -0.074964639321075,
+   "action": "nurse_outline",
    "reasons": [
-    "wound_not_found"
+    "uncertain_edge"
    ],
    "tilt": 26.6,
    "px_per_mm": 4.11,
-   "contrast": null
+   "contrast": 6.6
   },
   {
    "photo": "a-04.jpg",
    "true": 7.07,
-   "area": null,
-   "sd": null,
-   "err": null,
-   "action": "retake",
-   "reasons": [
-    "wound_not_found"
-   ],
+   "area": 6.82,
+   "sd": 0.17,
+   "err": -0.03536067892503536,
+   "action": "record",
+   "reasons": [],
    "tilt": 10.3,
    "px_per_mm": 3.73,
-   "contrast": null
+   "contrast": 9.2
   },
   {
    "photo": "a-05.jpg",
    "true": 7.07,
-   "area": 6.59,
+   "area": 6.65,
    "sd": 0.22,
-   "err": -0.0678925035360679,
+   "err": -0.05940594059405935,
    "action": "nurse_outline",
    "reasons": [
     "uncertain_edge"
    ],
    "tilt": 21.9,
    "px_per_mm": 4.53,
-   "contrast": 7.9
+   "contrast": 7.1
   },
   {
    "photo": "a-06.jpg",
    "true": 7.07,
-   "area": 6.37,
+   "area": 6.43,
    "sd": 0.21,
-   "err": -0.09900990099009899,
+   "err": -0.09052333804809065,
    "action": "nurse_outline",
    "reasons": [
     "weak_edge"
    ],
    "tilt": 28.2,
    "px_per_mm": 7.69,
-   "contrast": 5.7
+   "contrast": 5.8
   },
   {
    "photo": "a-07.jpg",
    "true": 7.07,
-   "area": 6.94,
-   "sd": 0.17,
-   "err": -0.018387553041018356,
+   "area": 6.67,
+   "sd": 0.18,
+   "err": -0.05657708628005664,
    "action": "nurse_outline",
    "reasons": [
     "uncertain_edge"
    ],
    "tilt": 26.8,
    "px_per_mm": 6.44,
-   "contrast": 7.9
+   "contrast": 7.6
   },
   {
    "photo": "a-08.jpg",
    "true": 7.07,
-   "area": 6.69,
-   "sd": 0.15,
-   "err": -0.05374823196605372,
+   "area": 6.89,
+   "sd": 0.14,
+   "err": -0.02545968882602556,
    "action": "nurse_outline",
    "reasons": [
     "uncertain_edge"
    ],
    "tilt": 16.6,
    "px_per_mm": 7.07,
-   "contrast": 7.7
+   "contrast": 8.5
   },
   {
    "photo": "a-09.jpg",
    "true": 7.07,
-   "area": 6.44,
+   "area": 6.85,
    "sd": 0.1,
-   "err": -0.08910891089108908,
+   "err": -0.031117397454031193,
    "action": "nurse_outline",
    "reasons": [
     "uncertain_edge"
    ],
    "tilt": 5.6,
    "px_per_mm": 5.8,
-   "contrast": 6.8
+   "contrast": 7.0
   },
   {
    "photo": "a-10.jpg",
    "true": 7.07,
-   "area": 6.56,
+   "area": 6.88,
    "sd": 0.13,
-   "err": -0.07213578500707218,
+   "err": -0.026874115983026914,
    "action": "nurse_outline",
    "reasons": [
     "uncertain_edge"
    ],
    "tilt": 20.4,
    "px_per_mm": 4.34,
-   "contrast": 7.2
+   "contrast": 7.5
   },
   {
    "photo": "a-11.jpg",
    "true": 7.07,
-   "area": 6.48,
+   "area": 6.88,
    "sd": 0.15,
-   "err": -0.08345120226308345,
+   "err": -0.026874115983026914,
    "action": "nurse_outline",
    "reasons": [
     "uncertain_edge"
    ],
    "tilt": 11.2,
    "px_per_mm": 5.76,
-   "contrast": 7.5
+   "contrast": 8.6
   },
   {
    "photo": "b-01.jpg",
    "true": 2.66,
-   "area": 2.43,
+   "area": 2.04,
    "sd": 0.06,
-   "err": -0.0864661654135338,
+   "err": -0.23308270676691734,
    "action": "nurse_outline",
    "reasons": [
-    "uncertain_edge"
+    "weak_edge"
    ],
    "tilt": 6.5,
    "px_per_mm": 5.76,
-   "contrast": 8.3
+   "contrast": 2.7
   },
   {
    "photo": "b-02.jpg",
@@ -224,144 +222,154 @@
   {
    "photo": "b-05.jpg",
    "true": 2.66,
-   "area": 2.26,
+   "area": 2.3,
    "sd": 0.06,
-   "err": -0.15037593984962416,
+   "err": -0.13533834586466176,
    "action": "nurse_outline",
    "reasons": [
     "uncertain_edge"
    ],
    "tilt": 4.8,
    "px_per_mm": 5.33,
-   "contrast": 7.1
+   "contrast": 7.8
   },
   {
    "photo": "b-06.jpg",
    "true": 2.66,
-   "area": 1.65,
-   "sd": 0.06,
-   "err": -0.37969924812030087,
+   "area": 1.94,
+   "sd": 0.07,
+   "err": -0.2706766917293234,
    "action": "nurse_outline",
    "reasons": [
     "weak_edge"
    ],
    "tilt": 12.3,
    "px_per_mm": 4.7,
-   "contrast": 1.9
+   "contrast": 2.5
   },
   {
    "photo": "b-07.jpg",
    "true": 2.66,
-   "area": 2.45,
+   "area": 2.46,
    "sd": 0.07,
-   "err": -0.07894736842105265,
+   "err": -0.07518796992481214,
    "action": "record",
    "reasons": [],
    "tilt": 14.7,
    "px_per_mm": 5.82,
-   "contrast": 8.8
+   "contrast": 8.7
   },
   {
    "photo": "b-08.jpg",
    "true": 2.66,
-   "area": 2.63,
+   "area": 2.69,
    "sd": 0.04,
-   "err": -0.011278195488721887,
+   "err": 0.011278195488721776,
    "action": "nurse_outline",
    "reasons": [
     "uncertain_edge"
    ],
    "tilt": 37.7,
    "px_per_mm": 8.01,
-   "contrast": 8.2
+   "contrast": 7.9
   },
   {
    "photo": "b-09.jpg",
    "true": 2.66,
-   "area": 2.53,
+   "area": 2.26,
    "sd": 0.05,
-   "err": -0.048872180451127956,
+   "err": -0.15037593984962416,
    "action": "retake",
    "reasons": [
     "card_bent"
    ],
    "tilt": 11.6,
    "px_per_mm": 6.5,
-   "contrast": 8.5
+   "contrast": 2.5
   },
   {
    "photo": "b-10.jpg",
    "true": 2.66,
-   "area": 1.97,
+   "area": 2.21,
    "sd": 0.06,
-   "err": -0.2593984962406015,
+   "err": -0.16917293233082709,
    "action": "nurse_outline",
    "reasons": [
     "weak_edge"
    ],
    "tilt": 14.1,
    "px_per_mm": 5.2,
-   "contrast": 1.9
+   "contrast": 4.6
   },
   {
    "photo": "b-11.jpg",
    "true": 2.66,
-   "area": 2.47,
+   "area": 2.18,
    "sd": 0.06,
-   "err": -0.0714285714285714,
-   "action": "record",
-   "reasons": [],
+   "err": -0.18045112781954886,
+   "action": "nurse_outline",
+   "reasons": [
+    "weak_edge"
+   ],
    "tilt": 7.5,
    "px_per_mm": 5.41,
-   "contrast": 9.7
+   "contrast": 3.1
   },
   {
    "photo": "b-12.jpg",
    "true": 2.66,
-   "area": 2.42,
+   "area": 2.13,
    "sd": 0.07,
-   "err": -0.09022556390977454,
-   "action": "record",
-   "reasons": [],
+   "err": -0.199248120300752,
+   "action": "nurse_outline",
+   "reasons": [
+    "weak_edge"
+   ],
    "tilt": 12.0,
    "px_per_mm": 5.23,
-   "contrast": 9.5
+   "contrast": 2.8
   },
   {
    "photo": "bw-medium-01.jpg",
    "true": 4.11,
-   "area": 4.18,
-   "sd": 0.12,
-   "err": 0.01703163017031617,
-   "action": "record",
-   "reasons": [],
+   "area": null,
+   "sd": null,
+   "err": null,
+   "action": "retake",
+   "reasons": [
+    "wound_not_found"
+   ],
    "tilt": 16.8,
    "px_per_mm": 5.32,
-   "contrast": 16.7
+   "contrast": null
   },
   {
    "photo": "coin-paper-01.jpg",
    "true": 4.909,
-   "area": 5.19,
-   "sd": 0.08,
-   "err": 0.05724180077408847,
-   "action": "record",
-   "reasons": [],
+   "area": null,
+   "sd": null,
+   "err": null,
+   "action": "retake",
+   "reasons": [
+    "wound_not_found"
+   ],
    "tilt": 5.4,
    "px_per_mm": 9.58,
-   "contrast": 21.3
+   "contrast": null
   },
   {
    "photo": "coin-paper-02.jpg",
    "true": 4.909,
-   "area": 5.21,
-   "sd": 0.06,
-   "err": 0.061315950295375954,
-   "action": "record",
-   "reasons": [],
+   "area": null,
+   "sd": null,
+   "err": null,
+   "action": "retake",
+   "reasons": [
+    "wound_not_found"
+   ],
    "tilt": 3.9,
    "px_per_mm": 11.71,
-   "contrast": 21.4
+   "contrast": null
   }
  ]
 }

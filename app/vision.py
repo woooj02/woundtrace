@@ -47,7 +47,7 @@ ARUCO = cv2.aruco.ArucoDetector(card.DICT, (lambda p: (
     cv2.aruco.DetectorParameters()))
 
 # Learned wound segmenter (ONNX), run with OpenCV's DNN module. Trained by eval/train_segmenter.py.
-MODEL_PATH = Path(__file__).resolve().parent / "models" / "wound_seg.onnx"
+MODEL_PATH = Path(os.environ.get("WOUND_MODEL", Path(__file__).resolve().parent / "models" / "wound_seg.onnx"))
 DNN_AVAILABLE = MODEL_PATH.exists()
 PRIMARY = "dnn" if DNN_AVAILABLE else "grabcut"  # what the app measures with first
 
