@@ -35,7 +35,7 @@ The patient takes one photo of the wound next to a printed card. An agent on Ama
 
 - **Bad photo?** It names the one fix: hold the phone flat, tap to focus, turn off the flash, move closer. It never guesses a number from a photo it can't trust.
 - **Card never checked?** Once per patient, OpenCV finds a plastic bank card in the photo and measures how big the printed card really came out, so a misprinted card can't bias every later visit.
-- **Good photo?** It measures the area in cm² with its own uncertainty (for example 7.13 ± 0.20), then checks OpenCV's work with its own eyes: the vision model marks the wound on the plain photo and plain code compares the two. If they disagree, a nurse confirms the outline before anything is saved.
+- **Good photo?** It measures the area in cm² with its own uncertainty (for example 7.12 ± 0.20), then checks OpenCV's work with its own eyes: the vision model marks the wound on the plain photo and plain code compares the two. If they disagree, a nurse confirms the outline before anything is saved.
 - **Healing stalled?** It compares with earlier visits, calls a rise "worsening" only when it beats the measurement noise, and drafts a note for the nurse with the numbers and their limits. Nothing is sent until a human approves it.
 
 ## How I built it
