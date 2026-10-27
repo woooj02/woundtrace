@@ -1,5 +1,5 @@
-DEVPOST: paste each block into its field. Numbers come from eval/ and real/ (see REPORT.md).
-Fill the two [brackets] after the push and the YouTube upload. Submit only when you say go.
+DEVPOST: paste each block into its field, top to bottom. Every number comes from eval/ and real/ (see REPORT.md).
+Everything is filled in. Paste top to bottom, then submit.
 
 ==================== PROJECT NAME ====================
 WoundTrace
@@ -12,7 +12,7 @@ https://asme326si3qdbv4raxgm4fbbge0fohve.lambda-url.us-east-1.on.aws/
 https://github.com/woooj02/woundtrace
 
 ==================== VIDEO DEMO LINK ====================
-[YouTube URL]
+https://youtu.be/AAn2KQZTjbw
 
 ==================== BUILT WITH (tags, one at a time) ====================
 opencv, python, fastapi, amazon-web-services, aws-lambda, amazon-bedrock, amazon-nova, amazon-s3, amazon-cloudwatch, graviton, onnx, numpy, pytorch, claude-code
@@ -94,7 +94,7 @@ Real wound photos come only from three public, de-identified research datasets, 
 
 ==================== IF THE FORM ASKS ====================
 Prizes / special awards: Overall, and the Agentic Vision Award. (Not Best Use of COOL.)
-Team: solo (aryan-neopane).
+Team: solo, Aryan Neopane (Devpost: aryan-neopane).
 Technical report: REPORT.md in the repo (https://github.com/woooj02/woundtrace/blob/main/REPORT.md).
 AWS services: Lambda (arm64 Graviton, Function URL), Amazon Bedrock (Nova 2 Lite, Converse tool use), S3, CloudWatch Logs and dashboard, IAM.
 How OpenCV 5 is used: every measurement is OpenCV 5 (opencv-contrib-python-headless 5.0.0.93): aruco, solvePnP, findHomography, warpPerspective, dnn (ONNX segmenter), grabCut, contours, Canny. See README "How it works".

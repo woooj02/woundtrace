@@ -11,7 +11,7 @@ Amazon Bedrock decides the next step; plain code gates every action.
 - **Live demo:** https://asme326si3qdbv4raxgm4fbbge0fohve.lambda-url.us-east-1.on.aws/
 - **Code:** https://github.com/woooj02/woundtrace
 - **Technical report:** [REPORT.md](REPORT.md) (method, evaluation, failure cases, limitations)
-- **Video:** _link added on submission_
+- **Video (4:52):** https://youtu.be/AAn2KQZTjbw
 
 > Measurement aid, not a diagnosis. Demo patients are printed or synthetic test targets. Real wounds enter
 > only through three public, de-identified research datasets (cited below), used to train and test the outline.
