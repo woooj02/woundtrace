@@ -21,7 +21,8 @@ healing becomes a drafted note that the nurse approves.
 
 One visit (diagram: [docs/architecture.svg](docs/architecture.svg)):
 
-1. `check_photo`: card, tilt, blur, resolution, flatness, brightness. Fail → `request_retake` with the fix.
+1. `check_photo`: card, tilt, blur, resolution, flatness, brightness. Fail → `request_retake` with the fix
+   (no card: the DNN and the vision model still show where the wound is, with no size).
 2. `calibrate_card` (once per printed card): measure the printed card's true size from a plastic bank card.
 3. `measure_wound`: rectify to true millimetres, outline the wound, measure area ± uncertainty, length,
    width, perimeter; the clinic's rules decide record, retake (glare), measure again with a second method

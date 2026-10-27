@@ -101,7 +101,43 @@ def check_photo(v: Visit, photo_id: str) -> dict:
     patient, and card_calibrated (whether this patient's printed card has been size-checked).
     Always call this first."""
     v.check = vision.check_photo(v.image())
+    if any(p["code"] == "card_not_found" for p in v.check["problems"]):
+        v.check["wound_preview"] = wound_preview(v)
     return {**v.check, "card_calibrated": patients.card_scale(patients.get(v.patient_id)) is not None}
+
+
+def wound_preview(v: Visit) -> dict:
+    """No card, so no scale and no measurement. Still look for the wound (OpenCV's DNN segmenter on the
+    whole photo, and with Bedrock the vision model's own box), so the retake message can say whether
+    the wound was in view. Never returns an area."""
+    img = v.image()
+    mask = vision.dnn_mask(img)
+    out = {"wound_seen": bool(mask.any()), "measured": False,
+           "reason": "no printed card in the photo, so there is no scale"}
+    if not out["wound_seen"]:
+        return out
+    out["share_of_photo"] = round(float((mask > 0).mean()), 4)
+    if v.needs_review:  # Bedrock engine: the vision model checks the outline it can't measure
+        rv = review.review(img, mask)
+        out["vision_model"] = {k: rv.get(k) for k in ("verdict", "iou", "issue", "model_box")}
+    k = max(1.0, 900 / max(img.shape[:2]))  # draw on a larger copy so small photos stay legible
+    ann = cv2.resize(img, None, fx=k, fy=k, interpolation=cv2.INTER_CUBIC) if k > 1 else img.copy()
+    t = max(2, round(max(ann.shape[:2]) / 450))
+    cs, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    cv2.drawContours(ann, [np.round(c * k).astype(np.int32) for c in cs], -1, (60, 255, 60), t, cv2.LINE_AA)
+    box = (out.get("vision_model") or {}).get("model_box")
+    if box:
+        x1, y1, x2, y2 = (round(c * k) for c in box)
+        cv2.rectangle(ann, (x1, y1), (x2, y2), (0, 215, 255), t, cv2.LINE_AA)
+        cv2.putText(ann, "vision model", (x1, max(24, y1 - 10)), cv2.FONT_HERSHEY_SIMPLEX, t * 0.35,
+                    (0, 215, 255), t, cv2.LINE_AA)
+    for colour, th in (((0, 0, 0), t * 3), ((60, 255, 60), t)):
+        cv2.putText(ann, "wound seen - no card, no scale", (16, 24 + 14 * t), cv2.FONT_HERSHEY_SIMPLEX,
+                    t * 0.35, colour, th, cv2.LINE_AA)
+    ok, buf = cv2.imencode(".jpg", ann, [cv2.IMWRITE_JPEG_QUALITY, 85])
+    out["annotated"] = f"annotated/{v.photo_id}-preview.jpg"
+    store.put(out["annotated"], buf.tobytes(), "image/jpeg")
+    return out
 
 
 @tool(patient_id=PATIENT, photo_id=PHOTO)

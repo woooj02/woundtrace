@@ -1,5 +1,7 @@
 # WoundTrace
 
+![WoundTrace: a wound measurement you can trust, or a clear reason to retake](docs/hero.png)
+
 **Measure a wound from a phone photo. An agent checks the photo, measures the area in cm² with its
 uncertainty, and asks a nurse to review when healing stalls. A human approves every alert.**
 
@@ -29,6 +31,8 @@ to a printed card into a trustworthy number, or a specific instruction to take a
      drafted and waits for approval.
    - *Patient C · card not checked* → the agent asks for a one-time card check; *Patient C · with a bank
      card* → it finds the plastic card, sees the printer shrank the card to 92%, and corrects the area.
+   - *Real wound · no card* (a CC BY dataset photo): OpenCV's network still outlines the wound and the
+     vision model checks it, but with no card there is no scale, so it gives no size and asks for the card.
 2. **Nurse**: approve or dismiss the drafted note; see each patient's trend with ± error bars.
 3. **How it works · evidence**: the architecture and every evaluation number, generated from the eval files.
 
@@ -88,7 +92,7 @@ result, not only the best. FUSeg and CO2Wounds appear as numbers only: their lic
 ```bash
 ./run.sh setup        # venv + pinned dependencies (requirements-dev.txt)
 ./run.sh              # http://127.0.0.1:8100 · rules engine, local storage, no AWS needed
-./run.sh test         # 18 offline tests
+./run.sh test         # 19 offline tests
 venv/bin/python -m scripts.demo_data seed   # demo patients A, B, C in data/store
 ```
 

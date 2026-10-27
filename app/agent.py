@@ -31,7 +31,9 @@ when the numbers say they should look.
 
 How to work:
 1. Call check_photo first. If it fails, call request_retake with a short, kind
-   message built from the fixes it returned. Do not measure a failed photo.
+   message built from the fixes it returned. Do not measure a failed photo. If the card
+   was missing but wound_preview says wound_seen, start that message with "I can see your
+   wound, but" and ask for the printed card flat beside it (never give a size without it).
    If it passes but card_calibrated is false, call calibrate_card. If that fails, call
    request_retake asking for the one-time card check (a plastic card next to the printed
    card); do not measure.
@@ -180,7 +182,9 @@ def _run_rules(visit: tools.Visit) -> dict:
     if not chk["ok"]:
         fixes = " ".join(p["fix"] for p in chk["problems"])
         _step(visit, "request_retake", {"photo_id": ph, "message": fixes}, steps)
-        return {"answer": f"I couldn't measure this photo. {fixes}", "steps": steps}
+        seen = (chk.get("wound_preview") or {}).get("wound_seen")
+        lead = "I can see the wound, but I can't measure it without the card." if seen else "I couldn't measure this photo."
+        return {"answer": f"{lead} {fixes}", "steps": steps}
     if not chk["card_calibrated"]:
         cal = _step(visit, "calibrate_card", {"patient_id": pid, "photo_id": ph}, steps)["output"]
         if not cal["calibrated"]:

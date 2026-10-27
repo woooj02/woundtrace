@@ -235,3 +235,13 @@ def test_outline_check_compares_the_models_box_with_the_outline():
     assert far["verdict"] == "misses" and far["iou"] == 0.0
     assert review.review(img, mask, FakeBedrock(None, visible=False))["verdict"] == "misses"
     assert review.review(img, mask, client=object())["verdict"] == "error"  # never raises
+
+
+def test_photo_without_card_shows_the_wound_but_never_a_size():
+    pid = upload(cv2.imread("web/samples/real-no-card.jpg"))  # a real wound photo, no card (CC BY 4.0 dataset)
+    r = client.post("/api/visits", json={"patient_id": "t1", "photo_id": pid}).json()
+    chk = r["steps"][0]["output"]
+    assert r["outcome"]["kind"] == "retake" and "card_not_found" in r["outcome"]["reasons"]
+    assert chk["wound_preview"]["wound_seen"] and not chk["wound_preview"]["measured"]
+    assert "area_cm2" not in json.dumps(chk) and r["answer"].startswith("I can see the wound")
+    assert patients.get("t1")["history"] == []

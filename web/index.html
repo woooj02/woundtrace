@@ -149,7 +149,8 @@
           <div class="muted small">Place the printed card flat next to the wound. Hold the phone straight above.</div>
           <h2 style="margin-top:18px">Or try a sample photo</h2>
           <div class="samples" id="samples"></div>
-          <p class="muted small" style="margin-bottom:0">Samples and demo patients are printed test targets, not real wounds or people.</p>
+          <p class="muted small" style="margin-bottom:0">Samples and demo patients are printed test targets, not real wounds or people, except the real
+            wound: Lower Limb and Feet Wound Image Dataset (Islam et al., Mendeley Data, CC BY 4.0), never used in training.</p>
         </div>
       </div>
       <div>
@@ -249,6 +250,7 @@ const SAMPLES = [
   { file: "b-good.jpg", patient: "demo-b", label: "Patient B · good photo" },
   { file: "c-no-card.jpg", patient: "demo-c", label: "Patient C · card not checked" },
   { file: "c-card-check.jpg", patient: "demo-c", label: "Patient C · with a bank card" },
+  { file: "real-no-card.jpg", patient: "demo-a", label: "Real wound · no card (CC BY dataset)" },
 ];
 
 const TOOL_LABEL = {
@@ -344,7 +346,9 @@ function renderRun(run) {
                  nurse_review: o.recorded ? `Measured ${fmt(meas?.area_cm2)} cm² · nurse asked to review` : "Sent to your nurse to check" }[o.kind] || "Done";
   // A retake is not a result: show the photo, not numbers that look like one.
   const shown = o.kind === "retake" ? null : meas;
-  const img = shown?.annotated ? `/api/img/${shown.annotated}` : `/api/img/photos/${run.photo_id}.jpg`;
+  const preview = run.steps.find(s => s.tool === "check_photo" && s.output)?.output?.wound_preview;
+  const img = shown?.annotated ? `/api/img/${shown.annotated}`
+            : preview?.annotated ? `/api/img/${preview.annotated}` : `/api/img/photos/${run.photo_id}.jpg`;
   $("#result").innerHTML = `
     <div class="outcome ${esc(o.kind)}">
       <div class="head">${esc(head)}</div>
@@ -388,7 +392,12 @@ function stepHtml(s) {
     const m = o.metrics || {};
     why = o.ok ? `passed · tilt ${fmt(m.tilt_deg, 0)}° · ${fmt(m.px_per_mm, 1)} px/mm · edge ${fmt(m.edge_mm)} mm`
                : `<span class="bad">failed: ${o.problems.map(p => esc(p.code)).join(", ")}</span>` +
-                 (m.tilt_deg != null ? ` · tilt ${fmt(m.tilt_deg, 0)}°` : "");
+                 (m.tilt_deg != null ? ` · tilt ${fmt(m.tilt_deg, 0)}°` : "") +
+                 (o.wound_preview ? (o.wound_preview.wound_seen
+                   ? ` · without a card: OpenCV's DNN still found the wound (no scale, so no size)` +
+                     (o.wound_preview.vision_model ? `; the vision model ${o.wound_preview.vision_model.verdict === "follows"
+                       ? `agrees (IoU ${fmt(o.wound_preview.vision_model.iou)})` : "disagrees"}` : "")
+                   : " · no wound seen either") : "");
   } else if (s.tool === "measure_wound") {
     why = o.found ? `${esc(o.method)}${o.dnn_confidence != null ? ` (confidence ${fmt(o.dnn_confidence)})` : ""}: ${fmt(o.area_cm2)} cm² · glare ${fmt(o.glare_fraction * 100, 1)}% · edge contrast ${fmt(o.edge_contrast, 1)} → <b>${esc(o.decision?.action)}</b>${o.decision?.reasons?.length ? " (" + o.decision.reasons.map(esc).join(", ") + ")" : ""}`
                   : `<span class="bad">no wound found</span>`;
