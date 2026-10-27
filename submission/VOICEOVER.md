@@ -1,4 +1,4 @@
-# Voice-over for the demo (4:52, recorded without sound)
+# Voice-over for the demo (4:51, recorded without sound)
 
 Start each line at its time; the teleprompter shows it in yellow at that moment. Calm pace: each line has a
 short breath after it. 609 words in all. The closing card holds about 3 seconds after your last line.
@@ -17,34 +17,33 @@ Captions of these lines are burned into the final video, so it also works muted.
 | 0:59.5 | Pipeline 4b: model outline (orange) vs GrabCut snap (green) | GrabCut, seeded by those scores, snaps the outline to the real edge. |
 | 1:05.5 | Sample: tilted photo; the agent works | Now the agent on Amazon Bedrock. First, a tilted photo. |
 | 1:10.5 | Result: retake, tilt 56° | Fifty-six degrees is too steep to measure, so it asks for one specific fix instead of guessing. |
-| 1:18.5 | Sample: good photo; the agent works | Now a good photo. The agent picks each OpenCV tool in turn. |
-| 1:24.5 | Trace: review_outline, IoU 0.93, agree | Then it checks OpenCV's work with its own eyes. Nova marks where it sees the wound on the plain photo. |
-| 1:34 | (same) | Code compares that with OpenCV's outline. If they disagree, a nurse checks it before anything is saved. |
-| 1:42 | Result: 7.12 ± 0.20 cm², photo with outline and the model's box | Here they agree: 7.12 square centimetres, plus or minus 0.2. |
-| 1:47 | Stats: ruler L×W | A ruler's length times width would have said 9.5. |
-| 1:51.5 | Trace: stalled → nurse note drafted | After four weeks it's only 13 percent smaller, so the agent drafts a care-plan note for the nurse. |
-| 2:00 | My ruler on my printed card: 27.7 mm, not 30 | Testing at home taught me something: my printer had quietly shrunk the card to 92 percent. |
-| 2:07.5 | (same) | That makes every area 17 percent too large, and the photo still looks perfect. |
+| 1:18.5 | Real wound photo, no card (CC BY dataset): wound outlined, vision model's box, no size | A real wound photo without the card: the network still finds it and Nova agrees, but with no scale, no size. |
+| 1:28.5 | Sample: good photo; the agent works | Now a good photo. The agent picks each OpenCV tool in turn. |
+| 1:34 | Trace: review_outline, IoU 0.93, agree | Then it checks OpenCV's work with its own eyes. Nova marks where it sees the wound on the plain photo. |
+| 1:43.5 | (same) | Code compares that with OpenCV's outline. If they disagree, a nurse checks it before anything is saved. |
+| 1:51.5 | Result: 7.12 ± 0.20 cm², photo with outline and the model's box | Here they agree: 7.12 square centimetres, plus or minus 0.2. |
+| 1:56.5 | Trace: stalled → nurse note drafted | After four weeks it's only 13 percent smaller, so the agent drafts a care-plan note for the nurse. |
+| 2:05 | My ruler on my printed card: 27.7 mm, not 30 | At home, my printer had quietly shrunk the card to 92 percent. Every area came out 17 percent too large. |
 | 2:14 | Patient C: card not checked → asks for a one-time card check | So for a new patient, the agent records nothing until the printed card is checked. |
-| 2:21.5 | Sample with a bank card; the agent works | The patient adds any bank card. OpenCV finds its outline and compares it with the standard size. |
-| 2:29.5 | Result: card printed at 92.0%, corrected; card outlined | This test card printed at 92 percent, so every measurement is corrected. |
-| 2:35 | Nurse view: the drafted note waits | In the nurse view, drafted notes wait with their evidence. Nothing is sent on its own. |
-| 2:43 | Click Approve | The nurse approves with one click. |
-| 2:46 | Patient trend: error bars, 4-week line | Each chart shows the measurements, with error bars, against the four-week benchmark. |
-| 2:52 | Architecture on AWS (docs/architecture.svg) | Under the hood, Lambda on Graviton runs OpenCV 5 and the ONNX model. The agent is Nova 2 Lite on Bedrock. |
-| 3:01.5 | (same) | The model picks the tools and writes the messages. Plain code gates every action. |
-| 3:08.5 | Card: how do I know it works? | So how do I know it works? My first version used colour rules, tuned on synthetic photos, within 1.4 percent. |
-| 3:17.5 | Scoreboard 1: FUSeg, colour rules 0.03 vs network 0.84 | On 200 real foot ulcers outlined by experts, it failed: a Dice overlap of 0.03 out of 1. |
-| 3:26 | (same) | So I trained a network on that dataset's separate training photos. Dice rose to 0.84. |
-| 3:33.5 | Scoreboard 2: two more clinics, before retraining | Two more datasets: it fell to 0.48 on wounds from Colombia, and drew wounds on healthy feet. |
-| 3:41 | Scoreboard 3: after retraining (held-out photos) | So I retrained with their training photos, and healthy feet as examples of no wound. |
-| 3:48.5 | (same) | On photos it never saw: 0.77 in Colombia, zero false alarms on 1,378 healthy feet, and 0.82 on the first set. |
-| 3:58 | Lower-limb examples, never trained on (CC BY 4.0, cited) | On a clinic it never trained on, it's still weak: 0.39. Its outlines sit on the wound but cover less than marked. |
-| 4:08 | Evidence: outline check (live app) | I tested the agent's outline check the same way. My first version approved every bad outline. |
-| 4:15.5 | (same) | The redesign sends 79 percent of bad outlines to the nurse, and also 28 percent of good ones. |
-| 4:24 | Evidence: synthetic + agent (live app) | On 750 held-out synthetic photos, the mean area error is 1.5 percent, and the agent matched the clinic's rules in 60 of 60 visits. |
-| 4:35 | Evidence: not validated | Not proven yet: area accuracy on patients' own photos. That needs a clinical study. |
-| 4:41.5 | CAM · End card | WoundTrace: a wound measurement you can trust, or a clear reason to take another photo. |
+| 2:21.5 | Sample with a bank card; the agent works | The patient adds any bank card, and OpenCV compares its outline with the standard size. |
+| 2:28.5 | Result: card printed at 92.0%, corrected; card outlined | This test card printed at 92 percent, so every measurement is corrected. |
+| 2:34.5 | Nurse view: the drafted note waits | In the nurse view, drafted notes wait with their evidence. Nothing is sent on its own. |
+| 2:42 | Click Approve | The nurse approves with one click. |
+| 2:45.5 | Patient trend: error bars, 4-week line | Each chart shows the measurements, with error bars, against the four-week benchmark. |
+| 2:51 | Architecture on AWS (docs/architecture.svg) | Under the hood, Lambda on Graviton runs OpenCV 5 and the ONNX model. The agent is Nova 2 Lite on Bedrock. |
+| 3:01 | (same) | The model picks the tools and writes the messages. Plain code gates every action. |
+| 3:07.5 | Card: how do I know it works? | So how do I know it works? My first version used colour rules, tuned on synthetic photos, within 1.4 percent. |
+| 3:17 | Scoreboard 1: FUSeg, colour rules 0.03 vs network 0.84 | On 200 real foot ulcers outlined by experts, it failed: a Dice overlap of 0.03 out of 1. |
+| 3:25 | (same) | So I trained a network on that dataset's separate training photos. Dice rose to 0.84. |
+| 3:32.5 | Scoreboard 2: two more clinics, before retraining | Two more datasets: it fell to 0.48 on wounds from Colombia, and drew wounds on healthy feet. |
+| 3:40.5 | Scoreboard 3: after retraining (held-out photos) | So I retrained with their training photos, and healthy feet as examples of no wound. |
+| 3:47.5 | (same) | On photos it never saw: 0.77 in Colombia, zero false alarms on 1,378 healthy feet, and 0.82 on the first set. |
+| 3:57 | Lower-limb examples, never trained on (CC BY 4.0, cited) | On a clinic it never trained on, it's still weak: 0.39. Its outlines sit on the wound but cover less than marked. |
+| 4:07 | Evidence: outline check (live app) | I tested the agent's outline check the same way. My first version approved every bad outline. |
+| 4:15 | (same) | The redesign sends 79 percent of bad outlines to the nurse, and also 28 percent of good ones. |
+| 4:23 | Evidence: synthetic + agent (live app) | On 750 held-out synthetic photos, the mean area error is 1.5 percent, and the agent matched the clinic's rules in 60 of 60 visits. |
+| 4:34 | Evidence: not validated | Not proven yet: area accuracy on patients' own photos. That needs a clinical study. |
+| 4:41 | CAM · End card | WoundTrace: a wound measurement you can trust, or a clear reason to take another photo. |
 
 ## Honest notes
 - App shots are the live app on AWS (Lambda + Bedrock Nova 2 Lite), recorded headless in a browser on my laptop
@@ -53,6 +52,9 @@ Captions of these lines are burned into the final video, so it also works muted.
 - The "inside OpenCV" frames come from scripts/pipeline_frames.py run on one real iPhone photo of my printed
   colour test sheet A (real/a/04.jpg; true area 7.07 cm², measured 6.81), not a wound. The stripes are a
   printer fault. They show what the code computes; the captions were added by the script.
+- The real wound photo (no card) is from the Lower Limb and Feet Wound Image Dataset (Islam et al., CC BY
+  4.0), never used in training; it is also a sample in the live app. I picked it because the wound is clearly
+  visible (its Dice is at the 90th percentile of that set). Without the card the app gives no size.
 - The scoreboard numbers are from eval/fuseg_summary.md, eval/external_summary.md and the previous model's
   runs of the same scripts on the same held-out photos (kept in data/v1/). "Retrained" = the deployed model.
 - No FUSeg or CO2Wounds photo is shown (their licences don't allow the commercial licence the rules ask of

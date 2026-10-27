@@ -26,6 +26,7 @@ submission/gallery/2-pipeline.png  Inside OpenCV 5: ArUco + solvePnP, homography
 submission/gallery/3-architecture.png  Lambda on Graviton runs OpenCV 5 and the ONNX model; Nova 2 Lite on Bedrock picks the tools; plain code gates every action.
 submission/gallery/4-real-wounds.png  Real wound photos from a clinic the model never trained on (CC BY 4.0 dataset), picked at the 90th, 50th and 10th percentile, plus a healthy foot.
 submission/gallery/5-results.png   Outline accuracy on three clinics' held-out photos, before and after retraining.
+submission/gallery/6-real-wound-no-card.png  A real wound photo with no card (CC BY 4.0 dataset) in the live app: OpenCV's network outlines it, the vision model agrees, and with no scale it gives no size.
 
 ==================== ABOUT THE PROJECT (Markdown) ====================
 ## Inspiration
